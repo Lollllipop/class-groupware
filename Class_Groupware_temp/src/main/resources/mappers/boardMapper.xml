@@ -3,11 +3,46 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ja.classgrouware.mapper.BoardMapper">
+<mapper namespace="com.ja.classgrouware.mapper.boardMapper">
 
-	<insert id="create">
-		insert into tbl_board (title, content, writer)
-		values(#{title},#{content}, #{writer})
+	<insert id="insert">
+		insert into board (class_idx, user_idx,
+		bo_title,
+		bo_content, bo_isnotice, bo_role)
+		values(#{class_idx},#{user_idx},
+		#{bo_title}, #{bo_content}, #{bo_isnotice}, #{bo_role})
 	</insert>
- 
+
+	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.BoardVO">
+		select class_idx, user_idx,
+		bo_title, bo_content, bo_writedate, bo_isnotice, bo_role from
+		board
+		where bo_idx =
+		#{bo_idx}
+	</select>
+
+	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.BoardVO">
+ <![CDATA[
+select class_idx, user_idx,
+		bo_title, bo_content, bo_writedate, bo_isnotice, bo_role from
+		board
+ where bo_idx > 0 
+ order by bo_idx desc
+ ]]>
+	</select>
+
+	<update id="update">
+		update board set bo_title
+		=#{bo_title}, bo_content
+		=#{bo_content}, bo_isnotice
+		=#{bo_isnotice}
+		where
+		bo_idx = #{bo_idx}
+	</update>
+
+	<delete id="delete">
+		delete from board where bo_idx =
+		#{bo_idx}
+	</delete>
+
 </mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ja.classgrouware.mapper.attendanceMapper">
+
+	<insert id="insert">
+		insert into attendance (class_idx, user_idx,
+		attendace_event)
+		values(#{class_idx},#{user_idx}, #{attendace_event})
+	</insert>
+
+	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.AttendanceVO">
+		select class_idx, user_idx,
+		attendace_event, attendace_date from
+		attendance
+		where attendace_idx =
+		#{attendace_idx}
+	</select>
+
+	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.AttendanceVO">
+ <![CDATA[
+ select class_idx, user_idx,
+		attendace_event, attendace_date from
+		attendance
+ where attendace_idx > 0 
+ order by attendace_idx desc
+ ]]>
+	</select>
+
+	<update id="update">
+		update attendance set attendace_event
+		=#{attendace_event}, attendace_date
+		=#{attendace_date}
+		where
+		attendace_idx = #{attendace_idx}
+	</update>
+
+	<delete id="delete">
+		delete from attendance where attendace_idx =
+		#{attendace_idx}
+	</delete>
+
+</mapper>
