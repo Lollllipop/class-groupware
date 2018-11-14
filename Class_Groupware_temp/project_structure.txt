@@ -1,0 +1,10 @@
+[Filter - complete]
+- UTF-8 인코딩
+- http 메소드를 모두 지원하지 않는 브라우저의 요청을 해석하기 위한 필터
+
+[Interceptor - progress] => xml
+- auth
+
+[AOP - progress] => xml
+- log (before) 
+- exception (after-throwing) 

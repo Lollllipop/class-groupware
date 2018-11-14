@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+						http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- 정적 데이터 매핑 -->
+	<resources mapping="/favicon.ico" location="/favicon.ico" />
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- String 형태의 view에 앞과 뒤에 수식어를 붙여줌 -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+
+	<!-- 컨트롤러만 스캔 -->
+	<context:component-scan base-package="com.ja.classgroupware.*.controller" />
+
+	<!-- 어노테이션 설정을 위한 옵션 -->
+	<!-- <aop:aspectj-autoproxy></aop:aspectj-autoproxy> -->
+
+	<!-- xml 설정을 위한 옵션 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com.ja.classgroupware..*.*(..))" id="allPointcut" />
+	
+		<aop:aspect ref="log">
+			<aop:before pointcut-ref="allPointcut" method="methodStartLog" />
+		</aop:aspect>
+		
+		<aop:aspect ref="exception">
+			<aop:after-throwing pointcut-ref="allPointcut" method="exceptionProcess" throwing="ex"/>
+		</aop:aspect>
+	</aop:config>
+
+</beans:beans>

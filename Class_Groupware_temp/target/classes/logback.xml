@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+	
+	<!-- 로깅 패턴 설정 -->
+	<!-- 메소드 호출 시점 로깅 -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [MOVED] : in %m%n</pattern>
+		</layout>
+	</appender>
+	<!-- 예외처리 로깅 -->
+	<appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [EXCEPTION] : at %m%n</pattern>
+		</layout>
+	</appender>
+
+	<!-- log4jdbc-log4j2 -->
+	<logger name="jdbc.sqlonly" level="DEBUG" />
+	<logger name="jdbc.sqltiming" level="INFO" />
+	<logger name="jdbc.audit" level="WARN" />
+	<logger name="jdbc.resultset" level="ERROR" />
+	<logger name="jdbc.resultsettable" level="ERROR" />
+	<logger name="jdbc.connection" level="INFO" />
+
+	<!-- 메소드 호출 시점 로깅 등록 -->
+	<logger name="com.ja.classgroupware.base.aop.AdviceLog" level="INFO"> 
+		<appender-ref ref="STDOUT" /> 
+	</logger>
+	<!-- 예외처리 로깅 등록 -->
+	<logger name="com.ja.classgroupware.base.aop.AdviceException" level="ERROR"> 
+		<appender-ref ref="STDERR" /> 
+	</logger>
+
+</configuration>
+
