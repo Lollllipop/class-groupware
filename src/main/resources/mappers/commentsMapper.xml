@@ -9,9 +9,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into comments (comment_idx, bo_idx, class_idx,
 		user_idx,
 		comm_parent_idx, comm_content, comm_writedate, comm_role)
-		values(#{comment_idx.nextval},#{bo_idx},#{class_idx},
+		values(comments_seq.nextval,#{bo_idx},#{class_idx},
 		#{user_idx}, #{comm_parent_idx},
-		#{comm_content}, #{sysdate},#{comm_role})
+		#{comm_content}, SYSDATE ,#{comm_role})
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.CommentsVO">
@@ -36,7 +36,7 @@ select comment_idx, bo_idx, class_idx,
 
 	<update id="update">
 		update comments set comm_content
-		=#{comm_content}, comm_writedate = #{sysdate}
+		=#{comm_content}, comm_writedate = SYSDATE
 		where
 		comment_idx = #{comment_idx}
 	</update>

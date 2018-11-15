@@ -9,7 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into files (file_idx, bo_idx, class_idx,
 		file_link,
 		file_name, file_role)
-		values(#{file_idx.nextval},
+		values(files_seq.nextval,
 		#{bo_idx},#{class_idx},
 		#{file_link},
 		#{file_name}, #{file_role})

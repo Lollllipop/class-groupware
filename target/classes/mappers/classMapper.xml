@@ -8,7 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="insert">
 		insert into class (class_idx, class_name, class_about,
 		class_startdate, class_enddate)
-		values(#{class_idx.nextval},#{class_name},#{class_about},
+		values(class_seq.nextval,#{class_name},#{class_about},
 		#{class_startdate}, #{class_enddate})
 	</insert>
 

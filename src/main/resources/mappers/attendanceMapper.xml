@@ -9,7 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into attendance (attendance_idx,class_idx,
 		user_idx,
 		attendace_event,attendance_date)
-		values(#{attendance_idx.nextval},#{class_idx},#{user_idx}, #{attendace_event},
+		values(attendance_seq.nextval,#{class_idx},#{user_idx}, #{attendace_event},
 		#{attendance_date})
 	</insert>
 

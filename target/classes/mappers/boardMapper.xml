@@ -9,9 +9,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into board (bo_idx,class_idx, user_idx,
 		bo_title,
 		bo_content, bo_writedate, bo_isnotice, bo_role)
-		values(#{bo_idx.nextval},#{class_idx},#{user_idx},
+		values(board_seq.nextval,#{class_idx},#{user_idx},
 		#{bo_title},
-		#{bo_content}, #{sysdate},#{bo_isnotice}, #{bo_role})
+		#{bo_content}, SYSDATE,#{bo_isnotice}, #{bo_role})
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.BoardVO">
@@ -37,7 +37,7 @@ select bo_idx, class_idx, user_idx,
 		update board set bo_title
 		=#{bo_title}, bo_content
 		=#{bo_content}, bo_isnotice
-		=#{bo_isnotice}, bo_writedate = #{sysdate}
+		=#{bo_isnotice}, bo_writedate = SYSDATE
 		where
 		bo_idx = #{bo_idx}
 	</update>
