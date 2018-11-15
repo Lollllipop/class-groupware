@@ -1,6 +1,5 @@
 package com.ja.classgroupware.base.persistence;
 
-import java.sql.Date;
 import java.util.List;
 
 import com.ja.classgroupware.base.vo.AttendanceVO;

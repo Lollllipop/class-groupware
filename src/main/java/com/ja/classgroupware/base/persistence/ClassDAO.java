@@ -5,9 +5,10 @@ import java.util.List;
 import com.ja.classgroupware.base.vo.ClassVO;
 
 public interface ClassDAO {
+	
 	public void insert(ClassVO vo) throws Exception;
 
-	//ÇÊ¿äÇÑÁø ¸ğ¸£°ÙÀ¸³ª °Á ¸¸µé¾îµÒ
+	//selectbyidxëŠ” í•„ìš”ì—†ì„ê±° ê°™ê¸°ë„ í•œë° ê± ë§Œë“¤ì–´ë‘ 
 	public ClassVO selectByIdx(int class_idx) throws Exception;
 
 	public List<ClassVO> selectAll() throws Exception;
