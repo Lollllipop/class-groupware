@@ -15,7 +15,7 @@ public class UsersDAOImpl implements UsersDAO {
 	@Inject
 	private SqlSession session;
 
-	private static String namespace = "com.ja.classgroupware.mapper.classMapper";
+	private static String namespace = "com.ja.classgroupware.mapper.usersMapper";
 
 	@Override
 	public void insert(UsersVO vo) throws Exception {

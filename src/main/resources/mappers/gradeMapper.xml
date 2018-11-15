@@ -3,20 +3,20 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ja.classgrouware.mapper.user_classMapper">
+<mapper namespace="com.ja.classgrouware.mapper.gradeMapper">
 
 	<insert id="insert">
 		insert into grade (grade_idx, class_idx, user_idx, grade_name, grade_score)
 		values(grade_seq.nextval, #{class_idx}, #{user_idx}, #{grade_name}, #{grade_score})
 	</insert>
 
-	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.GardeVO">
+	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.GradeVO">
 		select grade_idx, class_idx, user_idx, grade_name, grade_score
 		from grade
 		where grade_idx = #{grade_idx}
 	</select>
 
-	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.GardeVO">
+	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.GradeVO">
 		 <![CDATA[
 			select grade_idx, class_idx, user_idx, grade_name, grade_score
 			from grade

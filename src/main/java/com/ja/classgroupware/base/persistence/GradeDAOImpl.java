@@ -15,7 +15,7 @@ public class GradeDAOImpl implements GradeDAO {
 	@Inject
 	private SqlSession session;
 
-	private static String namespace = "com.ja.classgroupware.mapper.classMapper";
+	private static String namespace = "com.ja.classgroupware.mapper.gradeMapper";
 
 	@Override
 	public void insert(GradeVO vo) throws Exception {

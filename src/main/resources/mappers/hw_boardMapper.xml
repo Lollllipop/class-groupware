@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ja.classgrouware.mapper.user_classMapper">
+<mapper namespace="com.ja.classgrouware.mapper.hw_boardMapper">
 
 	<insert id="insert">
 		insert into hw_board (hw_idx, class_idx, user_idx, hw_title, hw_content, hw_startdate, hw_enddate, hw_writedate, hw_file_link, hw_file_name)
