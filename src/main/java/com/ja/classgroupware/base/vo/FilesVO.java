@@ -1,5 +1,14 @@
 package com.ja.classgroupware.base.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter 			// 각 필드에 대한 getter 자동 생성
+@Setter				// 각 필드에 대한 setter 자동 생성
+@NoArgsConstructor	// 파라미터가 하나도 없는 기본 생성자 자동 생성
+@AllArgsConstructor	// 모든 필드를 파라미터로 가지는 생성자 자동 생성
 public class FilesVO {
 
 	private int file_idx;
@@ -9,66 +18,4 @@ public class FilesVO {
 	private String file_name;
 	private String file_role;
 	
-	public FilesVO() {
-		
-	}
-
-	public FilesVO(int file_idx, int bo_idx, int class_idx, String file_link, String file_name, String file_role) {
-		super();
-		this.file_idx = file_idx;
-		this.bo_idx = bo_idx;
-		this.class_idx = class_idx;
-		this.file_link = file_link;
-		this.file_name = file_name;
-		this.file_role = file_role;
-	}
-
-	public int getFile_idx() {
-		return file_idx;
-	}
-
-	public void setFile_idx(int file_idx) {
-		this.file_idx = file_idx;
-	}
-
-	public int getBo_idx() {
-		return bo_idx;
-	}
-
-	public void setBo_idx(int bo_idx) {
-		this.bo_idx = bo_idx;
-	}
-
-	public int getClass_idx() {
-		return class_idx;
-	}
-
-	public void setClass_idx(int class_idx) {
-		this.class_idx = class_idx;
-	}
-
-	public String getFile_link() {
-		return file_link;
-	}
-
-	public void setFile_link(String file_link) {
-		this.file_link = file_link;
-	}
-
-	public String getFile_name() {
-		return file_name;
-	}
-
-	public void setFile_name(String file_name) {
-		this.file_name = file_name;
-	}
-
-	public String getFile_role() {
-		return file_role;
-	}
-
-	public void setFile_role(String file_role) {
-		this.file_role = file_role;
-	}
-
 }
