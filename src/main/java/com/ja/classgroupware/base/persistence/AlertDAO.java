@@ -6,7 +6,7 @@ import com.ja.classgroupware.base.vo.AlertVO;
 
 public interface AlertDAO {
 	
-	//¾Ë¸²¿¡ update¶û selectByIdx´Â ÇÊ¿ä¾øÀ»°Å °°¾Æ¼­ ¾È¸¸µë
+	//ì—…ë°ì´íŠ¸ë‘ selectbyidxëŠ” í•„ìš”ì—†ì„ê±° ê°™ì•„ì„œ ì•ˆë§Œë“¬
 	
 	public void insert(AlertVO vo) throws Exception;
 
@@ -14,7 +14,7 @@ public interface AlertDAO {
 
 	public void delete(int alert_idx) throws Exception;
 
-	// ¾Ë¶÷ ÆäÀÌÂ¡
+	// í˜ì´ì§•
 	//public List<AlertVO> listPage(int page) throws Exception;
 
 	//public List<AlertVO> listCriteria(Criteria cri) throws Exception;

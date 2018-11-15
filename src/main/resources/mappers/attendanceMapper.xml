@@ -6,13 +6,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ja.classgrouware.mapper.attendanceMapper">
 
 	<insert id="insert">
-		insert into attendance (class_idx, user_idx,
-		attendace_event)
-		values(#{class_idx},#{user_idx}, #{attendace_event})
+		insert into attendance (attendance_idx,class_idx,
+		user_idx,
+		attendace_event,attendance_date)
+		values(#{attendance_idx.nextval},#{class_idx},#{user_idx}, #{attendace_event},
+		#{attendance_date})
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.AttendanceVO">
-		select class_idx, user_idx,
+		select attendance_idx,
+		class_idx, user_idx,
 		attendace_event, attendace_date from
 		attendance
 		where attendace_idx =
@@ -21,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.AttendanceVO">
  <![CDATA[
- select class_idx, user_idx,
+ select attendance_idx, class_idx, user_idx,
 		attendace_event, attendace_date from
 		attendance
  where attendace_idx > 0 

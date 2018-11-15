@@ -6,14 +6,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ja.classgrouware.mapper.classMapper">
 
 	<insert id="insert">
-		insert into attendance (class_name, class_about,
+		insert into class (class_idx, class_name, class_about,
 		class_startdate, class_enddate)
-		values(#{class_name},#{class_about},
+		values(#{class_idx.nextval},#{class_name},#{class_about},
 		#{class_startdate}, #{class_enddate})
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.ClassVO">
-		select class_name,
+		select class_idx, class_name,
 		class_about,
 		class_startdate, class_enddate from
 		class
@@ -23,10 +23,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.ClassVO">
  <![CDATA[
-select class_name, class_about,
+select class_idx,class_name, class_about,
 		class_startdate, class_enddate from
 		class
  where class_idx > 0
+ order by class_idx desc
  ]]>
 	</select>
 

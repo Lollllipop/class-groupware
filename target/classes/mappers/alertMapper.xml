@@ -6,15 +6,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ja.classgrouware.mapper.alertMapper">
 
 	<insert id="insert">
-		insert into tbl_board (user_idx, class_idx,
+		insert into alert (alert_idx, user_idx, class_idx,
 		alert_content, alert_common_idx, alert_role)
-		values(#{user_idx},#{class_idx}, #{alert_content},
+		values(#{alert_idx.nextval}, #{user_idx},#{class_idx}, #{alert_content},
 		#{alert_common_idx}, #{alert_role})
 	</insert>
 
 	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.AlertVO">
  <![CDATA[
- select user_idx, class_idx, alert_content, alert_common_idx, alert_role from
+ select alert_idx, user_idx, class_idx, alert_content, alert_common_idx, alert_role from
 		alert
  where alert_idx > 0 
  order by alert_idx desc
