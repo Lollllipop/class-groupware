@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ja.classgrouware.mapper.user_classMapper">
+
+	<insert id="insert">
+		insert into user_class (user_idx, class_idx, user_status, user_joindate)
+		values(#{user_idx}, #{class_idx}, #{user_status}, #{user_joindate})
+	</insert>
+
+	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.User_classVO">
+		select user_idx, class_idx, user_status, user_joindate 
+		from user_class
+		where class_idx = #{class_idx}
+	</select>
+
+	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.User_classVO">
+		 <![CDATA[
+			select user_idx, class_idx, user_status, user_joindate
+			from user_class
+			where class_idx > 0
+		 ]]>
+	</select>
+
+	<update id="update">
+		update user_class 
+		set user_status = #{user_status},
+			user_joindate = #{user_joindate}
+		where class_idx = #{class_idx}
+	</update>
+
+	<delete id="delete">
+		delete 
+		from user_class 
+		where class_idx = #{class_idx}
+	</delete>
+
+</mapper>

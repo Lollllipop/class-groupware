@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ja.classgrouware.mapper.user_classMapper">
+
+	<insert id="insert">
+		insert into hw_board (hw_idx, class_idx, user_idx, hw_title, hw_content, hw_startdate, hw_enddate, hw_writedate, hw_file_link, hw_file_name)
+		values(hw_board_seq.nextval, #{class_idx}, #{user_idx}, #{hw_title}, #{hw_content}, #{hw_startdate}, #{hw_enddate}, sysdate, hw_file_link, hw_file_name)
+	</insert>
+
+	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.Hw_boardVO">
+		select hw_idx, class_idx, user_idx, hw_title, hw_content, hw_startdate, hw_enddate, hw_writedate, hw_file_link, hw_file_name
+		from hw_board
+		where hw_idx = #{hw_idx}
+	</select>
+
+	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.Hw_boardVO">
+		 <![CDATA[
+			select hw_idx, class_idx, user_idx, hw_title, hw_content, hw_startdate, hw_enddate, hw_writedate, hw_file_link, hw_file_name
+			from hw_board
+			where hw_idx > 0
+		 ]]>
+	</select>
+
+	<update id="update">
+		update hw_board 
+		set hw_title = #{hw_title},
+			hw_content = #{hw_content},
+			hw_startdate = #{hw_startdate},
+			hw_enddate = #{hw_enddate},
+			hw_writedate = sysdate,
+			hw_file_link = #{hw_file_link},
+			hw_file_name = #{hw_file_name}
+		where hw_idx = #{hw_idx}
+	</update>
+
+	<delete id="delete">
+		delete 
+		from hw_board 
+		where hw_idx = #{hw_idx}
+	</delete>
+
+</mapper>

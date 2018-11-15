@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ja.classgrouware.mapper.classMapper">
+
+	<insert id="insert">
+		insert into attendance (user_idx, user_id, user_email, user_name, user_password, user_role)
+		values(users_seq.nextval, #{user_id}, #{user_email}, #{user_name}, #{user_password}, #{user_role})
+	</insert>
+
+	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.UsersVO">
+		select user_idx, user_id, user_email, user_name, user_password, user_role
+		from users
+		where user_idx = #{user_idx}
+	</select>
+
+	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.UsersVO">
+		 <![CDATA[
+			select user_idx, user_id, user_email, user_name, user_password, user_role
+			from users
+			where user_idx > 0
+		 ]]>
+	</select>
+
+	<update id="update">
+		update class
+		set user_email = #{user_email},
+			user_name = #{user_name},
+			user_password = #{user_password},
+			user_role = #{user_role}
+		where user_idx = #{user_idx}
+	</update>
+
+	<delete id="delete">
+		delete 
+		from users 
+		where user_idx = #{user_idx}
+	</delete>
+
+</mapper>
