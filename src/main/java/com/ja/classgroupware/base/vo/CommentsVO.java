@@ -12,6 +12,10 @@ public class CommentsVO {
 	private String comm_content;
 	private Date comm_writedate;
 	private String comm_role;
+	
+	public CommentsVO() { 
+		
+	}
 
 	public CommentsVO(int comment_idx, int bo_idx, int class_idx, int user_idx, int comm_parent_idx,
 			String comm_content, Date comm_writedate, String comm_role) {

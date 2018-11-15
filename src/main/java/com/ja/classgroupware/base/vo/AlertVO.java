@@ -8,6 +8,10 @@ public class AlertVO {
 	private String alert_content;
 	private int alert_common_idx;
 	private String alert_role;
+	
+	public AlertVO() {
+		
+	}
 
 	public AlertVO(int alert_idx, int user_idx, int class_idx, String alert_content, int alert_common_idx,
 			String alert_role) {

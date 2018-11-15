@@ -8,6 +8,10 @@ public class FilesVO {
 	private String file_link;
 	private String file_name;
 	private String file_role;
+	
+	public FilesVO() {
+		
+	}
 
 	public FilesVO(int file_idx, int bo_idx, int class_idx, String file_link, String file_name, String file_role) {
 		super();

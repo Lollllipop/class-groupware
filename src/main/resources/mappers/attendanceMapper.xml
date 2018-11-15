@@ -3,23 +3,17 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ja.classgrouware.mapper.attendanceMapper">
+<mapper namespace="com.ja.classgroupware.base.persistence.AttendanceDAO">
 
 	<insert id="insert">
-		insert into attendance (attendance_idx,class_idx,
-		user_idx,
-		attendace_event,attendance_date)
-		values(attendance_seq.nextval,#{class_idx},#{user_idx}, #{attendace_event},
-		#{attendance_date})
+		insert into attendance
+		values(attendance_seq.nextval, #{class_idx}, #{user_idx}, #{attendace_event}, #{attendance_date})
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.AttendanceVO">
-		select attendance_idx,
-		class_idx, user_idx,
-		attendace_event, attendace_date from
-		attendance
-		where attendace_idx =
-		#{attendace_idx}
+		select attendance_idx, class_idx, user_idx, attendance_event, attendance_date
+		from attendance
+		where attendance_idx = #{attendance_idx}
 	</select>
 
 	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.AttendanceVO">

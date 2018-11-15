@@ -34,5 +34,11 @@
 		destroy-method="clearCache">
 		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
 	</bean>
+	
+	<!-- 지정된 베이스 패키지에서 DAO(Mapper) 를 검색하여 등록합니다. -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> 
+		<property name="basePackage" value="com.ja.classgroupware.base.persistence" /> 
+	</bean> 
+
 
 </beans>

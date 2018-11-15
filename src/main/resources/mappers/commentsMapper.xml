@@ -3,15 +3,11 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ja.classgrouware.mapper.commentsMapper">
+<mapper namespace="com.ja.classgroupware.base.persistence.CommentsDAO">
 
 	<insert id="insert">
-		insert into comments (comment_idx, bo_idx, class_idx,
-		user_idx,
-		comm_parent_idx, comm_content, comm_writedate, comm_role)
-		values(comments_seq.nextval,#{bo_idx},#{class_idx},
-		#{user_idx}, #{comm_parent_idx},
-		#{comm_content}, SYSDATE ,#{comm_role})
+		insert into comments
+		values(comments_seq.nextval, #{bo_idx}, #{class_idx}, #{user_idx}, #{comm_parent_idx}, #{comm_content}, SYSDATE, #{comm_role})
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.CommentsVO">

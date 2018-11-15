@@ -9,6 +9,10 @@ public class MessageVO {
 	private int message_receiver_idx;
 	private String message_content;
 	private Date message_writedate;
+	
+	public MessageVO() {
+		
+	}
 
 	public MessageVO(int message_idx, int message_sender_idx, int message_receiver_idx, String message_content,
 			Date message_writedate) {

@@ -12,6 +12,10 @@ public class Hw_submitVO {
 	private Date hw_submit_content_writedate;
 	private String hw_submit_file_name;
 	private String hw_submit_file_link;
+	
+	public Hw_submitVO() {
+		
+	}
 
 	public Hw_submitVO(int hw_submit_idx, int hw_idx, int class_idx, int user_idx, String hw_submit_content,
 			Date hw_submit_content_writedate, String hw_submit_file_name, String hw_submit_file_link) {

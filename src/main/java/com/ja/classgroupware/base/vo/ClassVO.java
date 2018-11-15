@@ -9,6 +9,10 @@ public class ClassVO {
 	private String class_about;
 	private Date class_startdate;
 	private Date class_enddate;
+	
+	public ClassVO() {
+		
+	}
 
 	public ClassVO(int class_idx, String class_name, String class_about, Date class_startdate, Date class_enddate) {
 		super();

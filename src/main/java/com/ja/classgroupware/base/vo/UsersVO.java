@@ -8,6 +8,10 @@ public class UsersVO {
 	private String user_name;
 	private String user_password;
 	private String user_role;
+	
+	public UsersVO() {
+		
+	}
 
 	public UsersVO(int user_idx, String user_id, String user_email, String user_name, String user_password,
 			String user_role) {

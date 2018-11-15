@@ -3,15 +3,11 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ja.classgrouware.mapper.boardMapper">
+<mapper namespace="com.ja.classgroupware.base.persistence.BoardDAO">
 
 	<insert id="insert">
-		insert into board (bo_idx,class_idx, user_idx,
-		bo_title,
-		bo_content, bo_writedate, bo_isnotice, bo_role)
-		values(board_seq.nextval,#{class_idx},#{user_idx},
-		#{bo_title},
-		#{bo_content}, SYSDATE,#{bo_isnotice}, #{bo_role})
+		insert into board
+		values(board_seq.nextval, #{class_idx}, #{user_idx}, #{bo_title}, #{bo_content}, SYSDATE, #{bo_isnotice}, #{bo_role})
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.BoardVO">

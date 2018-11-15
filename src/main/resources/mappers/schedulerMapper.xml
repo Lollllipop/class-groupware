@@ -3,13 +3,10 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ja.classgrouware.mapper.schedulerMapper">
+<mapper namespace="com.ja.classgroupware.base.persistence.SchedulerDAO">
 	<insert id="insert">
 		insert into scheduler
-		values(scheduler_seq.nextval
-		,#{scheduler_idx},#{class_idx},
-		#{scheduler_content}, #{scheduler_startdate},
-		,#{scheduler_enddate})
+		values(scheduler_seq.nextval ,#{scheduler_idx}, #{class_idx}, #{scheduler_content}, #{scheduler_startdate}, #{scheduler_enddate})
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.SchedulerVO">
@@ -18,11 +15,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.SchedulerVO">
- <![CDATA[
-select * from scheduler
- where scheduler_idx > 0 
- order by hw_idx desc
- ]]>
+		 <![CDATA[
+			select * from scheduler
+			 where scheduler_idx > 0 
+			 order by hw_idx desc
+		 ]]>
 	</select>
 
 	<update id="update">

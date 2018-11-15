@@ -12,6 +12,10 @@ public class BoardVO {
 	private Date bo_writedate;
 	private String bo_isnotice;
 	private String bo_role;
+	
+	public BoardVO() {
+		
+	}
 
 	public BoardVO(int bo_idx, int class_idx, int user_idx, String bo_title, String bo_content, Date bo_writedate,
 			String bo_isnotice, String bo_role) {

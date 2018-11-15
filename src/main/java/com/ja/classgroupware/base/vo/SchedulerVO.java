@@ -9,6 +9,10 @@ public class SchedulerVO {
 	private String scheduler_content;
 	private Date scheduler_startdate;
 	private Date scheduler_enddate;
+	
+	public SchedulerVO () {
+		
+	}
 
 	public SchedulerVO(int scheduler_idx, int class_idx, String scheduler_content, Date scheduler_startdate,
 			Date scheduler_enddate) {

@@ -7,6 +7,10 @@ public class GradeVO {
 	private int user_idx;
 	private String grade_name;
 	private int grade_score;
+	
+	public GradeVO() {
+		
+	}
 
 	public GradeVO(int grade_idx, int class_idx, int user_idx, String grade_name, int grade_score) {
 		super();

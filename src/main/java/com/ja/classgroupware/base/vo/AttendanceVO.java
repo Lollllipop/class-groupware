@@ -9,6 +9,10 @@ public class AttendanceVO {
 	private int user_idx;
 	private String attendace_event;
 	private Date attendace_date;
+	
+	public AttendanceVO() {
+		
+	}
 
 	public AttendanceVO(int attendace_idx, int class_idx, int user_idx, String attendace_event, Date attendace_date) {
 		super();

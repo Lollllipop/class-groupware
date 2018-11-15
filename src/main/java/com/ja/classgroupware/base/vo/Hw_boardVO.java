@@ -15,6 +15,10 @@ public class Hw_boardVO {
 	private String hw_file_link;
 	private String hw_file_name;
 
+	public Hw_boardVO() {
+		
+	}
+	
 	public Hw_boardVO(int hw_idx, int class_idx, int user_idx, String hw_title, String hw_content, Date hw_startdate,
 			Date hw_enddate, Date hw_writedate, String hw_file_link, String hw_file_name) {
 		super();

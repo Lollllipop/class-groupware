@@ -6,9 +6,9 @@ import com.ja.classgroupware.base.vo.MessageVO;
 
 public interface MessageDAO {
 
-	public void create(MessageVO vo) throws Exception;
+	public void insert(MessageVO vo) throws Exception;
 
-	public MessageVO readMessage(int message_idx) throws Exception;
+	public MessageVO selectByIdx(int message_idx) throws Exception;
 	
 	public List<MessageVO> selectAll() throws Exception; 
 	

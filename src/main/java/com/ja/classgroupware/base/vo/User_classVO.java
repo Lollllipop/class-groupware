@@ -1,20 +1,24 @@
 package com.ja.classgroupware.base.vo;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class User_classVO {
 
 	private int user_idx;
 	private int class_idx;
 	private String user_status;
-	private Date user_joindate;
+	private Date class_joindate;
 
-	public User_classVO(int user_idx, int class_idx, String user_status, Date user_joindate) {
+	public User_classVO() {
+		
+	}
+	
+	public User_classVO(int user_idx, int class_idx, String user_status, Date class_joindate) {
 		super();
 		this.user_idx = user_idx;
 		this.class_idx = class_idx;
 		this.user_status = user_status;
-		this.user_joindate = user_joindate;
+		this.class_joindate = class_joindate;
 	}
 
 	public int getUser_idx() {
@@ -41,12 +45,12 @@ public class User_classVO {
 		this.user_status = user_status;
 	}
 
-	public Date getUser_joindate() {
-		return user_joindate;
+	public Date getClass_joindate() {
+		return class_joindate;
 	}
 
-	public void setUser_joindate(Date user_joindate) {
-		this.user_joindate = user_joindate;
+	public void setClass_joindate(Date class_joindate) {
+		this.class_joindate = class_joindate;
 	}
 
 }

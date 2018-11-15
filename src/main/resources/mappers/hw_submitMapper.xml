@@ -3,11 +3,10 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ja.classgrouware.mapper.hw_submitMapper">
+<mapper namespace="com.ja.classgroupware.base.persistence.Hw_submitDAO">
 	<insert id="insert">
 		insert into hw_submit
-		values(hw_submit_seq.nextval ,#{hw_idx},#{class_idx},
-		#{user_idx}, #{hw_submit_content}, SYSDATE ,#{hw_submit_filename}, #{hw_submit_file_link})
+		values(hw_submit_seq.nextval, #{hw_idx}, #{class_idx}, #{user_idx}, #{hw_submit_content}, SYSDATE, #{hw_submit_filename}, #{hw_submit_file_link})
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.Hw_submitVO">

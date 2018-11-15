@@ -3,10 +3,10 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ja.classgrouware.mapper.gradeMapper">
+<mapper namespace="com.ja.classgroupware.base.persistence.GradeDAO">
 
 	<insert id="insert">
-		insert into grade (grade_idx, class_idx, user_idx, grade_name, grade_score)
+		insert into grade
 		values(grade_seq.nextval, #{class_idx}, #{user_idx}, #{grade_name}, #{grade_score})
 	</insert>
 
