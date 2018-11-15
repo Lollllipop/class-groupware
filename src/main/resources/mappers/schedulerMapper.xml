@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ja.classgrouware.mapper.schedulerMapper">
+	<insert id="insert">
+		insert into scheduler
+		values(scheduler_seq.nextval
+		,#{scheduler_idx},#{class_idx},
+		#{scheduler_content}, #{scheduler_startdate},
+		,#{scheduler_enddate})
+	</insert>
+
+	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.SchedulerVO">
+		select * from scheduler
+		where scheduler_idx=#{scheduler_idx}
+	</select>
+
+	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.SchedulerVO">
+ <![CDATA[
+select * from scheduler
+ where scheduler_idx > 0 
+ order by hw_idx desc
+ ]]>
+	</select>
+
+	<update id="update">
+		update scheduler set scheduler_content
+		=#{scheduler_content},
+		scheduler_startdate
+		=#{scheduler_startdate}, scheduler_enddate
+		=#{scheduler_enddate}
+		where
+		scheduler_idx = #{scheduler_idx}
+	</update>
+
+	<delete id="delete">
+		delete from scheduler where scheduler_idx =
+		#{scheduler_idx}
+	</delete>
+</mapper>

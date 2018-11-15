@@ -15,7 +15,7 @@ public class Hw_boardDAOImpl implements Hw_boardDAO {
 	@Inject
 	private SqlSession session;
 
-	private static String namespace = "com.ja.classgroupware.mapper.hw_boardMapper";
+	private static String namespace = "com.ja.classgroupware.mapper.user_classMapper";
 
 	@Override
 	public void insert(Hw_boardVO vo) throws Exception {

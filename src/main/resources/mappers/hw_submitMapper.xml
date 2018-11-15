@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ja.classgrouware.mapper.hw_submitMapper">
+	<insert id="insert">
+		insert into hw_submit
+		values(hw_submit_seq.nextval ,#{hw_idx},#{class_idx},
+		#{user_idx}, #{hw_submit_content}, SYSDATE ,#{hw_submit_filename}, #{hw_submit_file_link})
+	</insert>
+
+	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.Hw_submitVO">
+		select * from hw_submit where hw_idx=#{hw_idx}
+	</select>
+
+	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.Hw_submitVO">
+ <![CDATA[
+select * from hw_submit
+ where hw_idx > 0 
+ order by hw_idx desc
+ ]]>
+	</select>
+
+	<update id="update">
+		update hw_submit set hw_content
+		=#{hw_content}, hw_submit_file_name
+		=#{hw_submit_file_name}, hw_submit_file_link
+		=#{hw_submit_file_link}
+		where
+		hw_idx = #{hw_idx}
+	</update>
+
+	<delete id="delete">
+		delete from hw_submit where hw_idx =
+		#{hw_idx}
+	</delete>
+</mapper>
