@@ -4,7 +4,9 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-		<package name="com.ja.classgrouware.base.vo" />
+		<package name="com.ja.classgrouware.base.vo.*" />
+		<!-- 아래는 테스트 -->
+		<!-- <typeAlias alias="Hw_boardVO" type="com.ja.classgroupware.base.vo.Hw_boardVO"/> -->
 		<!-- <typeAlias alias="usersVO" type="com.ja.classgroupware.base.vo.UsersVO"/> -->
 	</typeAliases>
 </configuration>

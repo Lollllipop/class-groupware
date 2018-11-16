@@ -7,13 +7,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<insert id="insert">
 		insert into hw_board
-		values(hw_board_seq.nextval, #{class_idx}, #{user_idx}, #{hw_title}, #{hw_content}, #{hw_startdate}, #{hw_enddate}, sysdate, hw_file_link, hw_file_name)
+		values(hw_board_seq.nextval,
+		#{class_idx}, #{user_idx}, #{hw_title}, #{hw_content},
+		#{hw_startdate}, #{hw_enddate}, sysdate, hw_file_link, hw_file_name)
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.Hw_boardVO">
-		select hw_idx, class_idx, user_idx, hw_title, hw_content, hw_startdate, hw_enddate, hw_writedate, hw_file_link, hw_file_name
+		select hw_idx, class_idx,
+		user_idx, hw_title, hw_content, hw_startdate, hw_enddate,
+		hw_writedate, hw_file_link, hw_file_name
 		from hw_board
-		where hw_idx = #{hw_idx}
+		where hw_idx =
+		#{hw_idx}
 	</select>
 
 	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.Hw_boardVO">
@@ -25,21 +30,104 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<update id="update">
-		update hw_board 
+		update hw_board
 		set hw_title = #{hw_title},
-			hw_content = #{hw_content},
-			hw_startdate = #{hw_startdate},
-			hw_enddate = #{hw_enddate},
-			hw_writedate = sysdate,
-			hw_file_link = #{hw_file_link},
-			hw_file_name = #{hw_file_name}
+		hw_content
+		= #{hw_content},
+		hw_startdate = #{hw_startdate},
+		hw_enddate =
+		#{hw_enddate},
+		hw_writedate = sysdate,
+		hw_file_link = #{hw_file_link},
+		hw_file_name = #{hw_file_name}
 		where hw_idx = #{hw_idx}
 	</update>
 
 	<delete id="delete">
-		delete 
-		from hw_board 
+		delete
+		from hw_board
 		where hw_idx = #{hw_idx}
 	</delete>
+
+	<select id="listPage" resultType="com.ja.classgroupware.base.vo.Hw_boardVO">
+	<![CDATA[
+	select * from hw_board
+	where hw_idx > 0 order by hw_idx desc
+	limit #{page}, 10
+	]]>
+	</select>
+
+	<select id="listCriteria" resultType="com.ja.classgroupware.base.vo.Hw_boardVO">
+		select * from hw_board
+		where hw_idx > 0 order by hw_idx desc
+		limit #{pageStart}, #{perPageNum}
+	</select>
+
+	<select id="countPaging" resultType="int">
+ <![CDATA[
+ select 
+   count(hw_idx) 
+ from 
+   hw_board 
+ where 
+   hw_idx > 0 
+ ]]>
+	</select>
+
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">
+				and hw_title like '%#{keyword}%'
+			</if>
+			<if test="searchType == 'c'.toString()">
+				and hw_content like '%#{keyword}%'
+			</if>
+			<if test="searchType == 'w'.toString()">
+				and writer like '%#{keyword}%'
+			</if>
+			<if test="searchType == 'tc'.toString()">
+				and ( title like '%#{keyword}%'
+				OR content like
+				'%#{keyword}%')
+			</if>
+			<if test="searchType == 'cw'.toString()">
+				and ( content like '%#{keyword}%'
+				OR writer like
+				'%#{keyword}%')
+			</if>
+			<if test="searchType == 'tcw'.toString()">
+				and (title like '%#{keyword}%'
+				OR content like
+				'%#{keyword}%'
+				OR writer like '%#{keyword}%')
+			</if>
+		</if>
+	</sql>
+
+	<select id="listSearch" resultType="com.ja.classgroupware.base.vo.Hw_boardVO">
+<![CDATA[  
+  select * 
+  from hw_board 
+  where bno > 0 
+]]>
+
+		<include refid="search"></include>
+  
+<![CDATA[    
+  order by hw_idx desc
+  limit #{pageStart}, #{perPageNum}
+]]>
+	</select>
+
+	<select id="listSearchCount" resultType="int">
+<![CDATA[  
+  select count(hw_idx) 
+  from hw_board 
+  where bno > 0 
+]]>
+		<include refid="search"></include>
+
+	</select>
+
 
 </mapper>
