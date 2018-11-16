@@ -222,6 +222,14 @@
 			<version>4.2</version>
 		</dependency>
 
+		<!-- 편리한 어노테이션 -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.20</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>

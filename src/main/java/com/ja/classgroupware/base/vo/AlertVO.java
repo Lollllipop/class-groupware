@@ -1,5 +1,14 @@
 package com.ja.classgroupware.base.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter 			// 각 필드에 대한 getter 자동 생성
+@Setter				// 각 필드에 대한 setter 자동 생성
+@NoArgsConstructor	// 파라미터가 하나도 없는 기본 생성자 자동 생성
+@AllArgsConstructor	// 모든 필드를 파라미터로 가지는 생성자 자동 생성
 public class AlertVO {
 
 	private int alert_idx;
@@ -9,67 +18,4 @@ public class AlertVO {
 	private int alert_common_idx;
 	private String alert_role;
 	
-	public AlertVO() {
-		
-	}
-
-	public AlertVO(int alert_idx, int user_idx, int class_idx, String alert_content, int alert_common_idx,
-			String alert_role) {
-		super();
-		this.alert_idx = alert_idx;
-		this.user_idx = user_idx;
-		this.class_idx = class_idx;
-		this.alert_content = alert_content;
-		this.alert_common_idx = alert_common_idx;
-		this.alert_role = alert_role;
-	}
-
-	public int getAlert_idx() {
-		return alert_idx;
-	}
-
-	public void setAlert_idx(int alert_idx) {
-		this.alert_idx = alert_idx;
-	}
-
-	public int getUser_idx() {
-		return user_idx;
-	}
-
-	public void setUser_idx(int user_idx) {
-		this.user_idx = user_idx;
-	}
-
-	public int getClass_idx() {
-		return class_idx;
-	}
-
-	public void setClass_idx(int class_idx) {
-		this.class_idx = class_idx;
-	}
-
-	public String getAlert_content() {
-		return alert_content;
-	}
-
-	public void setAlert_content(String alert_content) {
-		this.alert_content = alert_content;
-	}
-
-	public int getAlert_common_idx() {
-		return alert_common_idx;
-	}
-
-	public void setAlert_common_idx(int alert_common_idx) {
-		this.alert_common_idx = alert_common_idx;
-	}
-
-	public String getAlert_role() {
-		return alert_role;
-	}
-
-	public void setAlert_role(String alert_role) {
-		this.alert_role = alert_role;
-	}
-
 }

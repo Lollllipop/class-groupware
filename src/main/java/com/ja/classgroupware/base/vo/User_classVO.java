@@ -2,55 +2,20 @@ package com.ja.classgroupware.base.vo;
 
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter 			// 각 필드에 대한 getter 자동 생성
+@Setter				// 각 필드에 대한 setter 자동 생성
+@NoArgsConstructor	// 파라미터가 하나도 없는 기본 생성자 자동 생성
+@AllArgsConstructor	// 모든 필드를 파라미터로 가지는 생성자 자동 생성
 public class User_classVO {
 
 	private int user_idx;
 	private int class_idx;
 	private String user_status;
 	private Date class_joindate;
-
-	public User_classVO() {
-		
-	}
-	
-	public User_classVO(int user_idx, int class_idx, String user_status, Date class_joindate) {
-		super();
-		this.user_idx = user_idx;
-		this.class_idx = class_idx;
-		this.user_status = user_status;
-		this.class_joindate = class_joindate;
-	}
-
-	public int getUser_idx() {
-		return user_idx;
-	}
-
-	public void setUser_idx(int user_idx) {
-		this.user_idx = user_idx;
-	}
-
-	public int getClass_idx() {
-		return class_idx;
-	}
-
-	public void setClass_idx(int class_idx) {
-		this.class_idx = class_idx;
-	}
-
-	public String getUser_status() {
-		return user_status;
-	}
-
-	public void setUser_status(String user_status) {
-		this.user_status = user_status;
-	}
-
-	public Date getClass_joindate() {
-		return class_joindate;
-	}
-
-	public void setClass_joindate(Date class_joindate) {
-		this.class_joindate = class_joindate;
-	}
 
 }

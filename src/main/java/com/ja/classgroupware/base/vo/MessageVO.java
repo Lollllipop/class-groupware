@@ -2,6 +2,15 @@ package com.ja.classgroupware.base.vo;
 
 import java.sql.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter 			// 각 필드에 대한 getter 자동 생성
+@Setter				// 각 필드에 대한 setter 자동 생성
+@NoArgsConstructor	// 파라미터가 하나도 없는 기본 생성자 자동 생성
+@AllArgsConstructor	// 모든 필드를 파라미터로 가지는 생성자 자동 생성
 public class MessageVO {
 
 	private int message_idx;
@@ -10,58 +19,4 @@ public class MessageVO {
 	private String message_content;
 	private Date message_writedate;
 	
-	public MessageVO() {
-		
-	}
-
-	public MessageVO(int message_idx, int message_sender_idx, int message_receiver_idx, String message_content,
-			Date message_writedate) {
-		super();
-		this.message_idx = message_idx;
-		this.message_sender_idx = message_sender_idx;
-		this.message_receiver_idx = message_receiver_idx;
-		this.message_content = message_content;
-		this.message_writedate = message_writedate;
-	}
-
-	public int getMessage_idx() {
-		return message_idx;
-	}
-
-	public void setMessage_idx(int message_idx) {
-		this.message_idx = message_idx;
-	}
-
-	public int getMessage_sender_idx() {
-		return message_sender_idx;
-	}
-
-	public void setMessage_sender_idx(int message_sender_idx) {
-		this.message_sender_idx = message_sender_idx;
-	}
-
-	public int getMessage_receiver_idx() {
-		return message_receiver_idx;
-	}
-
-	public void setMessage_receiver_idx(int message_receiver_idx) {
-		this.message_receiver_idx = message_receiver_idx;
-	}
-
-	public String getMessage_content() {
-		return message_content;
-	}
-
-	public void setMessage_content(String message_content) {
-		this.message_content = message_content;
-	}
-
-	public Date getMessage_writedate() {
-		return message_writedate;
-	}
-
-	public void setMessage_writedate(Date message_writedate) {
-		this.message_writedate = message_writedate;
-	}
-
 }

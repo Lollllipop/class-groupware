@@ -1,5 +1,14 @@
 package com.ja.classgroupware.base.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter 			// 각 필드에 대한 getter 자동 생성
+@Setter				// 각 필드에 대한 setter 자동 생성
+@NoArgsConstructor	// 파라미터가 하나도 없는 기본 생성자 자동 생성
+@AllArgsConstructor	// 모든 필드를 파라미터로 가지는 생성자 자동 생성
 public class GradeVO {
 
 	private int grade_idx;
@@ -8,57 +17,4 @@ public class GradeVO {
 	private String grade_name;
 	private int grade_score;
 	
-	public GradeVO() {
-		
-	}
-
-	public GradeVO(int grade_idx, int class_idx, int user_idx, String grade_name, int grade_score) {
-		super();
-		this.grade_idx = grade_idx;
-		this.class_idx = class_idx;
-		this.user_idx = user_idx;
-		this.grade_name = grade_name;
-		this.grade_score = grade_score;
-	}
-
-	public int getGrade_idx() {
-		return grade_idx;
-	}
-
-	public void setGrade_idx(int grade_idx) {
-		this.grade_idx = grade_idx;
-	}
-
-	public int getClass_idx() {
-		return class_idx;
-	}
-
-	public void setClass_idx(int class_idx) {
-		this.class_idx = class_idx;
-	}
-
-	public int getUser_idx() {
-		return user_idx;
-	}
-
-	public void setUser_idx(int user_idx) {
-		this.user_idx = user_idx;
-	}
-
-	public String getGrade_name() {
-		return grade_name;
-	}
-
-	public void setGrade_name(String grade_name) {
-		this.grade_name = grade_name;
-	}
-
-	public int getGrade_score() {
-		return grade_score;
-	}
-
-	public void setGrade_score(int grade_score) {
-		this.grade_score = grade_score;
-	}
-
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ja.classgroupware.base.persistence.AlertDAO;
+import com.ja.classgroupware.base.vo.AlertVO;
 
 @Controller
 public class HomeController {
@@ -29,7 +30,8 @@ public class HomeController {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
 		// 임시 코드...
-		boardMapper.selectAll();
+/*		AlertVO alertVO = new AlertVO(2,2,2,"2",2,"2");
+		boardMapper.insert(alertVO);*/
 		System.out.println("개선 성공!!!!!!!!!!!!");
 		//
 		
