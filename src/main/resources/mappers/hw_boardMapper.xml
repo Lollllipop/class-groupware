@@ -6,16 +6,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ja.classgroupware.base.persistence.Hw_boardDAO">
 
 	<insert id="insert">
-		insert into hw_board
+	<!-- 	insert into hw_board
 		values(hw_board_seq.nextval,
 		#{class_idx}, #{user_idx}, #{hw_title}, #{hw_content},
-		#{hw_startdate}, #{hw_enddate}, sysdate, hw_file_link, hw_file_name)
+		#{hw_startdate}, #{hw_enddate}, sysdate) -->
+		insert into hw_board
+		values(hw_board_seq.nextval,
+		#{class_idx}, #{user_idx}, #{hw_title, jdbcType=VARCHAR}, #{hw_content, jdbcType=VARCHAR},
+		#{hw_startdate, jdbcType=DATE}, #{hw_enddate, jdbcType=DATE}, sysdate)
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.Hw_boardVO">
 		select hw_idx, class_idx,
 		user_idx, hw_title, hw_content, hw_startdate, hw_enddate,
-		hw_writedate, hw_file_link, hw_file_name
+		hw_writedate
 		from hw_board
 		where hw_idx =
 		#{hw_idx}
@@ -23,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.Hw_boardVO">
 		 <![CDATA[
-			select hw_idx, class_idx, user_idx, hw_title, hw_content, hw_startdate, hw_enddate, hw_writedate, hw_file_link, hw_file_name
+			select hw_idx, class_idx, user_idx, hw_title, hw_content, hw_startdate, hw_enddate, hw_writedate
 			from hw_board
 			where hw_idx > 0
 		 ]]>
@@ -37,9 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		hw_startdate = #{hw_startdate},
 		hw_enddate =
 		#{hw_enddate},
-		hw_writedate = sysdate,
-		hw_file_link = #{hw_file_link},
-		hw_file_name = #{hw_file_name}
+		hw_writedate = sysdate
 		where hw_idx = #{hw_idx}
 	</update>
 
@@ -51,19 +53,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<select id="listPage" resultType="com.ja.classgroupware.base.vo.Hw_boardVO">
 	<![CDATA[
-	select * from hw_board
-	where hw_idx > 0 order by hw_idx desc
-	limit #{page}, 10
+	select * from
+	(select rownum rnum, hw_title, hw_startdate, hw_enddate, hw_idx from
+	(select * from hw_board where hw_idx >0 order by hw_idx desc))
+	 where rnum between #{page} and 10
+	
 	]]>
 	</select>
 
 	<select id="listCriteria" resultType="com.ja.classgroupware.base.vo.Hw_boardVO">
-		select * from hw_board
-		where hw_idx > 0 order by hw_idx desc
-		limit #{pageStart}, #{perPageNum}
+		select * from
+		(select rownum rnum, hw_title, hw_startdate, hw_enddate, hw_idx from
+		(select * from hw_board where hw_idx >0 order by hw_idx desc))
+		where rnum between #{pageStart} and #{perPageNum}
 	</select>
 
-	<select id="countPaging" resultType="int">
+	<!-- <select id="countPaging" resultType="int">
  <![CDATA[
  select 
    count(hw_idx) 
@@ -72,7 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  where 
    hw_idx > 0 
  ]]>
-	</select>
+	</select> -->
 
 	<sql id="search">
 		<if test="searchType != null">
@@ -82,52 +87,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="searchType == 'c'.toString()">
 				and hw_content like '%#{keyword}%'
 			</if>
-			<if test="searchType == 'w'.toString()">
-				and writer like '%#{keyword}%'
-			</if>
-			<if test="searchType == 'tc'.toString()">
-				and ( title like '%#{keyword}%'
-				OR content like
-				'%#{keyword}%')
-			</if>
-			<if test="searchType == 'cw'.toString()">
-				and ( content like '%#{keyword}%'
-				OR writer like
-				'%#{keyword}%')
-			</if>
-			<if test="searchType == 'tcw'.toString()">
-				and (title like '%#{keyword}%'
-				OR content like
-				'%#{keyword}%'
-				OR writer like '%#{keyword}%')
-			</if>
 		</if>
 	</sql>
 
 	<select id="listSearch" resultType="com.ja.classgroupware.base.vo.Hw_boardVO">
 <![CDATA[  
   select * 
-  from hw_board 
-  where bno > 0 
+  from (select rownum rnum, hw_title, hw_startdate, hw_enddate, hw_idx from
+		(select * from hw_board where hw_idx >0 order by hw_idx desc))
+		where rnum between #{pageStart} and #{perPageNum}
 ]]>
-
 		<include refid="search"></include>
-  
-<![CDATA[    
-  order by hw_idx desc
-  limit #{pageStart}, #{perPageNum}
-]]>
 	</select>
 
 	<select id="listSearchCount" resultType="int">
 <![CDATA[  
   select count(hw_idx) 
   from hw_board 
-  where bno > 0 
+  where hw_idx > 0 
 ]]>
 		<include refid="search"></include>
 
 	</select>
-
+	
+	<select id="countAll" resultType="int">
+	select count(*) from hw_board
+	</select>
 
 </mapper>

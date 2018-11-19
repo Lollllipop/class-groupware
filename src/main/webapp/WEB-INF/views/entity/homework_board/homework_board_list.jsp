@@ -20,7 +20,8 @@
 <!-- Bootstrap Styles-->
 <link href="${contextPath}/resources/css/bootstrap.css" rel="stylesheet" />
 <!-- FontAwesome Styles-->
-<link href="${contextPath}/resources/css/font-awesome.css" rel="stylesheet" />
+<link href="${contextPath}/resources/css/font-awesome.css"
+	rel="stylesheet" />
 <!-- Morris Chart Styles-->
 <link href="${contextPath}/resources/js/morris/morris-0.4.3.min.css"
 	rel="stylesheet" />
@@ -101,6 +102,34 @@ footer>strong {
 	float: left;
 }
 </style>
+<script>
+	/* function aa() {
+	
+	 } */
+
+	/* $(document).ready(function() {$('#searchBtn').on("click",function(event) {
+	self.location = "homework_board_list"
+	+ '${pageMaker.makeQuery(1)}'
+	+ "&searchType="
+	+ $("select option:selected").val()
+	+ "&keyword=" + $('#saerch_form_input_value').val();
+	});  */
+	$(document).ready(
+			function() {
+				$('#searchBtn').on(
+						"click",
+						function(event) {
+							self.location = "classgroupware/entity/homework_board/homework_board_list"
+									+ '${pageMaker.makeQuery(1)}'
+									+ "&searchType="
+									+ $("select option:selected").val()
+									+ "&keyword=" + $('#keywordInput').val();
+
+						});
+				});
+
+			});
+</script>
 </head>
 <body>
 	<div id="wrapper">
@@ -119,47 +148,74 @@ footer>strong {
 								<strong>과제</strong>
 							</div>
 							<div class="clear"></div>
-							<div class="cntAllTextArea">총 게시물 수</div>
+							<div class="cntAllTextArea">총 게시물 수 :[${totalCount}]</div>
 							<div class="searcharea">
 								<form class="form-inline d-flex justify-content-center">
 
 									<div class="selectSearchValue">
-										<select class="form-control input-sm" name="selectReadCount">
-											<option value="제목" selected="selected">제목</option>
-											<option value="내용">내용</option>
+										<select class="form-control input-sm" name="searchType">
+											<option value="n"
+												<c:out value="${cri.searchType == null?'selected':''}"/>>
+												---</option>
+											<option value="t"
+												<c:out value="${cri.searchType eq 't'?'selected':''}"/>>
+												제목</option>
+											<option value="c"
+												<c:out value="${cri.searchType eq 'c'?'selected':''}"/>>
+												내용</option>
 										</select>
 									</div>
 									<div class="search_icon">
-										<i class="material-icons dp48">search</i>
+										<i id="searchBtn" class="material-icons dp48">search</i>
+										<!-- 버튼 -->
 									</div>
 									<div class="search_area_form_input">
 										<input type="text" class="form-control"
-											placeholder="으로 검색합니다." id="saerch_form_input_value">
+											placeholder="으로 검색합니다." id="saerch_form_input_value"
+											name="keyword" value="${cri.keyword }">
 									</div>
 								</form>
 							</div>
 							<div class="clear"></div>
 							<div class="row">
-								<div class="card-content">
-									<a href="#">
+								<c:forEach items="${list}" var="hwboardVO">
+									<div class="card-content">
 										<div class="col-md-12 col-sm-6">
-											<div class="card blue-grey darken-1">
+											<div class="care blue-grey darken-1">
 												<div class="card-content white-text">
-
-													<span class="card-title">과제1 - 보고서</span>
+													<a
+														href="/homework_board_view${pageMaker.makeSearch(pageMaker.cri.page) }&hw_idx=${hwboardVO.hw_idx }">
+														<span class="card-title">${hwboardVO.hw_title}</span>
+													</a>
 													<p>첨부파일을 참고하여 과제를 기한내에 제출하세요.</p>
 													<br>
-													<p>제출기간 2018.11.01 ~ 2018.11.09</p>
+													<p>제출기한 : ${hwboardVO.hw_startdate } ~
+														${hwboardVO.hw_enddate }</p>
 												</div>
 											</div>
 										</div>
-									</a>
-								</div>
+									</div>
+								</c:forEach>
+								<!-- <div class="card-content">
+									<div class="col-md-12 col-sm-6">
+										<div class="card blue-grey darken-1">
+											<div class="card-content white-text">
+												<a href="/homework_board_view">
+												 <span class="card-title">과제1- 보고서</span>
+												 </a>
+												<p>첨부파일을 참고하여 과제를 기한내에 제출하세요.</p>
+												<br>
+												<p>제출기간 2018.11.01 ~ 2018.11.09</p>
+											</div>
+										</div>
+									</div>
+								</div> -->
 							</div>
 							<div class="clear"></div>
 							<div class="table-responsive">
 								<div class="writebtnArea">
-									<button type="button" class="btn">글쓰기</button>
+									<a href="./homework_board_write"><input type="button"
+										class="btn" id="write" value="글쓰기"></a>
 								</div>
 
 								<div class="clear"></div>
@@ -167,20 +223,25 @@ footer>strong {
 								<div
 									style="width: 230px; margin-left: auto; margin-right: auto;">
 									<ul class="pagination">
-										<li class="page-item"><a class="page-link" href="#">
-												<span>«</span>
-										</a></li>
-										<li class="page-item active"><a class="page-link"
-											href="#">1</a></li>
-										<li class="page-item"><a class="page-link" href="#">2</a>
-										</li>
-										<li class="page-item"><a class="page-link" href="#">3</a>
-										</li>
-										<li class="page-item"><a class="page-link" href="#">4</a>
-										</li>
-										<li class="page-item"><a class="page-link" href="#">
-												<span>»</span>
-										</a></li>
+
+										<c:if test="${pageMaker.prev}">
+											<li><a
+												href="homework_board_list${pageMaker.makeSearch(pageMaker.startPage - 1) }">&laquo;</a></li>
+										</c:if>
+
+										<c:forEach begin="${pageMaker.startPage }"
+											end="${pageMaker.endPage }" var="hw_idx">
+											<li
+												<c:out value="${pageMaker.cri.page == hw_idx?'class =active':''}"/>>
+												<a href="homework_board_list${pageMaker.makeSearch(hw_idx)}">${hw_idx}</a>
+											</li>
+										</c:forEach>
+
+										<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+											<li><a
+												href="homework_board_list${pageMaker.makeSearch(pageMaker.endPage +1) }">&raquo;</a></li>
+										</c:if>
+
 									</ul>
 								</div>
 							</div>
@@ -195,7 +256,8 @@ footer>strong {
 	<script src="${contextPath}/resources/js/jquery-1.10.2.js"></script>
 	<!-- Bootstrap Js -->
 	<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
-	<script src="${contextPath}/resources/materialize/js/materialize.min.js"></script>
+	<script
+		src="${contextPath}/resources/materialize/js/materialize.min.js"></script>
 	<!-- Metis Menu Js -->
 	<script src="${contextPath}/resources/js/jquery.metisMenu.js"></script>
 	<!-- Custom Js -->

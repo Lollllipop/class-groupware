@@ -20,7 +20,8 @@
 <!-- Bootstrap Styles-->
 <link href="${contextPath}/resources/css/bootstrap.css" rel="stylesheet" />
 <!-- FontAwesome Styles-->
-<link href="${contextPath}/resources/css/font-awesome.css" rel="stylesheet" />
+<link href="${contextPath}/resources/css/font-awesome.css"
+	rel="stylesheet" />
 <!-- Morris Chart Styles-->
 <link href="${contextPath}/resources/js/morris/morris-0.4.3.min.css"
 	rel="stylesheet" />
@@ -160,16 +161,16 @@ footer>strong {
 											<tr>
 												<td>
 													<ul class="list-inline">
-														<li>작성자</li>|
+														<li>작성자 </li>|
 														<li>작성일 2018.10.29</li>|
 														<li>수정일 2018.10.29</li>
 														<div style="float: right;">
 															<li><i class="material-icons dp48">chat_bubble</i> <b>5</b>
-															<!--제출--></li>
+																<!--제출--></li>
 														</div>
 														<div style="float: right;">
 															<li><i class="material-icons dp48">visibility</i> <b>13</b>
-															<!--조회수--></li>
+																<!--조회수--></li>
 														</div>
 													</ul>
 													<ul class="list-inline">
@@ -339,18 +340,19 @@ footer>strong {
 					</div>
 
 					<%@ include file="/WEB-INF/views/include/footer.jsp"%>
-					</div>
 				</div>
 			</div>
 		</div>
-		<!-- jQuery Js -->
-		<script src="${contextPath}/resources/js/jquery-1.10.2.js"></script>
-		<!-- Bootstrap Js -->
-		<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
-		<script src="${contextPath}/resources/materialize/js/materialize.min.js"></script>
-		<!-- Metis Menu Js -->
-		<script src="${contextPath}/resources/js/jquery.metisMenu.js"></script>
-		<!-- Custom Js -->
-		<script src="${contextPath}/resources/js/custom-scripts.js"></script>
+	</div>
+	<!-- jQuery Js -->
+	<script src="${contextPath}/resources/js/jquery-1.10.2.js"></script>
+	<!-- Bootstrap Js -->
+	<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+	<script
+		src="${contextPath}/resources/materialize/js/materialize.min.js"></script>
+	<!-- Metis Menu Js -->
+	<script src="${contextPath}/resources/js/jquery.metisMenu.js"></script>
+	<!-- Custom Js -->
+	<script src="${contextPath}/resources/js/custom-scripts.js"></script>
 </body>
 </html>

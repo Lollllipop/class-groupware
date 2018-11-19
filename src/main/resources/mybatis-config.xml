@@ -9,5 +9,8 @@
 		<!-- <typeAlias alias="Hw_boardVO" type="com.ja.classgroupware.base.vo.Hw_boardVO"/> -->
 		<!-- <typeAlias alias="usersVO" type="com.ja.classgroupware.base.vo.UsersVO"/> -->
 	</typeAliases>
+	<!-- oracle null 처리 -->
+	
+
 </configuration>
 

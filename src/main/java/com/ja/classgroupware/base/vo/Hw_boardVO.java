@@ -21,7 +21,7 @@ public class Hw_boardVO {
 	private Date hw_startdate;
 	private Date hw_enddate;
 	private Date hw_writedate;
-	private String hw_file_link;
-	private String hw_file_name;
+	/*private String hw_file_link;
+	private String hw_file_name;*/
 
 }

@@ -12,13 +12,11 @@ public interface Hw_boardDAO {
 
 	public Hw_boardVO selectByIdx(int hw_idx) throws Exception;
 
-	public List<Hw_boardVO> selectAll() throws Exception;
-
 	public void update(Hw_boardVO vo) throws Exception;
 
 	public void delete(int hw_idx) throws Exception;
 
-	public List<Hw_boardVO> listAll() throws Exception;
+	public List<Hw_boardVO> selectAll() throws Exception;
 
 	public List<Hw_boardVO> listPage(int page) throws Exception;
 
@@ -29,4 +27,6 @@ public interface Hw_boardDAO {
 	public List<Hw_boardVO> listSearch(SearchCriteria cri) throws Exception;
 
 	public int listSearchCount(SearchCriteria cri) throws Exception;
+
+	public int countAll() throws Exception;
 }

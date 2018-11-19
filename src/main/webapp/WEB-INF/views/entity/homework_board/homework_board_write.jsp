@@ -19,7 +19,8 @@
 <!-- Bootstrap Styles-->
 <link href="${contextPath}/resources/css/bootstrap.css" rel="stylesheet" />
 <!-- FontAwesome Styles-->
-<link href="${contextPath}/resources/css/font-awesome.css" rel="stylesheet" />
+<link href="${contextPath}/resources/css/font-awesome.css"
+	rel="stylesheet" />
 <!-- Morris Chart Styles-->
 <link href="${contextPath}/resources/js/morris/morris-0.4.3.min.css"
 	rel="stylesheet" />
@@ -33,6 +34,18 @@
 	rel="stylesheet">
 
 <%-- 여기에 css등 링크 작성!! --%>
+<script id="template" type="text/x-handlebars-template">
+<li>
+  <span class="mailbox-attachment-icon has-img"><img src="{{imgsrc}}" alt="Attachment"></span>
+  <div class="mailbox-attachment-info">
+	<a href="{{hw_file_link}}" class="mailbox-attachment-name">{{hw_file_name}}</a>
+	<a href="{{hw_file_name}}" 
+     class="btn btn-default btn-xs pull-right delbtn"><i class="fa fa-fw fa-remove"></i></a>
+	</span>
+  </div>
+</li>                
+</script>
+
 <style>
 .clear {
 	clear: both;
@@ -122,7 +135,7 @@ footer>strong {
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-content">
-								<form id="form1" action="" method="post"
+								<form id="form1" method="post"
 									enctype="multipart/form-data">
 									<div class="table-responsive">
 										<table class="table" id="dataTables-example"
@@ -132,38 +145,48 @@ footer>strong {
 													<td style="text-align: center; vertical-align: middle;">제목</td>
 													<td colspan="2"><input type="text"
 														class="form-control" placeholder="내용을 입력해주세요"
-														style="vertical-align: middle;"></td>
+														style="vertical-align: middle;" name="hw_title"></td>
 												</tr>
 												<tr>
-													<td style="text-align: center">작성자</td>
-													<input type="hidden" name="아이디" value="">
+													<td style="text-align: center">작성자<input type="text"
+														name="user_idx" value="3">
+														<input type="hidden" name="class_idx" value="1">
+														</td>
 													<td colspan="2">강사</td>
 												</tr>
 												<tr>
 													<td style="text-align: center; vertical-align: middle;">제출기간
 														시작일</td>
-													<td colspan="2"><input type="datetime-local"></td>
+													<td colspan="2"><input type="datetime-local"
+														name="hw_startdate"></td>
 												</tr>
 												<tr>
 													<td style="text-align: center; vertical-align: middle;">제출기간
 														마감일</td>
-													<td colspan="2"><input type="datetime-local"></td>
+													<td colspan="2"><input type="datetime-local"
+														name="hw_enddate"></td>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
 													<td colspan="3"><textarea name="editor1" id="editor1"
-															rows="10" cols="15">
-													에디터
+															rows="10" cols="15" name="hw_content">
+													내용을 입력해주세요
 												</textarea> <script type="text/javascript">
 													CKEDITOR.replace('editor1');
 												</script></td>
 												</tr>
 												<tr>
-													<td style="text-align: center">첨부파일</td>
-													<td><input type="file"></td>
+													<td>
+														<div class="form-group">
+															<label for="exampleInputEmail1">첨부파일을 드롭 하세요.</label>
+															<div class="fileDrop"></div>
+														</div>
+													</td>
+													<!-- <td style="text-align: center">첨부파일</td>
+													<td><input type="file"></td>-->
 													<td><label class="form-check-label"> <input
-															class="form-check-input" type="checkbox" value="">
+															class="form-check-input" type="checkbox" name="">
 															선택파일 삭제
 													</label></td>
 												</tr>
@@ -172,10 +195,12 @@ footer>strong {
 												<tr>
 													<td colspan="3">
 														<div style="float: right;">
-															<input type="submit" value="등록" class="btn btn-success">
+															<button type="submit" class="btn btn-success">등록</button>
 															<!--onclick시 file data가 있으면같이 submit 없으면 본문만 submit(?)-->
-															<input type="button" value="목록으로" class="btn btn-primary">
+															<a href="./homework_board_list"><input type="button"
+																value="목록으로" class="btn btn-primary"></a>
 														</div>
+
 													</td>
 												</tr>
 											</tfoot>
@@ -194,10 +219,13 @@ footer>strong {
 	<script src="${contextPath}/resources/js/jquery-1.10.2.js"></script>
 	<!-- Bootstrap Js -->
 	<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
-	<script src="${contextPath}/resources/materialize/js/materialize.min.js"></script>
+	<script
+		src="${contextPath}/resources/materialize/js/materialize.min.js"></script>
 	<!-- Metis Menu Js -->
 	<script src="${contextPath}/resources/js/jquery.metisMenu.js"></script>
 	<!-- Custom Js -->
 	<script src="${contextPath}/resources/js/custom-scripts.js"></script>
+	<script
+		src="${contextPath}/resources/homework_board/js/homework_board.js"></script>
 </body>
 </html>
