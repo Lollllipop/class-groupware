@@ -20,7 +20,8 @@
 <!-- Bootstrap Styles-->
 <link href="${contextPath}/resources/css/bootstrap.css" rel="stylesheet" />
 <!-- FontAwesome Styles-->
-<link href="${contextPath}/resources/css/font-awesome.css" rel="stylesheet" />
+<link href="${contextPath}/resources/css/font-awesome.css"
+	rel="stylesheet" />
 <!-- Morris Chart Styles-->
 <link href="${contextPath}/resources/js/morris/morris-0.4.3.min.css"
 	rel="stylesheet" />
@@ -33,7 +34,8 @@
 <link href="${contextPath}/resources/js/Lightweight-Chart/cssCharts.css"
 	rel="stylesheet">
 
-<link href="${contextPath }/resources/open_board/css/open_board_list.css"
+<link
+	href="${contextPath }/resources/open_board/css/open_board_list.css"
 	rel="stylesheet" />
 
 </head>
@@ -55,7 +57,7 @@
 								<strong>자유게시판</strong>
 							</div>
 							<div class="clear"></div>
-							<div class="cntAllTextArea">총 게시물 수</div>
+							<div class="cntAllTextArea">총 ${totalCount} 개</div>
 							<div class="searcharea">
 								<form class="form-inline d-flex justify-content-center">
 
@@ -93,13 +95,18 @@
 										</thead>
 										<tbody>
 
-											<tr>
-												<td>1</td>
-												<td>안녕 1번글이야</td>
-												<td>조문규</td>
-												<td>2018.10.26</td>
-												<td>1</td>
-											</tr>
+											<!-- jstl el -->
+											<c:forEach var="board" items="${boards}">
+												<tr>
+													<td>${board.bo_idx}</td>
+													<td>${board.bo_title}</td>
+													<td>${board.user_name}</td>
+													<td>${board.bo_writedate}</td>
+													<td>${board.bo_views}</td>
+												</tr>
+											</c:forEach>
+											<!--  -->
+
 										</tbody>
 									</table>
 
@@ -156,7 +163,8 @@
 	<script src="${contextPath}/resources/js/jquery-1.10.2.js"></script>
 	<!-- Bootstrap Js -->
 	<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
-	<script src="${contextPath}/resources/materialize/js/materialize.min.js"></script>
+	<script
+		src="${contextPath}/resources/materialize/js/materialize.min.js"></script>
 	<!-- Metis Menu Js -->
 	<script src="${contextPath}/resources/js/jquery.metisMenu.js"></script>
 	<!-- Custom Js -->

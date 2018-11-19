@@ -4,43 +4,55 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ja.classgroupware.base.persistence.BoardDAO">
-
+	<!-- pure -->
 	<insert id="insert">
 		insert into board
 		values(board_seq.nextval, #{class_idx}, #{user_idx}, #{bo_title}, #{bo_content}, SYSDATE, #{bo_isnotice}, #{bo_role})
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.BoardVO">
-		select bo_idx, class_idx,
-		user_idx,
-		bo_title, bo_content, bo_writedate, bo_isnotice, bo_role from
-		board
+		select bo_idx, class_idx, user_idx, bo_title, bo_content, bo_writedate, bo_isnotice, bo_role 
+		from board
 		where bo_idx =
 		#{bo_idx}
 	</select>
 
 	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.BoardVO">
- <![CDATA[
-select bo_idx, class_idx, user_idx,
-		bo_title, bo_content, bo_writedate, bo_isnotice, bo_role from
-		board
- where bo_idx > 0 
- order by bo_idx desc
- ]]>
+		<![CDATA[
+			select bo_idx, class_idx, user_idx, bo_title, bo_content, bo_writedate, bo_isnotice, bo_role 
+			from board
+			where bo_idx > 0 
+			order by bo_idx desc
+		]]>
 	</select>
 
 	<update id="update">
-		update board set bo_title
-		=#{bo_title}, bo_content
-		=#{bo_content}, bo_isnotice
-		=#{bo_isnotice}, bo_writedate = SYSDATE
-		where
-		bo_idx = #{bo_idx}
+		update board 
+		set bo_title = #{bo_title},
+			bo_content = #{bo_content},
+			bo_isnotice = #{bo_isnotice}, 
+			bo_writedate = SYSDATE
+		where bo_idx = #{bo_idx}
 	</update>
 
 	<delete id="delete">
-		delete from board where bo_idx =
-		#{bo_idx}
+		delete 
+		from board 
+		where bo_idx = #{bo_idx}
 	</delete>
 
+
+	<!-- mixed -->
+	<select id="selectAllList" resultType="com.ja.classgroupware.board.domain.BoardDTO">
+		select bo_idx, s.user_idx, bo_title, bo_writedate, bo_isnotice, bo_role, bo_views, user_name
+		from board b, users s
+		where b.user_idx = s.user_idx
+	    and class_idx = #{class_idx}
+	    and bo_role = #{bo_role} 
+	</select>
+	
+	<select id="selectTotalCount" resultType="_int">
+		select count(*)
+		from board
+	</select>
 </mapper>
