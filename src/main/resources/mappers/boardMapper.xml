@@ -6,15 +6,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ja.classgroupware.base.persistence.BoardDAO">
 	<!-- pure -->
 	<insert id="insert">
-		insert into board
-		values(board_seq.nextval, #{class_idx}, #{user_idx}, #{bo_title}, #{bo_content}, SYSDATE, #{bo_isnotice}, #{bo_role})
+		insert into board(bo_idx, class_idx, user_idx, bo_title, bo_content, bo_writedate, bo_isnotice, bo_role, bo_views, bo_comments)
+		values(board_seq.nextval, #{class_idx}, #{user_idx}, #{bo_title}, #{bo_content}, SYSDATE, #{bo_isnotice}, #{bo_role}, #{bo_views}, #{bo_comments})
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.BoardVO">
-		select bo_idx, class_idx, user_idx, bo_title, bo_content, bo_writedate, bo_isnotice, bo_role 
+		select *
 		from board
-		where bo_idx =
-		#{bo_idx}
+		where bo_idx = #{bo_idx}
 	</select>
 
 	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.BoardVO">
@@ -44,11 +43,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- mixed -->
 	<select id="selectAllList" resultType="com.ja.classgroupware.board.domain.BoardDTO">
-		select bo_idx, s.user_idx, bo_title, bo_writedate, bo_isnotice, bo_role, bo_views, user_name
+		select bo_idx, s.user_idx, bo_title, bo_writedate, bo_isnotice, bo_role, bo_views, user_name, bo_comments
 		from board b, users s
 		where b.user_idx = s.user_idx
 	    and class_idx = #{class_idx}
 	    and bo_role = #{bo_role} 
+	</select>
+	
+	<select id="selectDetailByIdx" resultType="com.ja.classgroupware.board.domain.PostMainDTO">
+		select bo_idx, s.user_idx, user_name, bo_title, bo_content, bo_writedate, bo_updatedate, bo_isnotice, bo_role, bo_views, bo_comments
+		from board b, users s
+		where b.user_idx = s.user_idx
+		and bo_idx = #{bo_idx}
 	</select>
 	
 	<select id="selectTotalCount" resultType="_int">

@@ -12,35 +12,23 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Class Groupware</title>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-	rel="stylesheet">
-<link rel="stylesheet"
-	href="${contextPath}/resources/materialize/css/materialize.min.css"
-	media="screen,projection" />
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+<link rel="stylesheet" href="${contextPath}/resources/materialize/css/materialize.min.css" media="screen,projection" />
 <!-- Bootstrap Styles-->
 <link href="${contextPath}/resources/css/bootstrap.css" rel="stylesheet" />
 <!-- FontAwesome Styles-->
-<link href="${contextPath}/resources/css/font-awesome.css" rel="stylesheet" />
+<link href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" rel="stylesheet" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous" />
 <!-- Morris Chart Styles-->
-<link href="${contextPath}/resources/js/morris/morris-0.4.3.min.css"
-	rel="stylesheet" />
+<link href="${contextPath}/resources/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
 <!-- Custom Styles-->
-<link href="${contextPath}/resources/css/custom-styles.css"
-	rel="stylesheet" />
+<link href="${contextPath}/resources/css/custom-styles.css" rel="stylesheet" />
+<link href="${contextPath}/resources/open_board/css/open_board_detail.css" rel="stylesheet" />
 <!-- Google Fonts-->
-<link href='http://fonts.googleapis.com/css?family=Open+Sans'
-	rel='stylesheet' type='text/css' />
-<link href="${contextPath}/resources/js/Lightweight-Chart/cssCharts.css"
-	rel="stylesheet">
-
-<link href="${contextPath }/resources/open_board/css/open_board_detail.css"
-	rel="stylesheet" />
-<link rel="stylesheet"
-	href="https://use.fontawesome.com/releases/v5.4.2/css/all.css"
-	integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns"
-	crossorigin="anonymous" />
-
-
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+<link href="${contextPath}/resources/js/Lightweight-Chart/cssCharts.css" rel="stylesheet" />
+<!-- Include Editor style. -->
+<link href="https://cdn.jsdelivr.net/npm/froala-editor@2.9.1/css/froala_style.min.css" rel="stylesheet" type="text/css" />
 
 </head>
 <body>
@@ -69,15 +57,16 @@
 											<tr>
 												<td>
 													<ul class="list-inline">
-														<li>작성자</li>|
-														<li>작성일 2018.10.29</li>|
-														<li>수정일 2018.10.29</li>
+														<li>${post.user_name}</li>
+														<li>| 작성일 ${post.bo_writedate}</li>
+														<li id="updatedate" style="display: none;">| 수정일
+															${post.bo_updatedate}</li>
 														<div style="float: right;">
-															<li><i class="material-icons dp48">chat_bubble</i> <b>5</b>
+															<li><i class="material-icons dp48">chat_bubble</i> <b>${post.bo_views}</b>
 															</li>
 														</div>
 														<div style="float: right;">
-															<li><i class="material-icons dp48">visibility</i> <b>13</b>
+															<li><i class="material-icons dp48">visibility</i> <b>${post.bo_comments}</b>
 															</li>
 														</div>
 													</ul>
@@ -87,10 +76,10 @@
 										<tbody>
 											<tr>
 												<td>
-													<p>
-														글내용 <br> ㅇㅅㅇ <br> ㅇㅅㅇ <br> ㅎㅎ <br>
-														'^'(*~ <br>
-													</p>
+													<!-- fr-view 클래스를 사용해야 에디터에서 작성한 그대로 보존시켜줌 -->
+													<div class="fr-view">
+														${post.bo_content}
+													</div>
 													<div class="share">
 														<i class="fas fa-share-alt"></i>
 													</div>
@@ -155,7 +144,9 @@
 																	<li>작성일 2018.10.29</li>|
 																	<li><div class="box-header with-border">
 																			<a data-toggle="collapse" data-parent="#accordion"
-																				href="#collapseOne"> <i class="fas fa-reply"></i>답글 달기 </a>
+																				href="#collapseOne"> <i class="fas fa-reply"></i>답글
+																				달기
+																			</a>
 																		</div></li>
 																</ul>
 															</td>
@@ -167,7 +158,7 @@
 														</tr>
 													</tbody>
 												</table>
-											
+
 												<div id="collapseOne" class="panel-collapse collapse in">
 													<div class="box-body">
 														<div class="reply_write_area">
@@ -199,7 +190,9 @@
 																	<li>작성일 2018.10.29</li>|
 																	<li><div class="box-header with-border">
 																			<a data-toggle="collapse" data-parent="#accordion"
-																				href="#collapseTwo"> <i class="fas fa-reply"></i>답글 달기 </a>
+																				href="#collapseTwo"> <i class="fas fa-reply"></i>답글
+																				달기
+																			</a>
 																		</div></li>
 																</ul>
 															</td>
@@ -214,8 +207,8 @@
 														</tr>
 													</tbody>
 												</table>
-										
-												
+
+
 												<div id="collapseTwo" class="panel-collapse collapse">
 													<div class="box-body">
 														<div class="reply_write_area">
@@ -246,7 +239,9 @@
 																	<li>작성일 2018.10.29</li>|
 																	<li><div class="box-header with-border">
 																			<a data-toggle="collapse" data-parent="#accordion"
-																				href="#collapseThree"> <i class="fas fa-reply"></i>답글 달기 </a>
+																				href="#collapseThree"> <i class="fas fa-reply"></i>답글
+																				달기
+																			</a>
 																		</div></li>
 																</ul>
 															</td>
@@ -258,7 +253,7 @@
 														</tr>
 													</tbody>
 												</table>
-												
+
 												<div id="collapseThree" class="panel-collapse collapse">
 													<div class="box-body">
 														<div class="reply_write_area">
@@ -294,16 +289,31 @@
 
 
 	<!-- jQuery Js -->
-	<script src="${contextPath}/resources/js/jquery-1.10.2.js"></script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<!-- Bootstrap Js -->
 	<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
-	<script src="${contextPath}/resources/materialize/js/materialize.min.js"></script>
+	<script
+		src="${contextPath}/resources/materialize/js/materialize.min.js"></script>
 	<!-- Metis Menu Js -->
 	<script src="${contextPath}/resources/js/jquery.metisMenu.js"></script>
 	<!-- Custom Js -->
 	<script src="${contextPath}/resources/js/custom-scripts.js"></script>
-	<script src="${contextPath}/resources/open_board/js/open_board_detail.js"></script>
+	<script
+		src="${contextPath}/resources/open_board/js/open_board_detail.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var isUpdated = $
+			{
+				post.bo_updatedate
+			}
+
+			if (isUpdated) {
+				$('#updatedate').css('display', 'inline-block');
+			}
+		});
+	</script>
 
 </body>
 </html>
-r

@@ -34,9 +34,7 @@
 <link href="${contextPath}/resources/js/Lightweight-Chart/cssCharts.css"
 	rel="stylesheet">
 
-<link
-	href="${contextPath }/resources/open_board/css/open_board_list.css"
-	rel="stylesheet" />
+<link href="${contextPath}/resources/open_board/css/open_board_list.css" rel="stylesheet" />
 
 </head>
 <body>
@@ -82,8 +80,7 @@
 
 							<div class="card-content">
 								<div class="table-responsive">
-									<table class="table table-striped table-bordered table-hover"
-										id="dataTables-example">
+									<table class="table" id="dataTables-example">
 										<thead>
 											<tr>
 												<th>글 번호</th>
@@ -91,18 +88,20 @@
 												<th>작성자</th>
 												<th>작성일</th>
 												<th>조회수</th>
+												<th>댓글수</th>
 											</tr>
 										</thead>
 										<tbody>
 
 											<!-- jstl el -->
-											<c:forEach var="board" items="${boards}">
+											<c:forEach var="post" items="${posts}">
 												<tr>
-													<td>${board.bo_idx}</td>
-													<td>${board.bo_title}</td>
-													<td>${board.user_name}</td>
-													<td>${board.bo_writedate}</td>
-													<td>${board.bo_views}</td>
+													<td>${post.view_idx}</td>
+													<td><a href="/openboard/${post.bo_idx}">${post.bo_title}</a></td>
+													<td>${post.user_name}</td>
+													<td>${post.bo_writedate}</td>
+													<td>${post.bo_views}</td>
+													<td>${post.bo_comments}</td>
 												</tr>
 											</c:forEach>
 											<!--  -->
@@ -123,7 +122,7 @@
 									</div>
 
 									<div class="writebtnArea">
-										<button type="button" class="btn">글쓰기</button>
+										<a href="/openboard/new"><button type="button" class="btn" onclick="">글쓰기</button></a>
 									</div>
 
 									<div class="clear"></div>
@@ -169,5 +168,6 @@
 	<script src="${contextPath}/resources/js/jquery.metisMenu.js"></script>
 	<!-- Custom Js -->
 	<script src="${contextPath}/resources/js/custom-scripts.js"></script>
+	
 </body>
 </html>

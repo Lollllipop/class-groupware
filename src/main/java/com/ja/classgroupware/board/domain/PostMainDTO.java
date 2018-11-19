@@ -11,28 +11,18 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardDTO implements Comparable<BoardDTO>{
+public class PostMainDTO {
 	
 	private int 	bo_idx;
-	private int 	view_idx;
 	private int 	user_idx;
+	private String 	user_name;
 	private String 	bo_title;
+	private String 	bo_content;
 	private Date 	bo_writedate;
+	private Date 	bo_updatedate;
 	private String 	bo_isnotice;
 	private String 	bo_role;
 	private int 	bo_views;
-	private String 	user_name;
 	private int 	bo_comments;
-	
-	@Override
-	public int compareTo(BoardDTO post) {
-		if (bo_idx < post.getBo_idx()) {
-			return 1;
-		} else if (bo_idx == post.getBo_idx()){
-			return 0;
-		} else {
-			return -1;
-		}
-	}
 	
 }
