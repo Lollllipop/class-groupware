@@ -6,16 +6,20 @@ public class ClassManager {
 	
 	HttpServletRequest request;
 	
-	ClassManager(HttpServletRequest request) {
+	public ClassManager(HttpServletRequest request) {
 		this.request = request;
 	}
 	
 	public int getClassIdx() {
-		return 1;
+//		int class_idx = (int) request.getSession().getAttribute("class_idx");
+		int class_idx = 1;
+		return class_idx;
 	}
 	
 	public int getUserIdx() {
-		return 1;
+//		int user_idx = (int) request.getSession().getAttribute("user").getUser_idx();
+		int user_idx = 1;
+		return user_idx;
 	}
 	
 	public String getUserName() {

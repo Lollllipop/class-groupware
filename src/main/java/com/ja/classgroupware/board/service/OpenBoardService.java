@@ -14,5 +14,7 @@ public interface OpenBoardService {
 	public void getPageList() throws Exception;
 	
 	public PostMainDTO getDetail(int bo_idx) throws Exception;
+	
+	public void addOneAtViews(int bo_idx) throws Exception;
 
 }

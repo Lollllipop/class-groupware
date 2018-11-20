@@ -23,9 +23,12 @@ public interface BoardDAO {
 	
 	// mixed
 	public ArrayList<BoardDTO> selectAllList(Map<String, Object> paramMap) throws Exception;
+	
 	public PostMainDTO selectDetailByIdx(int bo_idx) throws Exception;
 	
 	// etc
 	public int selectTotalCount() throws Exception;
+	
+	public void updateViewsWithPlusOne(int bo_idx) throws Exception;
 
 }

@@ -57,8 +57,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		and bo_idx = #{bo_idx}
 	</select>
 	
+	<!-- etc -->
 	<select id="selectTotalCount" resultType="_int">
 		select count(*)
 		from board
 	</select>
+	
+	<update id="updateViewsWithPlusOne">
+		update board 
+		set bo_views = bo_views + 1
+		where bo_idx = #{bo_idx}
+	</update>
 </mapper>

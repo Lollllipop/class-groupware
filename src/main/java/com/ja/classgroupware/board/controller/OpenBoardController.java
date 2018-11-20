@@ -1,6 +1,6 @@
 package com.ja.classgroupware.board.controller;
 
-import java.util.Locale;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.ja.classgroupware.base.persistence.AlertDAO;
+import com.ja.classgroupware.base.util.ClassManager;
 import com.ja.classgroupware.board.service.OpenBoardService;
 
 // board : 게시판
@@ -30,13 +30,14 @@ public class OpenBoardController {
 	
 	@Value("${separator.openboard}")
 	private String boardSeparator;
+	
+	private ClassManager classManager;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String readAll(Model model) throws Exception {
-		String page = "entity/open_board/open_board_list";
-		
-		// 로직적으로 받아올것임 실제론
-		int class_idx = 1;
+	public String readAll(HttpServletRequest request, Model model) throws Exception {
+		String page 	= "entity/open_board/open_board_list";
+		classManager 	= new ClassManager(request);	
+		int class_idx 	= classManager.getClassIdx();
 		
 		model.addAttribute("posts", openBoardService.getAll(class_idx, boardSeparator));
 		model.addAttribute("totalCount", openBoardService.getTotalCount());
@@ -47,7 +48,6 @@ public class OpenBoardController {
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public String make(RedirectAttributes rttr) throws Exception {
 		
-		
 		rttr.addFlashAttribute("msg", "SUCCESS");
 
 		return "redirect:/openboard";
@@ -56,6 +56,8 @@ public class OpenBoardController {
 	@RequestMapping(value = "/{bo_idx}", method = RequestMethod.GET)
 	public String readDetail(@PathVariable("bo_idx") Integer bo_idx, Model model) throws Exception {
 		String page = "entity/open_board/open_board_detail";
+		
+		openBoardService.addOneAtViews(bo_idx);
 		
 		// 총 3개를 model에 담으면 됨
 		// 리스트 디테일

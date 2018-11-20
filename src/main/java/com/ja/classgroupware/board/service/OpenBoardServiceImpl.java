@@ -47,12 +47,15 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 	public PostMainDTO getDetail(int bo_idx) throws Exception {
 		return boardDAO.selectDetailByIdx(bo_idx);
 	}
+	
+	@Override
+	public void addOneAtViews(int bo_idx) throws Exception {
+		boardDAO.updateViewsWithPlusOne(bo_idx);
+	}
 
 	@Override
 	public void getPageList() throws Exception {
 		// TODO Auto-generated method stub
 	}
-
-
 
 }
