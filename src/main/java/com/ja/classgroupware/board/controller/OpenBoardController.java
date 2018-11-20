@@ -1,6 +1,7 @@
 package com.ja.classgroupware.board.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -54,6 +55,11 @@ public class OpenBoardController {
 		PagingNavInfo pagingNavInfo = pageMaker.make();
 		
 		// posts setView_idx 번호 부착해야함
+		Collections.sort(posts);
+		
+		for (int i = 0; i < posts.size(); i++) {
+			posts.get(i).setView_idx(totalCount - (((pagingNavInfo.getCurrentPage() - 1) * pageMaker.getCount()) + i));
+		}
 	
 		model.addAttribute("posts", posts);
 		model.addAttribute("totalCount", totalCount);

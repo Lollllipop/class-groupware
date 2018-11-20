@@ -50,13 +50,17 @@ public class PageMaker {
 		pagingNavInfo.setLastPageOffset(makeLastPageOffset());
 		pagingNavInfo.setLastPageMax(makeLastPageMax());
 		
-		pagingNavInfo.setLastPageUnitStartNumber(makeLastPageUnitStartNumber());
-		pagingNavInfo.setLastPageUnitEndNumber(makeLastPageUnitEndNumber());
 		pagingNavInfo.setOffset(makeOffset());
 		pagingNavInfo.setMax(makeMax());
 		
+		pagingNavInfo.setCurrentPage(makeCurrentPage());
+		
 		
 		return pagingNavInfo;
+	}
+
+	private int makeCurrentPage() {
+		return currentPage;
 	}
 
 	private int makeLastPageMax() {
@@ -127,14 +131,6 @@ public class PageMaker {
 	
 	private int makePostsCount() {
 		return count;
-	}
-	
-	private int makeLastPageUnitEndNumber() {
-		return totalCount;
-	}
-
-	private int makeLastPageUnitStartNumber() {
-		return totalPageUnit * 10 * count;
 	}
 	
 	private int makeMax() {

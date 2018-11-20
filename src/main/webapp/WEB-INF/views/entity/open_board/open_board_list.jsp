@@ -96,8 +96,7 @@
 											<!-- jstl el -->
 											<c:forEach var="post" items="${posts}">
 												<tr>
-													<%-- <td>${post.view_idx}</td> --%>
-													<td>${post.bo_idx}</td>
+													<td>${post.view_idx}</td>
 													<td><a href="/openboard/${post.bo_idx}">${post.bo_title}</a></td>
 													<td>${post.user_name}</td>
 													<td>${post.bo_writedate}</td>
@@ -113,10 +112,10 @@
 									<div class="selectReadCountArea">
 										<div class="selectReadCountSelect">
 											<select class="form-control input-sm" name="selectReadCount">
-												<option value="5">5</option>
 												<option value="10" selected="selected">10</option>
-												<option value="15">15</option>
 												<option value="20">20</option>
+												<option value="30">30</option>
+												<option value="50">50</option>
 											</select>
 										</div>
 										<div class="selectReadCountText">개씩보기</div>
@@ -139,7 +138,14 @@
 											
 											<c:set var="postsCount" value="0"/>
 											<c:forEach var="i" begin="${pagingNavInfo.startPage}" end="${pagingNavInfo.endPage}">
-												<li class="page-item"><a class="page-link" href="/openboard?offset=${pagingNavInfo.offset + postsCount}&max=${pagingNavInfo.max + postsCount}&sort=${pagingNavInfo.pageInfo.sort}&order=${pagingNavInfo.pageInfo.order}">${i}</a></li>
+												<c:choose>
+													<c:when test="${i eq pagingNavInfo.currentPage}">
+														<li class="page-item"><a class="page-link" style="color: white; background-color: #f44336;" href="/openboard?offset=${pagingNavInfo.offset + postsCount}&max=${pagingNavInfo.max + postsCount}&sort=${pagingNavInfo.pageInfo.sort}&order=${pagingNavInfo.pageInfo.order}">${i}</a></li>
+													</c:when>
+													<c:otherwise>
+														<li class="page-item"><a class="page-link" href="/openboard?offset=${pagingNavInfo.offset + postsCount}&max=${pagingNavInfo.max + postsCount}&sort=${pagingNavInfo.pageInfo.sort}&order=${pagingNavInfo.pageInfo.order}">${i}</a></li>
+													</c:otherwise>
+												</c:choose>
 												<c:set var="postsCount" value="${postsCount + pagingNavInfo.postsCount}"/>
 											</c:forEach>
 											

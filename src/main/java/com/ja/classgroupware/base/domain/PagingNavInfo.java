@@ -20,6 +20,7 @@ public class PagingNavInfo {
 	// 현재 페이지 범위의 시작과 끝
 	private int 		startPage;	
 	private int 		endPage;
+	
 	private int 		postsCount;
 	private PageInfo 	pageInfo;
 	
@@ -33,10 +34,9 @@ public class PagingNavInfo {
 	private int 		lastPageOffset;
 	private int 		lastPageMax;
 	
-	
-	private int 		lastPageUnitStartNumber;
-	private int 		lastPageUnitEndNumber;
 	private int 		offset;
 	private int			max;
+	
+	private int 		currentPage;
 	
 }
