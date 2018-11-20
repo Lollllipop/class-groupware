@@ -47,7 +47,7 @@
 							<div class="card-content">
 								<div class="table-responsive">
 									<div class="ref_file_area">
-										<div class="content_title">여기는 제목</div>
+										<div class="content_title">${post.bo_title}</div>
 										<div class="ref_file_icon">
 											<i class="fas fa-file-invoice"></i>
 										</div>

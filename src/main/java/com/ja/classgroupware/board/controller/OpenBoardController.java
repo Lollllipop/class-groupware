@@ -1,5 +1,7 @@
 package com.ja.classgroupware.board.controller;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,7 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.ja.classgroupware.base.domain.PageInfo;
+import com.ja.classgroupware.base.domain.PagingNavInfo;
 import com.ja.classgroupware.base.util.ClassManager;
+import com.ja.classgroupware.base.util.PageMaker;
+import com.ja.classgroupware.board.domain.BoardDTO;
 import com.ja.classgroupware.board.service.OpenBoardService;
 
 // board : 게시판
@@ -31,16 +38,26 @@ public class OpenBoardController {
 	@Value("${separator.openboard}")
 	private String boardSeparator;
 	
-	private ClassManager classManager;
+	private ClassManager 	classManager;
+	private PageMaker 		pageMaker;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String readAll(HttpServletRequest request, Model model) throws Exception {
+	public String readAll(@ModelAttribute("cri") PageInfo pageInfo, Model model, HttpServletRequest request) throws Exception {
 		String page 	= "entity/open_board/open_board_list";
-		classManager 	= new ClassManager(request);	
+		classManager 	= new ClassManager(request);
 		int class_idx 	= classManager.getClassIdx();
 		
-		model.addAttribute("posts", openBoardService.getAll(class_idx, boardSeparator));
-		model.addAttribute("totalCount", openBoardService.getTotalCount());
+		ArrayList<BoardDTO> posts 		= openBoardService.getPageList(pageInfo, class_idx, boardSeparator);
+		int 				totalCount 	= openBoardService.getTotalCount();
+		
+		pageMaker = new PageMaker(pageInfo, totalCount);
+		PagingNavInfo pagingNavInfo = pageMaker.make();
+		
+		// posts setView_idx 번호 부착해야함
+	
+		model.addAttribute("posts", posts);
+		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("pagingNavInfo", pagingNavInfo);
 		
 		return page;
 	}

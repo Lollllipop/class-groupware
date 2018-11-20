@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ja.classgroupware.base.domain.PageInfo;
 import com.ja.classgroupware.base.persistence.BoardDAO;
 import com.ja.classgroupware.board.domain.BoardDTO;
 import com.ja.classgroupware.board.domain.PostMainDTO;
@@ -39,6 +40,17 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 	}
 	
 	@Override
+	public ArrayList<BoardDTO> getPageList(PageInfo pageInfo, int class_idx, String bo_role) throws Exception {
+		paramMap = new HashMap<String, Object>();
+		
+		paramMap.put("pageInfo", pageInfo);
+		paramMap.put("class_idx", class_idx);
+		paramMap.put("bo_role", bo_role);
+		
+		return boardDAO.selectPage(paramMap);
+	}
+	
+	@Override
 	public int getTotalCount() throws Exception {
 		return boardDAO.selectTotalCount();
 	}
@@ -51,11 +63,6 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 	@Override
 	public void addOneAtViews(int bo_idx) throws Exception {
 		boardDAO.updateViewsWithPlusOne(bo_idx);
-	}
-
-	@Override
-	public void getPageList() throws Exception {
-		// TODO Auto-generated method stub
 	}
 
 }

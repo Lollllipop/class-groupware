@@ -68,4 +68,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		set bo_views = bo_views + 1
 		where bo_idx = #{bo_idx}
 	</update>
+	
+	<select id="selectPage" resultType="com.ja.classgroupware.board.domain.BoardDTO">
+		<![CDATA[
+			SELECT *
+			FROM (
+			        SELECT a.*, ROWNUM AS rnum
+			        FROM (
+			                SELECT bo_idx, s.user_idx, bo_title, bo_writedate, bo_isnotice, bo_role, bo_views, user_name, bo_comments
+			                FROM board b, users s
+			                WHERE b.user_idx = s.user_idx
+			                AND class_idx = #{class_idx}
+			                AND bo_role = #{bo_role} 
+			                ORDER BY ${pageInfo.sort} ${pageInfo.order}
+			             ) a
+			        WHERE ROWNUM <= #{pageInfo.max}
+			    )
+			WHERE rnum > #{pageInfo.offset}
+		]]>
+	</select>
 </mapper>

@@ -1,7 +1,6 @@
 package com.ja.classgroupware.base.persistence;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import com.ja.classgroupware.base.vo.BoardVO;
@@ -15,7 +14,7 @@ public interface BoardDAO {
 
 	public BoardVO selectByIdx(int bo_idx) throws Exception;
 
-	public List<BoardVO> selectAll() throws Exception;
+	public ArrayList<BoardVO> selectAll() throws Exception;
 
 	public void update(BoardVO vo) throws Exception;
 
@@ -30,5 +29,7 @@ public interface BoardDAO {
 	public int selectTotalCount() throws Exception;
 	
 	public void updateViewsWithPlusOne(int bo_idx) throws Exception;
+	
+	public ArrayList<BoardDTO> selectPage(Map<String, Object> paramMap) throws Exception;
 
 }

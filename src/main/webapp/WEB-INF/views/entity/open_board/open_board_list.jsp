@@ -96,7 +96,8 @@
 											<!-- jstl el -->
 											<c:forEach var="post" items="${posts}">
 												<tr>
-													<td>${post.view_idx}</td>
+													<%-- <td>${post.view_idx}</td> --%>
+													<td>${post.bo_idx}</td>
 													<td><a href="/openboard/${post.bo_idx}">${post.bo_title}</a></td>
 													<td>${post.user_name}</td>
 													<td>${post.bo_writedate}</td>
@@ -127,23 +128,27 @@
 
 									<div class="clear"></div>
 
-									<div
-										style="width: 230px; margin-left: auto; margin-right: auto;">
+									<div style="width: 550px; margin-left: auto; margin-right: auto; text-align: center">
 										<ul class="pagination">
-											<li class="page-item"><a class="page-link" href="#">
-													<span>«</span>
-											</a></li>
-											<li class="page-item active"><a class="page-link"
-												href="#">1</a></li>
-											<li class="page-item"><a class="page-link" href="#">2</a>
-											</li>
-											<li class="page-item"><a class="page-link" href="#">3</a>
-											</li>
-											<li class="page-item"><a class="page-link" href="#">4</a>
-											</li>
-											<li class="page-item"><a class="page-link" href="#">
-													<span>»</span>
-											</a></li>
+											<c:if test="${pagingNavInfo.firstPage}">
+												<li class="page-item"><a class="page-link" href="/openboard?offset=${pagingNavInfo.firstPageOffset}&max=${pagingNavInfo.firstPageMax}&sort=${pagingNavInfo.pageInfo.sort}&order=${pagingNavInfo.pageInfo.order}"><span>≪</span></a></li>
+											</c:if>
+											<c:if test="${pagingNavInfo.prev}">
+												<li class="page-item"><a class="page-link" href="/openboard?offset=${pagingNavInfo.prevPageOffset}&max=${pagingNavInfo.prevPageMax}&sort=${pagingNavInfo.pageInfo.sort}&order=${pagingNavInfo.pageInfo.order}"><span>＜</span></a></li>
+											</c:if>
+											
+											<c:set var="postsCount" value="0"/>
+											<c:forEach var="i" begin="${pagingNavInfo.startPage}" end="${pagingNavInfo.endPage}">
+												<li class="page-item"><a class="page-link" href="/openboard?offset=${pagingNavInfo.offset + postsCount}&max=${pagingNavInfo.max + postsCount}&sort=${pagingNavInfo.pageInfo.sort}&order=${pagingNavInfo.pageInfo.order}">${i}</a></li>
+												<c:set var="postsCount" value="${postsCount + pagingNavInfo.postsCount}"/>
+											</c:forEach>
+											
+											<c:if test="${pagingNavInfo.next}">
+												<li class="page-item"><a class="page-link" href="/openboard?offset=${pagingNavInfo.nextPageOffset}&max=${pagingNavInfo.nextPageMax}&sort=${pagingNavInfo.pageInfo.sort}&order=${pagingNavInfo.pageInfo.order}"><span>＞</span></a></li>
+											</c:if>
+											<c:if test="${pagingNavInfo.lastPage}">
+												<li class="page-item"><a class="page-link" href="/openboard?offset=${pagingNavInfo.lastPageOffset}&max=${pagingNavInfo.lastPageMax}&sort=${pagingNavInfo.pageInfo.sort}&order=${pagingNavInfo.pageInfo.order}"><span>≫</span></a></li>
+											</c:if>
 										</ul>
 									</div>
 								</div>
