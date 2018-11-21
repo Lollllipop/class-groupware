@@ -46,10 +46,15 @@
 						<div class="card">
 							<div class="card-content">
 								<div class="table-responsive">
-									<div class="ref_file_area">
-										<div class="content_title">${post.bo_title}</div>
-										<div class="ref_file_icon">
-											<i class="fas fa-file-invoice"></i>
+									<div class="ref_file_area" style='padding: 8px;'>
+										<div>
+											<div class="content_title">${post.bo_title}</div>
+											<div class="ref_file_icon">
+												<i class="fas fa-file-invoice"></i>
+											</div>
+										</div>
+										<div>
+											<a href="${prevPage}"><button class="btn" style="float: right;">목록</button></a>
 										</div>
 									</div>
 									<table class="table">
@@ -304,7 +309,7 @@
 
 	<script type="text/javascript">
 		$(document).ready(function() {
-			var isUpdated = ${post.bo_updatedate}
+			var isUpdated = ${post.bo_updatedate};
 
 			if (isUpdated) {
 				$('#updatedate').css('display', 'inline-block');

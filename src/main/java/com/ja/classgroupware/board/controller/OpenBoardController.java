@@ -80,11 +80,12 @@ public class OpenBoardController {
 	}
 	
 	@RequestMapping(value = "/{bo_idx}", method = RequestMethod.GET)
-	public String readDetail(@PathVariable("bo_idx") Integer bo_idx, Model model) throws Exception {
+	public String readDetail(@PathVariable("bo_idx") Integer bo_idx, Model model, HttpServletRequest request) throws Exception {
 		String page = "entity/open_board/open_board_detail";
 		
 		openBoardService.addOneAtViews(bo_idx);
 		
+		model.addAttribute("prevPage", request.getHeader("referer"));
 		// 총 3개를 model에 담으면 됨
 		// 리스트 디테일
 		model.addAttribute("post", openBoardService.getDetail(bo_idx));
