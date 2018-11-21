@@ -48,19 +48,22 @@ public class OpenBoardController {
 		classManager 	= new ClassManager(request);
 		int class_idx 	= classManager.getClassIdx();
 		
-		ArrayList<BoardDTO> posts 		= openBoardService.getPageList(pageInfo, class_idx, boardSeparator);
-		int 				totalCount 	= openBoardService.getTotalCount();
+		ArrayList<BoardDTO> posts 			= openBoardService.getPageList(pageInfo, class_idx, boardSeparator);
+		int 				totalCount 		= openBoardService.getTotalCount();
 		
+		// 페이지메이커 생성
 		pageMaker = new PageMaker(pageInfo, totalCount);
-		PagingNavInfo pagingNavInfo = pageMaker.make();
 		
-		// posts setView_idx 번호 부착해야함
+		// 페이지 정보 생성
+		PagingNavInfo 		pagingNavInfo 	= pageMaker.make();
+		
 		Collections.sort(posts);
 		
 		for (int i = 0; i < posts.size(); i++) {
 			posts.get(i).setView_idx(totalCount - (((pagingNavInfo.getCurrentPage() - 1) * pageMaker.getCount()) + i));
 		}
-	
+		
+		// 페이지 정보 view로 전달
 		model.addAttribute("posts", posts);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("pagingNavInfo", pagingNavInfo);

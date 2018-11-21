@@ -1,7 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<!-- 페이징 옵션 설정  -->
+<%
+	request.setAttribute("path", "openboard");
+	request.setAttribute("p", request.getAttribute("pagingNavInfo"));
+%>
 
 <c:set var="contextPath" value="<%=request.getContextPath()%>"></c:set>
 
@@ -33,7 +38,6 @@
 	rel='stylesheet' type='text/css' />
 <link href="${contextPath}/resources/js/Lightweight-Chart/cssCharts.css"
 	rel="stylesheet">
-
 <link href="${contextPath}/resources/open_board/css/open_board_list.css" rel="stylesheet" />
 
 </head>
@@ -91,9 +95,9 @@
 												<th>댓글수</th>
 											</tr>
 										</thead>
-										<tbody>
-
-											<!-- jstl el -->
+										<tbody id='posts-body'>
+										
+											<!-- 리스트 부분 -->
 											<c:forEach var="post" items="${posts}">
 												<tr>
 													<td>${post.view_idx}</td>
@@ -104,14 +108,13 @@
 													<td>${post.bo_comments}</td>
 												</tr>
 											</c:forEach>
-											<!--  -->
-
+											
 										</tbody>
 									</table>
 
 									<div class="selectReadCountArea">
 										<div class="selectReadCountSelect">
-											<select class="form-control input-sm" name="selectReadCount">
+											<select class="form-control input-sm" id="readCountOfPosts" name="selectReadCount">
 												<option value="10" selected="selected">10</option>
 												<option value="20">20</option>
 												<option value="30">30</option>
@@ -120,41 +123,44 @@
 										</div>
 										<div class="selectReadCountText">개씩보기</div>
 									</div>
-
+									
 									<div class="writebtnArea">
 										<a href="/openboard/new"><button type="button" class="btn" onclick="">글쓰기</button></a>
 									</div>
-
 									<div class="clear"></div>
-
 									<div style="width: 550px; margin-left: auto; margin-right: auto; text-align: center">
-										<ul class="pagination">
-											<c:if test="${pagingNavInfo.firstPage}">
-												<li class="page-item"><a class="page-link" href="/openboard?offset=${pagingNavInfo.firstPageOffset}&max=${pagingNavInfo.firstPageMax}&sort=${pagingNavInfo.pageInfo.sort}&order=${pagingNavInfo.pageInfo.order}"><span>≪</span></a></li>
+										<ul class="pagination" id='paging-buttons'>
+											
+											<!-- 처음 및 이전 페이지 버튼 -->
+											<c:if test="${p.firstPage}">
+												<li class="page-item"><a class="page-link" href="/${path}?offset=${p.firstPageOffset}&max=${p.firstPageMax}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}"><span>≪</span></a></li>
 											</c:if>
-											<c:if test="${pagingNavInfo.prev}">
-												<li class="page-item"><a class="page-link" href="/openboard?offset=${pagingNavInfo.prevPageOffset}&max=${pagingNavInfo.prevPageMax}&sort=${pagingNavInfo.pageInfo.sort}&order=${pagingNavInfo.pageInfo.order}"><span>＜</span></a></li>
+											<c:if test="${p.prev}">
+												<li class="page-item"><a class="page-link" href="/${path}?offset=${p.prevPageOffset}&max=${p.prevPageMax}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}"><span>＜</span></a></li>
 											</c:if>
 											
+											<!-- 페이지 버튼 -->
 											<c:set var="postsCount" value="0"/>
-											<c:forEach var="i" begin="${pagingNavInfo.startPage}" end="${pagingNavInfo.endPage}">
+											<c:forEach var="i" begin="${p.startPage}" end="${p.endPage}">
 												<c:choose>
-													<c:when test="${i eq pagingNavInfo.currentPage}">
-														<li class="page-item"><a class="page-link" style="color: white; background-color: #f44336;" href="/openboard?offset=${pagingNavInfo.offset + postsCount}&max=${pagingNavInfo.max + postsCount}&sort=${pagingNavInfo.pageInfo.sort}&order=${pagingNavInfo.pageInfo.order}">${i}</a></li>
+													<c:when test="${i eq p.currentPage}">
+														<li class="page-item"><a class="page-link" style="color: white; background-color: #f44336;" href="/${path}?offset=${p.offset + postsCount}&max=${p.max + postsCount}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}">${i}</a></li>
 													</c:when>
 													<c:otherwise>
-														<li class="page-item"><a class="page-link" href="/openboard?offset=${pagingNavInfo.offset + postsCount}&max=${pagingNavInfo.max + postsCount}&sort=${pagingNavInfo.pageInfo.sort}&order=${pagingNavInfo.pageInfo.order}">${i}</a></li>
+														<li class="page-item"><a class="page-link" href="/${path}?offset=${p.offset + postsCount}&max=${p.max + postsCount}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}">${i}</a></li>
 													</c:otherwise>
 												</c:choose>
-												<c:set var="postsCount" value="${postsCount + pagingNavInfo.postsCount}"/>
+												<c:set var="postsCount" value="${postsCount + p.postsCount}"/>
 											</c:forEach>
 											
-											<c:if test="${pagingNavInfo.next}">
-												<li class="page-item"><a class="page-link" href="/openboard?offset=${pagingNavInfo.nextPageOffset}&max=${pagingNavInfo.nextPageMax}&sort=${pagingNavInfo.pageInfo.sort}&order=${pagingNavInfo.pageInfo.order}"><span>＞</span></a></li>
+											<!-- 다음 및 마지막 페이지 버튼 -->
+											<c:if test="${p.next}">
+												<li class="page-item"><a class="page-link" href="/${path}?offset=${p.nextPageOffset}&max=${p.nextPageMax}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}"><span>＞</span></a></li>
 											</c:if>
-											<c:if test="${pagingNavInfo.lastPage}">
-												<li class="page-item"><a class="page-link" href="/openboard?offset=${pagingNavInfo.lastPageOffset}&max=${pagingNavInfo.lastPageMax}&sort=${pagingNavInfo.pageInfo.sort}&order=${pagingNavInfo.pageInfo.order}"><span>≫</span></a></li>
+											<c:if test="${p.lastPage}">
+												<li class="page-item"><a class="page-link" href="/${path}?offset=${p.lastPageOffset}&max=${p.lastPageMax}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}"><span>≫</span></a></li>
 											</c:if>
+											
 										</ul>
 									</div>
 								</div>
@@ -167,18 +173,122 @@
 		</div>
 	</div>
 
-
-
 	<!-- jQuery Js -->
-	<script src="${contextPath}/resources/js/jquery-1.10.2.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<!-- Bootstrap Js -->
 	<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
-	<script
-		src="${contextPath}/resources/materialize/js/materialize.min.js"></script>
+	<script src="${contextPath}/resources/materialize/js/materialize.min.js"></script>
 	<!-- Metis Menu Js -->
 	<script src="${contextPath}/resources/js/jquery.metisMenu.js"></script>
 	<!-- Custom Js -->
 	<script src="${contextPath}/resources/js/custom-scripts.js"></script>
+	<script>
 	
+	function getQuerystring(paramName){ 
+		var tempUrl = window.location.search.substring(1);
+		var tempArray = tempUrl.split('&'); 
+		
+		console.log(tempArray);
+		
+		if (tempArray[0] !== '') {
+			for(var i = 0; tempArray.length; i++) { 
+				var keyValuePair = tempArray[i].split('=');
+				
+				if(keyValuePair[0] == paramName){
+					return keyValuePair[1]; 
+				} 
+			} 
+		} else {
+			return 0;
+		}
+	}
+
+	function getChangedRangePosts() {
+		var selectedCount 	= $('#readCountOfPosts option:selected').val();
+		var offset			= '${p.pageInfo.offset}';
+		var max				= String(parseInt(offset) + parseInt(selectedCount));
+		var sort 			= '${p.pageInfo.sort}';
+		var order 			= '${p.pageInfo.order}';
+		
+		$.ajax({
+			type	: 'GET',
+			url		: '/openboardajax?offset=' + offset + '&max=' + max + '&sort=' + sort + '&order=' + order,
+			success : function(data, textStatus, xhr) {
+				console.log(data);
+				
+		        $('#posts-body').empty();
+		        $('#paging-buttons').empty();
+		        
+		        data.posts.forEach(function(item, index, array) {
+		       		var post = `
+						<tr>
+							<td>` + item.view_idx + `</td>
+							<td><a href="/openboard/` + item.bo_idx + `">` + item.bo_title + `</a></td>
+							<td>` + item.user_name + `</td>
+							<td>` + item.bo_writedate + `</td>
+							<td>` + item.bo_views + `</td>
+							<td>` + item.bo_comments + `</td>
+						</tr>
+					`;
+					
+		        	$('#posts-body').append(post);
+		        });
+		        
+		        var path = 'openboard';
+		        var p	 = data.pagingNavInfo;
+		        
+		        var firstButton = p.firstPage 
+		        					? `<li class="page-item"><a class="page-link" href="/` + path + `?offset=` + p.firstPageOffset + `&max=` + p.firstPageMax + `&sort=` + p.pageInfo.sort + `&order=` + p.pageInfo.order + `"><span>≪</span></a></li>`
+		        					: ``;
+		        var prevButton = p.prev
+		        					? `<li class="page-item"><a class="page-link" href="/` + path + `?offset=` + p.prevPageOffset + `&max=` + p.prevPageMax + `&sort=` + p.pageInfo.sort + `&order=` + p.pageInfo.order + `"><span>＜</span></a></li>`
+		        					: ``;
+
+		        var nextButton = p.lastPage
+									? `<li class="page-item"><a class="page-link" href="/` + path + `?offset=` + p.nextPageOffset + `&max=` + p.nextPageMax + `&sort=` + p.pageInfo.sort + `&order=` + p.pageInfo.order + `"><span>＞</span></a></li>`
+									: ``; 
+		        
+		        var lastButton = p.lastPage
+									? `<li class="page-item"><a class="page-link" href="/` + path + `?offset=` + p.lastPageOffset + `&max=` + p.lastPageMax + `&sort=` + p.pageInfo.sort + `&order=` + p.pageInfo.order + `"><span>≫</span></a></li>`			
+									: ``;
+									
+				var currentPageList = ``;
+				var postsCount = 0;
+				
+				for (var i = p.startPage; i <= p.endPage; i++) {
+					currentPageList += i === p.currentPage 
+											? `<li class="page-item"><a class="page-link" style="color: white; background-color: #f44336;" href="/` + path + `?offset=` + (p.offset + postsCount) + `&max=` + (p.max + postsCount) + `&sort=` + p.pageInfo.sort + `&order=` + p.pageInfo.order + `"><span>` + i + `</span></a></li>`
+											: `<li class="page-item"><a class="page-link" href="/` + path + `?offset=` + (p.offset + postsCount) + `&max=` + (p.max + postsCount) + `&sort=` + p.pageInfo.sort + `&order=` + p.pageInfo.order + `"><span>` + i + `</span></a></li>`
+												  
+					postsCount += p.postsCount
+				}
+					        
+		        var pagingInfo = firstButton + prevButton + currentPageList + nextButton + lastButton;
+		        
+		        $('#paging-buttons').append(pagingInfo);
+		    },
+		    error	: function(request, status, error) {
+		    	alert("code:"+request.status+"\n"+"error:"+error);
+		    }
+		});
+	}
+	
+	
+ 	$(window).load(function(){
+ 		
+		$('#readCountOfPosts').on("change", function(){
+			getChangedRangePosts();
+		})
+		
+		var offset 		= getQuerystring('offset');
+		var max 		= getQuerystring('max');
+		var postsCount 	= max - offset;
+		
+		$('#readCountOfPosts').find('option[seleted=true]').attr('selected', false);
+		$('#readCountOfPosts').find('option[value=' + postsCount +']').attr('selected', true);
+
+	});
+ 	
+	</script>
 </body>
 </html>

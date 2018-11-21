@@ -304,10 +304,7 @@
 
 	<script type="text/javascript">
 		$(document).ready(function() {
-			var isUpdated = $
-			{
-				post.bo_updatedate
-			}
+			var isUpdated = ${post.bo_updatedate}
 
 			if (isUpdated) {
 				$('#updatedate').css('display', 'inline-block');

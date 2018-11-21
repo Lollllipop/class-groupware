@@ -100,7 +100,7 @@ public class PageMaker {
 	}
 	
 	public boolean makeIsNext() {
-		int currentPageUnit = currentPage / 10;
+		int currentPageUnit = ((currentPage - 1) / 10);
 		int totalPageUnit	= totalPageCount / 10;
 		
 		return totalPageUnit > currentPageUnit ? true : false;
