@@ -50,8 +50,6 @@ public class OpenBoardRestController {
 		
 		PagingNavInfo 		pagingNavInfo 	= pageMaker.make();
 		
-		Collections.sort(posts);
-		
 		for (int i = 0; i < posts.size(); i++) {
 			posts.get(i).setView_idx(totalCount - (((pagingNavInfo.getCurrentPage() - 1) * pageMaker.getCount()) + i));
 		}

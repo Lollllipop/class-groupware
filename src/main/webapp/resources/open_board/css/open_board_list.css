@@ -56,3 +56,7 @@
         .card-action {
             float: left;
         }
+        
+        #dataTables-example a {
+        	color: black;
+        }

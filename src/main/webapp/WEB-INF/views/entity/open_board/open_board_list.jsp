@@ -99,14 +99,30 @@
 										
 											<!-- 리스트 부분 -->
 											<c:forEach var="post" items="${posts}">
-												<tr>
-													<td>${post.view_idx}</td>
-													<td><a href="/openboard/${post.bo_idx}">${post.bo_title}</a></td>
-													<td>${post.user_name}</td>
-													<td>${post.bo_writedate}</td>
-													<td>${post.bo_views}</td>
-													<td>${post.bo_comments}</td>
-												</tr>
+											
+												<c:choose>
+													<c:when test="${post.bo_isnotice}">
+														<tr style='background-color: #f9f9f8; font-weight: 900;'>
+															<td style='color: #f44336;'>공지</td>
+															<td><a href="/openboard/${post.bo_idx}">${post.bo_title}</a></td>
+															<td>${post.user_name}</td>
+															<td>${post.bo_writedate}</td>
+															<td>${post.bo_views}</td>
+															<td>${post.bo_comments}</td>
+														</tr>
+													</c:when>
+													<c:otherwise>
+														<tr>
+															<td>${post.view_idx}</td>
+															<td><a href="/openboard/${post.bo_idx}">${post.bo_title}</a></td>
+															<td>${post.user_name}</td>
+															<td>${post.bo_writedate}</td>
+															<td>${post.bo_views}</td>
+															<td>${post.bo_comments}</td>
+														</tr>
+													</c:otherwise>
+												</c:choose>
+
 											</c:forEach>
 											
 										</tbody>
@@ -125,7 +141,7 @@
 									</div>
 									
 									<div class="writebtnArea">
-										<a href="/openboard/new"><button type="button" class="btn" onclick="">글쓰기</button></a>
+										<a href="/openboard/new"><button type="button" class="btn" data-toggle="tooltip" data-placement="top" title="Tooltip on top">글쓰기</button></a>
 									</div>
 									<div class="clear"></div>
 									<div style="width: 550px; margin-left: auto; margin-right: auto; text-align: center">
@@ -188,8 +204,6 @@
 		var tempUrl = window.location.search.substring(1);
 		var tempArray = tempUrl.split('&'); 
 		
-		console.log(tempArray);
-		
 		if (tempArray[0] !== '') {
 			for(var i = 0; tempArray.length; i++) { 
 				var keyValuePair = tempArray[i].split('=');
@@ -220,17 +234,23 @@
 		        $('#paging-buttons').empty();
 		        
 		        data.posts.forEach(function(item, index, array) {
-		       		var post = `
-						<tr>
-							<td>` + item.view_idx + `</td>
-							<td><a href="/openboard/` + item.bo_idx + `">` + item.bo_title + `</a></td>
+			        var post_tr 	= item.bo_isnotice === 'true'
+			        					? `<tr style='background-color: #f9f9f8; font-weight: 900;'>`
+			        					: `<tr>`;
+				    var view_idx 	= item.bo_isnotice === 'true'
+				    					? `<td style='color: #f44336;'>공지</td>`
+				    					: `<td>` + item.view_idx + `</td>`;
+		        	
+		       		var post =
+						post_tr +
+							view_idx +
+						   `<td><a href="/openboard/` + item.bo_idx + `">` + item.bo_title + `</a></td>
 							<td>` + item.user_name + `</td>
 							<td>` + item.bo_writedate + `</td>
 							<td>` + item.bo_views + `</td>
 							<td>` + item.bo_comments + `</td>
-						</tr>
-					`;
-					
+						</tr>`;
+						
 		        	$('#posts-body').append(post);
 		        });
 		        
@@ -276,16 +296,21 @@
 	
  	$(window).load(function(){
  		
+ 		// 렌더링할 게시물 수 옵션 선택시 실행되는 함수
 		$('#readCountOfPosts').on("change", function(){
 			getChangedRangePosts();
 		})
 		
+		// 게시물 수 옵션이 현재 렌더링 되는 게시물수와 동일하게 선택되어 있도록 하는 코드
 		var offset 		= getQuerystring('offset');
 		var max 		= getQuerystring('max');
 		var postsCount 	= max - offset;
 		
 		$('#readCountOfPosts').find('option[seleted=true]').attr('selected', false);
 		$('#readCountOfPosts').find('option[value=' + postsCount +']').attr('selected', true);
+		
+		// 작성일에 마우스를 가져다대면 자세한 날짜가 나오도록 하는 코드
+		$('[data-toggle="tooltip"]').tooltip()
 
 	});
  	

@@ -43,7 +43,7 @@ public class OpenBoardController {
 	private PageMaker 		pageMaker;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String readAll(@ModelAttribute("cri") PageInfo pageInfo, Model model, HttpServletRequest request) throws Exception {
+	public String readAll(@ModelAttribute("pageInfo") PageInfo pageInfo, Model model, HttpServletRequest request) throws Exception {
 		String page 	= "entity/open_board/open_board_list";
 		classManager 	= new ClassManager(request);
 		int class_idx 	= classManager.getClassIdx();
@@ -57,11 +57,11 @@ public class OpenBoardController {
 		// 페이지 정보 생성
 		PagingNavInfo 		pagingNavInfo 	= pageMaker.make();
 		
-		Collections.sort(posts);
-		
 		for (int i = 0; i < posts.size(); i++) {
 			posts.get(i).setView_idx(totalCount - (((pagingNavInfo.getCurrentPage() - 1) * pageMaker.getCount()) + i));
 		}
+		
+		// 공지
 		
 		// 페이지 정보 view로 전달
 		model.addAttribute("posts", posts);
