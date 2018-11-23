@@ -23,6 +23,7 @@ public class BoardDTO implements Comparable<BoardDTO>{
 	private int 	bo_views;
 	private String 	user_name;
 	private int 	bo_comments;
+	private String 	bo_convertedwritedate;
 	
 	@Override
 	public int compareTo(BoardDTO post) {

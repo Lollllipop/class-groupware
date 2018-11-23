@@ -1,7 +1,6 @@
 package com.ja.classgroupware.board.controller;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,6 +21,7 @@ import com.ja.classgroupware.base.domain.PageInfo;
 import com.ja.classgroupware.base.domain.PagingNavInfo;
 import com.ja.classgroupware.base.util.ClassManager;
 import com.ja.classgroupware.base.util.PageMaker;
+import com.ja.classgroupware.base.util.DateConverter;
 import com.ja.classgroupware.board.domain.BoardDTO;
 import com.ja.classgroupware.board.service.OpenBoardService;
 
@@ -41,12 +41,14 @@ public class OpenBoardController {
 	
 	private ClassManager 	classManager;
 	private PageMaker 		pageMaker;
+	private DateConverter 	dateConverter;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String readAll(@ModelAttribute("pageInfo") PageInfo pageInfo, Model model, HttpServletRequest request) throws Exception {
 		String page 	= "entity/open_board/open_board_list";
 		classManager 	= new ClassManager(request);
 		int class_idx 	= classManager.getClassIdx();
+		dateConverter 	= new DateConverter();
 		
 		ArrayList<BoardDTO> posts 			= openBoardService.getPageList(pageInfo, class_idx, boardSeparator);
 		int 				totalCount 		= openBoardService.getTotalCount();
@@ -59,9 +61,8 @@ public class OpenBoardController {
 		
 		for (int i = 0; i < posts.size(); i++) {
 			posts.get(i).setView_idx(totalCount - (((pagingNavInfo.getCurrentPage() - 1) * pageMaker.getCount()) + i));
+			posts.get(i).setBo_convertedwritedate(dateConverter.convert(posts.get(i).getBo_writedate()));
 		}
-		
-		// 공지
 		
 		// 페이지 정보 view로 전달
 		model.addAttribute("posts", posts);

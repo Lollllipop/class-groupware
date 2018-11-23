@@ -106,7 +106,7 @@
 															<td style='color: #f44336;'>공지</td>
 															<td><a href="/openboard/${post.bo_idx}">${post.bo_title}</a></td>
 															<td>${post.user_name}</td>
-															<td>${post.bo_writedate}</td>
+															<td>${post.bo_convertedwritedate}</td>
 															<td>${post.bo_views}</td>
 															<td>${post.bo_comments}</td>
 														</tr>
@@ -116,7 +116,7 @@
 															<td>${post.view_idx}</td>
 															<td><a href="/openboard/${post.bo_idx}">${post.bo_title}</a></td>
 															<td>${post.user_name}</td>
-															<td>${post.bo_writedate}</td>
+															<td>${post.bo_convertedwritedate}</td>
 															<td>${post.bo_views}</td>
 															<td>${post.bo_comments}</td>
 														</tr>
@@ -141,7 +141,7 @@
 									</div>
 									
 									<div class="writebtnArea">
-										<a href="/openboard/new"><button type="button" class="btn" data-toggle="tooltip" data-placement="top" title="Tooltip on top">글쓰기</button></a>
+										<a href="/openboard/new"><button type="button" class="btn" data-toggle="tooltip" data-placement="top" title="abcde">글쓰기</button></a>
 									</div>
 									<div class="clear"></div>
 									<div style="width: 550px; margin-left: auto; margin-right: auto; text-align: center">
@@ -246,7 +246,7 @@
 							view_idx +
 						   `<td><a href="/openboard/` + item.bo_idx + `">` + item.bo_title + `</a></td>
 							<td>` + item.user_name + `</td>
-							<td>` + item.bo_writedate + `</td>
+							<td>` + item.bo_convertedwritedate + `</td>
 							<td>` + item.bo_views + `</td>
 							<td>` + item.bo_comments + `</td>
 						</tr>`;
