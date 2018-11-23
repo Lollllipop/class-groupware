@@ -24,15 +24,15 @@ public class DateConverter {
 			
 			if (subtractionValueOfTwoTimestamp < oneMinute * 5) {
 				
-				convertedDate = "방금";
+				convertedDate = "방금 전";
 				
 			} else if (subtractionValueOfTwoTimestamp < oneHour) {
 				
-				convertedDate = Integer.toString((int) (subtractionValueOfTwoTimestamp / oneMinute)) + "분";
+				convertedDate = Integer.toString((int) (subtractionValueOfTwoTimestamp / oneMinute)) + "분 전";
 				
 			} else if (subtractionValueOfTwoTimestamp < oneDay) {
 				
-				convertedDate = Integer.toString((int) (subtractionValueOfTwoTimestamp / oneHour)) + "시간";
+				convertedDate = Integer.toString((int) (subtractionValueOfTwoTimestamp / oneHour)) + "시간 전";
 				
 			} else {
 				

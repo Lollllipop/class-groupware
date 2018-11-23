@@ -80,7 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			                WHERE b.user_idx = s.user_idx
 			                AND class_idx = #{class_idx}
 			                AND bo_role = #{bo_role} 
-			                ORDER BY bo_isnotice desc, ${pageInfo.sort} ${pageInfo.order}
+			                ORDER BY bo_isnotice desc, ${pageInfo.sort} ${pageInfo.order}, bo_idx desc
 			             ) a
 			        WHERE ROWNUM <= #{pageInfo.max}
 			    )

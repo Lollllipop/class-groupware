@@ -19,14 +19,12 @@
 <title>Class Groupware</title>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	rel="stylesheet">
-<link rel="stylesheet"
-	href="${contextPath}/resources/materialize/css/materialize.min.css"
-	media="screen,projection" />
+<link href="${contextPath}/resources/materialize/css/materialize.min.css" media="screen,projection" rel="stylesheet"/>
 <!-- Bootstrap Styles-->
 <link href="${contextPath}/resources/css/bootstrap.css" rel="stylesheet" />
 <!-- FontAwesome Styles-->
-<link href="${contextPath}/resources/css/font-awesome.css"
-	rel="stylesheet" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<link href="${contextPath}/resources/css/font-awesome.css" rel="stylesheet" />
 <!-- Morris Chart Styles-->
 <link href="${contextPath}/resources/js/morris/morris-0.4.3.min.css"
 	rel="stylesheet" />
@@ -39,6 +37,16 @@
 <link href="${contextPath}/resources/js/Lightweight-Chart/cssCharts.css"
 	rel="stylesheet">
 <link href="${contextPath}/resources/open_board/css/open_board_list.css" rel="stylesheet" />
+
+<!-- 커스텀 css -->
+<style type="text/css">
+	
+	#dataTables-example .fas {
+		cursor: pointer;
+		color: #b5b5b5;
+	}
+	
+</style>
 
 </head>
 <body>
@@ -91,8 +99,8 @@
 												<th>제목</th>
 												<th>작성자</th>
 												<th>작성일</th>
-												<th>조회수</th>
-												<th>댓글수</th>
+												<th>조회수  <i class="fas fa-sort-amount-up" id="views-sort-up"></i> <i class="fas fa-sort-amount-down" id="views-sort-down"></i> </th>
+												<th>댓글수 <i class="fas fa-sort-amount-up" id="comments-sort-up"></i> <i class="fas fa-sort-amount-down" id="comments-sort-down"></i> </th>
 											</tr>
 										</thead>
 										<tbody id='posts-body'>
@@ -200,6 +208,14 @@
 	<script src="${contextPath}/resources/js/custom-scripts.js"></script>
 	<script>
 	
+	var offset 			= null;
+	var max 			= null;
+	var sort 			= 'bo_idx';
+	var order 			= null;
+	
+	var viewsOrder 		= null;
+	var commentsOrder	= null;
+	
 	function getQuerystring(paramName){ 
 		var tempUrl = window.location.search.substring(1);
 		var tempArray = tempUrl.split('&'); 
@@ -296,9 +312,84 @@
 	
  	$(window).load(function(){
  		
- 		// 렌더링할 게시물 수 옵션 선택시 실행되는 함수
+ 		// html에 이벤트 등록하는 코드
 		$('#readCountOfPosts').on("change", function(){
 			getChangedRangePosts();
+		})
+		
+		$('#views-sort-up').on("click", function(){
+			console.log('views-sort-up!!');
+	
+			$('#comments-sort-down').css('color', '#b5b5b5');
+			$('#comments-sort-up').css('color', '#b5b5b5');
+			$('#views-sort-down').css('color', '#b5b5b5');
+			$('#views-sort-up').css('color', '#f44336');
+			
+			viewsOrder 	= 'asc';
+			sort		= 'bo_views';
+			
+			
+			
+			// TODO
+			var selectedCount 	= $('#readCountOfPosts option:selected').val();
+			var offset			= '${p.pageInfo.offset}';
+			var max				= String(parseInt(offset) + parseInt(selectedCount));
+			var sort 			= 'bo_views';
+			var order 			= viewsOrder;
+			
+			$.ajax({
+				type	: 'GET',
+				url		: '/openboardajax?offset=' + offset + '&max=' + max + '&sort=' + sort + '&order=' + order,
+				success : function(data, textStatus, xhr) {
+					console.log(data);
+			    },
+			    error	: function(request, status, error) {
+			    	alert("code:"+request.status+"\n"+"error:"+error);
+			    }
+			});
+			//
+			
+			
+			
+		})
+		
+		$('#views-sort-down').on("click", function(){
+			console.log('views-sort-down!!');
+			
+			$('#comments-sort-down').css('color', '#b5b5b5');
+			$('#comments-sort-up').css('color', '#b5b5b5');
+			$('#views-sort-up').css('color', '#b5b5b5');
+			$('#views-sort-down').css('color', '#f44336');
+			
+			viewsOrder 	= 'desc';
+			sort		= 'bo_views';
+			
+		})
+		
+		$('#comments-sort-up').on("click", function(){
+			console.log('comments-sort-up!!');
+			
+			$('#views-sort-down').css('color', '#b5b5b5');
+			$('#views-sort-up').css('color', '#b5b5b5');
+			$('#comments-sort-down').css('color', '#b5b5b5');
+			$('#comments-sort-up').css('color', '#f44336');
+			
+			commentsOrder 	= 'asc';
+			sort			= 'bo_comments';
+			
+		})
+		
+		$('#comments-sort-down').on("click", function(){
+			console.log('comments-sort-down!!');
+			
+			$('#views-sort-down').css('color', '#b5b5b5');
+			$('#views-sort-up').css('color', '#b5b5b5');
+			$('#comments-sort-up').css('color', '#b5b5b5');
+			$('#comments-sort-down').css('color', '#f44336');
+			
+			commentsOrder 	= 'desc';
+			sort			= 'bo_comments';
+			
 		})
 		
 		// 게시물 수 옵션이 현재 렌더링 되는 게시물수와 동일하게 선택되어 있도록 하는 코드

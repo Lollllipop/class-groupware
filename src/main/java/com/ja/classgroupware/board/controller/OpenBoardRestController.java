@@ -35,10 +35,11 @@ public class OpenBoardRestController {
 	private PageMaker 		pageMaker;
 	private DateConverter 	dateConverter;
 
+
 	@RequestMapping(value="", method= RequestMethod.GET)
 	public Map<String,	Object> readAll(@ModelAttribute("cri") PageInfo pageInfo, HttpServletRequest request) throws Exception {
 		Map<String,	Object> datas = new HashMap<String, Object>();
-		 
+		
 		classManager 	= new ClassManager(request);
 		int class_idx 	= classManager.getClassIdx();
 		dateConverter 	= new DateConverter();
