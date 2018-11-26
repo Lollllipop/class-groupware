@@ -18,7 +18,8 @@
 <!-- Bootstrap Styles-->
 <link href="${contextPath}/resources/css/bootstrap.css" rel="stylesheet" />
 <!-- FontAwesome Styles-->
-<link href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" rel="stylesheet" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<link href="${contextPath}/resources/css/font-awesome.css" rel="stylesheet" />
 <!-- Morris Chart Styles-->
 <link href="${contextPath}/resources/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
 <!-- Custom Styles-->
@@ -67,11 +68,11 @@
 														<li id="updatedate" style="display: none;">| 수정일
 															${post.bo_updatedate}</li>
 														<div style="float: right;">
-															<li><i class="material-icons dp48">chat_bubble</i> <b>${post.bo_views}</b>
+															<li><i class="material-icons dp48">chat_bubble</i> <b>${post.bo_comments}</b>
 															</li>
 														</div>
 														<div style="float: right;">
-															<li><i class="material-icons dp48">visibility</i> <b>${post.bo_comments}</b>
+															<li><i class="material-icons dp48">visibility</i> <b>${post.bo_views}</b>
 															</li>
 														</div>
 													</ul>
@@ -91,33 +92,18 @@
 												</td>
 											</tr>
 											<tr>
-												<td>
-													<div class="ref_file_name">
-														다운로드 <a href="#">첨부파일이름.txt</a>
-													</div>
-													<div class="ref_file_icon"></div>
-												</td>
-											</tr>
-
-											<tr>
-												<td>
-													<button class="btn">수정</button>
-													<button class="btn">삭제</button>
-												</td>
-											</tr>
-
-											<tr>
-												<td><a href="#">↑ 다음글 | 일반글</a></td>
-											</tr>
-											<tr>
-												<td><a href="#">↓ 이전글 | 안녕하세요</a></td>
+													<c:if test="${isAuthor}">
+														<td>
+															<button class="btn">수정</button>
+															<button class="btn">삭제</button>
+														</td>
+													</c:if>
 											</tr>
 											<tr>
 												<td>
 													<div class="form-group">
 														<form>
-															<textarea class="form-control" rows="5"
-																placeholder="로그인 후 댓글 입력이 가능합니다." class="span2"></textarea>
+															<textarea class="form-control" rows="5" placeholder="댓글을 작성해주세요." class="span2"></textarea>
 															<td>
 																<button class="btn">등록</button>
 															</td>

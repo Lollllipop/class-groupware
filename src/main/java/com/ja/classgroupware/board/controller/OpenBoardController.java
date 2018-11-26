@@ -23,6 +23,7 @@ import com.ja.classgroupware.base.util.ClassManager;
 import com.ja.classgroupware.base.util.PageMaker;
 import com.ja.classgroupware.base.util.DateConverter;
 import com.ja.classgroupware.board.domain.BoardDTO;
+import com.ja.classgroupware.board.domain.PostMainDTO;
 import com.ja.classgroupware.board.service.OpenBoardService;
 
 // board : 게시판
@@ -45,7 +46,8 @@ public class OpenBoardController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String readAll(@ModelAttribute("pageInfo") PageInfo pageInfo, Model model, HttpServletRequest request) throws Exception {
-		String page 	= "entity/open_board/open_board_list";
+		String page = "entity/open_board/open_board_list";
+		
 		classManager 	= new ClassManager(request);
 		int class_idx 	= classManager.getClassIdx();
 		dateConverter 	= new DateConverter();
@@ -84,14 +86,31 @@ public class OpenBoardController {
 	public String readDetail(@PathVariable("bo_idx") Integer bo_idx, Model model, HttpServletRequest request) throws Exception {
 		String page = "entity/open_board/open_board_detail";
 		
+		classManager 		= new ClassManager(request);
+		int 	class_idx 	= classManager.getClassIdx();
+		int 	user_idx 	= classManager.getUserIdx();
+		String 	user_role	= classManager.getUserRole();
+		
+		// 조회수 증가 시킴
 		openBoardService.addOneAtViews(bo_idx);
 		
+		// 이전에 있던 리스트 페이지 위치를 위한 정보
 		model.addAttribute("prevPage", request.getHeader("referer"));
+		
+		// TODO 총 3개를 model에 담으면 됨
 		// 총 3개를 model에 담으면 됨
+		
 		// 리스트 디테일
-		model.addAttribute("post", openBoardService.getDetail(bo_idx));
+		PostMainDTO postMainDTO = openBoardService.getDetail(bo_idx);
+		model.addAttribute("post", postMainDTO);
+		
+		// 작성자 본인인지 아닌지 구분하기 위한 정보
+		boolean  isAuthor = postMainDTO.getUser_idx() == user_idx ? true : false;
+		model.addAttribute("isAuthor", isAuthor);
+		
 		// 첨부된 파일들
 		// 댓글들
+		
 		
 		return page;
 	}
