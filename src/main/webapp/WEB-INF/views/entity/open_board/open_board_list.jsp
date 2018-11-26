@@ -46,6 +46,29 @@
 		color: #b5b5b5;
 	}
 	
+	#dataTables-example td:nth-of-type(1), td:nth-of-type(5), td:nth-of-type(6) {
+		width: 100px !important;
+	}
+	
+	#dataTables-example td:nth-of-type(2) {
+		white-space: nowrap;
+   	 	overflow: hidden;
+    	text-overflow: ellipsis;
+	}
+	
+	#dataTables-example td:nth-of-type(3) {
+		width: 150px !important;
+		white-space: nowrap;
+   	 	overflow: hidden;
+    	text-overflow: ellipsis;
+	}
+	
+	#dataTables-example td:nth-of-type(4) {
+		width: 170px !important;
+	}
+	
+
+	
 </style>
 
 </head>
@@ -338,8 +361,6 @@
 		})
 		
 		$('#views-sort-up').on("click", function(){
-			console.log('views-sort-up!!');
-	
 			$('#comments-sort-down').css('color', '#b5b5b5');
 			$('#comments-sort-up').css('color', '#b5b5b5');
 			$('#views-sort-down').css('color', '#b5b5b5');
@@ -352,8 +373,6 @@
 		})
 		
 		$('#views-sort-down').on("click", function(){
-			console.log('views-sort-down!!');
-			
 			$('#comments-sort-down').css('color', '#b5b5b5');
 			$('#comments-sort-up').css('color', '#b5b5b5');
 			$('#views-sort-up').css('color', '#b5b5b5');
@@ -366,8 +385,6 @@
 		})
 		
 		$('#comments-sort-up').on("click", function(){
-			console.log('comments-sort-up!!');
-			
 			$('#views-sort-down').css('color', '#b5b5b5');
 			$('#views-sort-up').css('color', '#b5b5b5');
 			$('#comments-sort-down').css('color', '#b5b5b5');
@@ -380,8 +397,6 @@
 		})
 		
 		$('#comments-sort-down').on("click", function(){
-			console.log('comments-sort-down!!');
-			
 			$('#views-sort-down').css('color', '#b5b5b5');
 			$('#views-sort-up').css('color', '#b5b5b5');
 			$('#comments-sort-up').css('color', '#b5b5b5');

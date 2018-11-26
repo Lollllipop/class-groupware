@@ -24,7 +24,7 @@ public class PageMaker {
 		this.pageInfo 		= pageInfo;
 		this.totalCount 	= totalCount;
 		this.count 			= pageInfo.getMax() - pageInfo.getOffset();
-		this.totalPageCount = (totalCount / count) + 1;
+		this.totalPageCount = totalCount % count == 0 ? (totalCount / count) : (totalCount / count) + 1;
 		this.currentPage 	= pageInfo.getMax() / count;
  	}
 	
