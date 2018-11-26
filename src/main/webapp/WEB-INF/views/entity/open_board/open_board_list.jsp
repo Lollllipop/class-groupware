@@ -208,13 +208,27 @@
 	<script src="${contextPath}/resources/js/custom-scripts.js"></script>
 	<script>
 	
-	var offset 			= null;
-	var max 			= null;
-	var sort 			= 'bo_idx';
-	var order 			= null;
+	var offset 			= '${p.pageInfo.offset}';
+	var max 			= '${p.pageInfo.max}';
+	var sort 			= 'bo_idx'; // 정렬 가운데에 들어갈 값
+	var order 			= 'desc';   // 정렬 가운데에 들어갈 값
+	var selectedCount 	= $('#readCountOfPosts option:selected').val();
 	
-	var viewsOrder 		= null;
-	var commentsOrder	= null;
+	function setSelectedCountWhenAjaxCall() {
+		selectedCount = $('#readCountOfPosts option:selected').val();
+	}
+	
+	function setMaxWhenAjaxCall() {
+		max	= String(parseInt(offset) + parseInt(selectedCount));
+	}
+	
+	function setSort(sort) {
+		this.sort = sort;
+	}
+	
+	function setOrder(order) {
+		this.order = order;
+	}
 	
 	function getQuerystring(paramName){ 
 		var tempUrl = window.location.search.substring(1);
@@ -233,13 +247,7 @@
 		}
 	}
 
-	function getChangedRangePosts() {
-		var selectedCount 	= $('#readCountOfPosts option:selected').val();
-		var offset			= '${p.pageInfo.offset}';
-		var max				= String(parseInt(offset) + parseInt(selectedCount));
-		var sort 			= '${p.pageInfo.sort}';
-		var order 			= '${p.pageInfo.order}';
-		
+	function changeBoardAndPagingNav() {
 		$.ajax({
 			type	: 'GET',
 			url		: '/openboardajax?offset=' + offset + '&max=' + max + '&sort=' + sort + '&order=' + order,
@@ -309,12 +317,24 @@
 		});
 	}
 	
+	// 게시물 수 옵션이 현재 렌더링 되는 게시물수와 동일하게 선택되어 있도록 하는 코드
+	function setSelectOptionWherRefreshing() {
+		var offset 		= getQuerystring('offset');
+		var max 		= getQuerystring('max');
+		var postsCount 	= max - offset;
+		
+		$('#readCountOfPosts').find('option[seleted=true]').attr('selected', false);
+		$('#readCountOfPosts').find('option[value=' + postsCount +']').attr('selected', true);
+	}
+	
 	
  	$(window).load(function(){
- 		
  		// html에 이벤트 등록하는 코드
 		$('#readCountOfPosts').on("change", function(){
-			getChangedRangePosts();
+			setSelectedCountWhenAjaxCall();
+			setMaxWhenAjaxCall();
+			
+			changeBoardAndPagingNav();
 		})
 		
 		$('#views-sort-up').on("click", function(){
@@ -324,33 +344,11 @@
 			$('#comments-sort-up').css('color', '#b5b5b5');
 			$('#views-sort-down').css('color', '#b5b5b5');
 			$('#views-sort-up').css('color', '#f44336');
+					
+			setSort('bo_views');
+			setOrder('asc');
 			
-			viewsOrder 	= 'asc';
-			sort		= 'bo_views';
-			
-			
-			
-			// TODO
-			var selectedCount 	= $('#readCountOfPosts option:selected').val();
-			var offset			= '${p.pageInfo.offset}';
-			var max				= String(parseInt(offset) + parseInt(selectedCount));
-			var sort 			= 'bo_views';
-			var order 			= viewsOrder;
-			
-			$.ajax({
-				type	: 'GET',
-				url		: '/openboardajax?offset=' + offset + '&max=' + max + '&sort=' + sort + '&order=' + order,
-				success : function(data, textStatus, xhr) {
-					console.log(data);
-			    },
-			    error	: function(request, status, error) {
-			    	alert("code:"+request.status+"\n"+"error:"+error);
-			    }
-			});
-			//
-			
-			
-			
+			changeBoardAndPagingNav();
 		})
 		
 		$('#views-sort-down').on("click", function(){
@@ -361,9 +359,10 @@
 			$('#views-sort-up').css('color', '#b5b5b5');
 			$('#views-sort-down').css('color', '#f44336');
 			
-			viewsOrder 	= 'desc';
-			sort		= 'bo_views';
+			setSort('bo_views');
+			setOrder('desc');
 			
+			changeBoardAndPagingNav();
 		})
 		
 		$('#comments-sort-up').on("click", function(){
@@ -374,9 +373,10 @@
 			$('#comments-sort-down').css('color', '#b5b5b5');
 			$('#comments-sort-up').css('color', '#f44336');
 			
-			commentsOrder 	= 'asc';
-			sort			= 'bo_comments';
+			setSort('bo_comments');
+			setOrder('asc');
 			
+			changeBoardAndPagingNav();
 		})
 		
 		$('#comments-sort-down').on("click", function(){
@@ -386,22 +386,18 @@
 			$('#views-sort-up').css('color', '#b5b5b5');
 			$('#comments-sort-up').css('color', '#b5b5b5');
 			$('#comments-sort-down').css('color', '#f44336');
+				
+			setSort('bo_comments');
+			setOrder('desc');
 			
-			commentsOrder 	= 'desc';
-			sort			= 'bo_comments';
-			
+			changeBoardAndPagingNav();
 		})
 		
-		// 게시물 수 옵션이 현재 렌더링 되는 게시물수와 동일하게 선택되어 있도록 하는 코드
-		var offset 		= getQuerystring('offset');
-		var max 		= getQuerystring('max');
-		var postsCount 	= max - offset;
+		setSelectOptionWherRefreshing();
 		
-		$('#readCountOfPosts').find('option[seleted=true]').attr('selected', false);
-		$('#readCountOfPosts').find('option[value=' + postsCount +']').attr('selected', true);
-		
+ 		// TODO 부트스트랩 버전을 올려야 할지 흠.. 현재 부트스트랩 버전으로는 적용이 안된다.
 		// 작성일에 마우스를 가져다대면 자세한 날짜가 나오도록 하는 코드
-		$('[data-toggle="tooltip"]').tooltip()
+		// $('[data-toggle="tooltip"]').tooltip()
 
 	});
  	
