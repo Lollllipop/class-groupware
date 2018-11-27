@@ -62,8 +62,6 @@ public class FileUploadManager {
 		// splitpoint로 잘라서 뒤에거를 리턴한다!!
 		String resultLink = substitutedLink.substring(realPath.length() - 1, substitutedLink.length());
 		
-		System.out.println(resultLink);
-		
 		return resultLink;
 	}
 	

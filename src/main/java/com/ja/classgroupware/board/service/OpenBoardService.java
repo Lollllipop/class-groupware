@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.ja.classgroupware.base.domain.PageInfo;
 import com.ja.classgroupware.base.vo.BoardVO;
+import com.ja.classgroupware.base.vo.FilesVO;
 import com.ja.classgroupware.board.domain.BoardDTO;
 import com.ja.classgroupware.board.domain.PostMainDTO;
 
@@ -20,5 +21,7 @@ public interface OpenBoardService {
 	public void addOneAtViews(int bo_idx) throws Exception;
 
 	public void addPostContent(BoardVO post) throws Exception;
+
+	public void addPostImage(FilesVO filesVO) throws Exception;
 
 }

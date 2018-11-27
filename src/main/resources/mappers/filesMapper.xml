@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<insert id="insert">
 		insert into files
-		values(files_seq.nextval, #{bo_idx}, #{class_idx}, #{file_link}, #{file_name}, #{file_role})
+		values(files_seq.nextval, (select max(bo_idx) + 1 from board), #{class_idx}, #{file_link}, #{file_name}, #{file_role})
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.FilesVO">

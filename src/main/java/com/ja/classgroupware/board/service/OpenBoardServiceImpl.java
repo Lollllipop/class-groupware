@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.ja.classgroupware.base.domain.PageInfo;
 import com.ja.classgroupware.base.persistence.BoardDAO;
+import com.ja.classgroupware.base.persistence.FilesDAO;
 import com.ja.classgroupware.base.vo.BoardVO;
+import com.ja.classgroupware.base.vo.FilesVO;
 import com.ja.classgroupware.board.domain.BoardDTO;
 import com.ja.classgroupware.board.domain.PostMainDTO;
 
@@ -19,6 +21,9 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 
 	@Autowired
 	BoardDAO boardDAO;
+	
+	@Autowired
+	FilesDAO filesDAO;
 	
 	Map<String, Object> paramMap;
 		
@@ -69,6 +74,11 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 	@Override
 	public void addPostContent(BoardVO post) throws Exception {
 		boardDAO.insert(post);
+	}
+
+	@Override
+	public void addPostImage(FilesVO filesVO) throws Exception {
+		filesDAO.insert(filesVO);
 	}	
 
 }

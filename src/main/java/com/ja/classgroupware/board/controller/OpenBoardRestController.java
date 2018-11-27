@@ -20,6 +20,7 @@ import com.ja.classgroupware.base.util.ClassManager;
 import com.ja.classgroupware.base.util.DateConverter;
 import com.ja.classgroupware.base.util.FileUploadManager;
 import com.ja.classgroupware.base.util.PageMaker;
+import com.ja.classgroupware.base.vo.FilesVO;
 import com.ja.classgroupware.board.domain.BoardDTO;
 import com.ja.classgroupware.board.domain.UploadedLinkDTO;
 import com.ja.classgroupware.board.service.OpenBoardService;
@@ -72,13 +73,19 @@ public class OpenBoardRestController {
 		FileUploadManager fileUploadManager = new FileUploadManager();
 		
 		fileUploadManager.setPath("openboard", request);
-		fileUploadManager.upload(file); // 경로 리턴해야 함 경로 이쁘게 클라이언트 기준으로  ex> /resources/img/~
+		fileUploadManager.upload(file);
 		
-		// 디비에 저장하기! service와 dao 사용해서
+		classManager = new ClassManager(request);
+		
+		FilesVO filesVO = new FilesVO();
+		filesVO.setClass_idx(classManager.getClassIdx());
+		filesVO.setFile_link(fileUploadManager.getUploadedLink());
+		filesVO.setFile_name(file.getOriginalFilename());
+		filesVO.setFile_role(boardSeparator);
+		
+		openBoardService.addPostImage(filesVO);
 		
 		String uploadedLink = fileUploadManager.getUploadedLink();
-		
-		System.out.println("과연..! ? : " + uploadedLink);
 		
 		uploadedLinkDTO.setLink(uploadedLink);
 
