@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- pure -->
 	<insert id="insert">
 		insert into board(bo_idx, class_idx, user_idx, bo_title, bo_content, bo_writedate, bo_isnotice, bo_role, bo_views, bo_comments)
-		values(board_seq.nextval, #{class_idx}, #{user_idx}, #{bo_title}, #{bo_content}, SYSDATE, #{bo_isnotice}, #{bo_role}, #{bo_views}, #{bo_comments})
+		values(board_seq.nextval, #{class_idx}, #{user_idx}, #{bo_title}, #{bo_content}, SYSDATE, #{bo_isnotice}, #{bo_role}, 0, 0)
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.BoardVO">

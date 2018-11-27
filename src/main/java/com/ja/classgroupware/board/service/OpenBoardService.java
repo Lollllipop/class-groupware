@@ -3,6 +3,7 @@ package com.ja.classgroupware.board.service;
 import java.util.ArrayList;
 
 import com.ja.classgroupware.base.domain.PageInfo;
+import com.ja.classgroupware.base.vo.BoardVO;
 import com.ja.classgroupware.board.domain.BoardDTO;
 import com.ja.classgroupware.board.domain.PostMainDTO;
 
@@ -17,5 +18,7 @@ public interface OpenBoardService {
 	public int getTotalCount() throws Exception;
 	
 	public void addOneAtViews(int bo_idx) throws Exception;
+
+	public void addPostContent(BoardVO post) throws Exception;
 
 }

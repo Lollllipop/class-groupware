@@ -2,14 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<%
- 	// String user_name = request.getSession().getAttribute("user").getUser_name();
-	// int user_idx = request.getSession().getAttribute("user").getUser_idx();
-	String user_name = "테스터";
-	int user_idx = 1;
-	
-%>
-
 <c:set var="contextPath" value="<%=request.getContextPath()%>"></c:set>
 
 <!DOCTYPE html>
@@ -24,7 +16,8 @@
 <!-- Bootstrap Styles-->
 <link href="${contextPath}/resources/css/bootstrap.css" rel="stylesheet" />
 <!-- FontAwesome Styles-->
-<link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+<link href="${contextPath}/resources/css/font-awesome.css" rel="stylesheet" />
 <!-- Morris Chart Styles-->
 <link href="${contextPath}/resources/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
 <!-- Custom Styles-->
@@ -56,19 +49,25 @@
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-content">
-								<form id="submit-form" action="/openboard" method="post" enctype="multipart/form-data">
+								<!-- 멀티파트 폼데이터를 받는 무언가가 필요할듯 -->
+								<!-- enctype='multipart/form-data' -->
+								<form id="submit-form" action="/openboard" method="POST" enctype="multipart/form-data">
 									<div class="table-responsive">
 										<table class="table" id="dataTables-example"
 											style="width: 60%; margin-left: auto; margin-right: auto;">
 											<thead>
 												<tr>
 													<td style="text-align: center; vertical-align: middle;">제목</td>
-													<td colspan="2"><input type="text" name='bo_title' class="form-control" placeholder="내용을 입력해주세요" style="vertical-align: middle;"></td>
+													<td colspan="2">
+														<input type="text" name='bo_title' id='post-title' class="form-control" placeholder="내용을 입력해주세요" style="vertical-align: middle;">
+														<input type="hidden" name='user_idx' value='${user_idx}'>
+														<input type="hidden" name='class_idx' value='${class_idx}'>
+														<input type="hidden" name='bo_role' value='${bo_role}'>
+													</td>
 												</tr>
 												<tr>
 													<td style="text-align: center">작성자</td>
-													<input type="hidden" name='user_idx' value='<%=user_idx %>'/>
-													<td><%=user_name %></td>
+													<td>${user_name}</td>
 												</tr>
 											</thead>
 											<tbody>
@@ -77,23 +76,27 @@
 														<textarea id='editor-area' name='bo_content'></textarea>
 													</td>
 												</tr>
-												<tr>
-													<td style="text-align: center">첨부파일</td>
-													<td><input type="file"></td>
-													<td>
-														<label class="form-check-label"> 
-															<input class="form-check-input" type="checkbox" value="">
-															선택파일 삭제
-														</label>
-													</td>
-												</tr>
+												<c:if test="${hasNoticeAuth}">
+													<tr>
+														<td style="text-align: center">
+															공지 여부
+															<input type="hidden" name='user2' value='777'>
+														</td>
+														<td>
+															<input type="checkbox" class="filled-in" id="filled-in-box" name="bo_isnotice" value="true">
+															<input type="hidden" name='user1' value='666'>
+															<label for="filled-in-box" style="height:11px !important;"></label>
+														</td>
+														
+													</tr>
+												</c:if>
 											</tbody>
 											<tfoot>
 												<tr>
 													<td colspan="3">
 														<div style="float: right;">
-															<input type="submit" value="등록" class="btn btn-success">
-															<a href='/openboard'><input type="button" value="목록으로" class="btn btn-primary"></a>
+															<input type="submit" value="등록" class="btn btn-success" id='submit-btn'>
+															<a href=${prevPage}><input type="button" value="목록으로" class="btn btn-primary"></a>
 														</div>
 													</td>
 												</tr>
@@ -125,16 +128,36 @@
 	<!-- WYSIWYG Editor JS -->
 	<!-- package (all plugins included) -->
 	<script src="https://cdn.jsdelivr.net/npm/froala-editor@2.9.1/js/froala_editor.pkgd.min.js"></script>
-	<!-- Initialize the editor. -->
+	
 	<script>
 		$(function() {
+			/* Initialize the editor. */
 			$('#editor-area').froalaEditor({
 				// 에디터 세로 길이
 				height : 300,
+				
+				/* 이미지 업로드 */
 				// 이미지 업로드 경로
-				imageUploadURL: '/openboard/uploadfiles',
+				imageUploadURL: '/openboardajax/image',
 		        // 이미지 전송 방법
 		        imageUploadMethod: 'POST',
+		        // 허용 파일 타입
+		        imageAllowedTypes: ['jpeg', 'jpg', 'png']
+			})
+			
+			/* null값 방지 스크립트 */
+			$('#submit-btn').on('click', function() {
+				var titlaVal = $('#post-title').val();
+				var contentVal = $('#editor-area').val();
+				
+				if (titlaVal === "") {
+					alert("제목을 입력해주세요.");
+				} else {
+					if (contentVal === "") {
+						alert("내용을 입력해주세요.");
+					}
+				}
+
 			})
 		});
 	</script>

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.ja.classgroupware.base.domain.PageInfo;
 import com.ja.classgroupware.base.persistence.BoardDAO;
+import com.ja.classgroupware.base.vo.BoardVO;
 import com.ja.classgroupware.board.domain.BoardDTO;
 import com.ja.classgroupware.board.domain.PostMainDTO;
 
@@ -64,5 +65,10 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 	public void addOneAtViews(int bo_idx) throws Exception {
 		boardDAO.updateViewsWithPlusOne(bo_idx);
 	}
+
+	@Override
+	public void addPostContent(BoardVO post) throws Exception {
+		boardDAO.insert(post);
+	}	
 
 }

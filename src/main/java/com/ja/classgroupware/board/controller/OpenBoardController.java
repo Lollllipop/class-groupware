@@ -1,6 +1,8 @@
 package com.ja.classgroupware.board.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,12 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ja.classgroupware.base.domain.PageInfo;
 import com.ja.classgroupware.base.domain.PagingNavInfo;
 import com.ja.classgroupware.base.util.ClassManager;
 import com.ja.classgroupware.base.util.PageMaker;
+import com.ja.classgroupware.base.vo.BoardVO;
 import com.ja.classgroupware.base.util.DateConverter;
 import com.ja.classgroupware.board.domain.BoardDTO;
 import com.ja.classgroupware.board.domain.PostMainDTO;
@@ -55,18 +59,15 @@ public class OpenBoardController {
 		ArrayList<BoardDTO> posts 			= openBoardService.getPageList(pageInfo, class_idx, boardSeparator);
 		int 				totalCount 		= openBoardService.getTotalCount();
 		
-		// 페이지메이커 생성
 		pageMaker = new PageMaker(pageInfo, totalCount);
 		
-		// 페이지 정보 생성
-		PagingNavInfo 		pagingNavInfo 	= pageMaker.make();
+		PagingNavInfo pagingNavInfo = pageMaker.make();
 		
 		for (int i = 0; i < posts.size(); i++) {
 			posts.get(i).setView_idx(totalCount - (((pagingNavInfo.getCurrentPage() - 1) * pageMaker.getCount()) + i));
 			posts.get(i).setBo_convertedwritedate(dateConverter.convert(posts.get(i).getBo_writedate()));
 		}
 		
-		// 페이지 정보 view로 전달
 		model.addAttribute("posts", posts);
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("pagingNavInfo", pagingNavInfo);
@@ -74,10 +75,20 @@ public class OpenBoardController {
 		return page;
 	}
 	
+	// 글 작성시 이미지가 아닌 데이터들은 이리로 들어옴
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public String make(RedirectAttributes rttr) throws Exception {
-		
+	public String make(RedirectAttributes rttr, MultipartHttpServletRequest mrequest) throws Exception {
 		rttr.addFlashAttribute("msg", "SUCCESS");
+		
+		BoardVO post = new BoardVO();
+		post.setBo_title(mrequest.getParameter("bo_title"));
+		post.setUser_idx(Integer.parseInt(mrequest.getParameter("user_idx")));
+		post.setClass_idx(Integer.parseInt(mrequest.getParameter("class_idx")));
+		post.setBo_content(mrequest.getParameter("bo_content"));
+		post.setBo_role(mrequest.getParameter("bo_role"));
+		post.setBo_isnotice(mrequest.getParameter("bo_isnotice") == null ? "false" : "true");
+
+		openBoardService.addPostContent(post);
 
 		return "redirect:/openboard";
 	}
@@ -86,10 +97,8 @@ public class OpenBoardController {
 	public String readDetail(@PathVariable("bo_idx") Integer bo_idx, Model model, HttpServletRequest request) throws Exception {
 		String page = "entity/open_board/open_board_detail";
 		
-		classManager 		= new ClassManager(request);
-		int 	class_idx 	= classManager.getClassIdx();
-		int 	user_idx 	= classManager.getUserIdx();
-		String 	user_role	= classManager.getUserRole();
+		classManager = new ClassManager(request);
+		int user_idx = classManager.getUserIdx();
 		
 		// 조회수 증가 시킴
 		openBoardService.addOneAtViews(bo_idx);
@@ -98,7 +107,6 @@ public class OpenBoardController {
 		model.addAttribute("prevPage", request.getHeader("referer"));
 		
 		// TODO 총 3개를 model에 담으면 됨
-		// 총 3개를 model에 담으면 됨
 		
 		// 리스트 디테일
 		PostMainDTO postMainDTO = openBoardService.getDetail(bo_idx);
@@ -111,21 +119,36 @@ public class OpenBoardController {
 		// 첨부된 파일들
 		// 댓글들
 		
-		
 		return page;
 	}
 	
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
-	public String regist(Model model) throws Exception {
+	public String regist(Model model, HttpServletRequest request) throws Exception {
 		String page = "entity/open_board/open_board_write";
+		
+		classManager 		= new ClassManager(request);
+		int 	class_idx 	= classManager.getClassIdx();
+		int 	user_idx 	= classManager.getUserIdx();
+		String 	user_name 	= classManager.getUserName();
+		String 	user_role 	= classManager.getUserRole();
+		
+		model.addAttribute("class_idx", 	class_idx);
+		model.addAttribute("user_idx", 		user_idx);
+		model.addAttribute("user_name", 	user_name);
+		model.addAttribute("bo_role", 		boardSeparator);
+		model.addAttribute("prevPage", 		request.getHeader("referer"));
+		model.addAttribute("hasNoticeAuth", user_role.equals("student") ? false : true );
+		
 		return page;
 	}
 	
-	@ResponseBody
+	
+	// WYSIWYG 이미지 Ajax 업로드 받는 컨트롤러 부분
+	@ResponseBody // 반환을 바로 하겠다 view형태가 아닌 데이터 형태로
 	@RequestMapping(value = "/uploadfiles", method = RequestMethod.POST)
 	public ResponseEntity<String> upload(MultipartFile file) throws Exception {
 		ResponseEntity<String> entity = null;
-		System.out.println(file.getOriginalFilename());
+		System.out.println("file : " + file.getOriginalFilename());
 		return entity;
 	}
 	

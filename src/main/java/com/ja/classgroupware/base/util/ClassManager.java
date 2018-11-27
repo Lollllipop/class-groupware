@@ -27,5 +27,11 @@ public class ClassManager {
 		String user_role = "student";
 		return user_role;
 	}
+
+	public String getUserName() {
+//		String user_role = (int) request.getSession().getAttribute("user").getUser_idx();
+		String user_name = "name_test";
+		return user_name;
+	}
 	
 }

@@ -45,5 +45,8 @@
 			<aop:after-throwing pointcut-ref="allPointcut" method="exceptionProcess" throwing="ex"/>
 		</aop:aspect>
 	</aop:config>
+	
+	<!-- 파일 입출력을 위한 설정 -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
 </beans:beans>
