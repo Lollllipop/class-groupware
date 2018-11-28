@@ -24,6 +24,7 @@ public class BoardDTO implements Comparable<BoardDTO>{
 	private String 	user_name;
 	private int 	bo_comments;
 	private String 	bo_convertedwritedate;
+	private String 	bo_hasfiles;
 	
 	@Override
 	public int compareTo(BoardDTO post) {

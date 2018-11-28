@@ -63,6 +63,7 @@
 														<input type="hidden" name='user_idx' value='${user_idx}'>
 														<input type="hidden" name='class_idx' value='${class_idx}'>
 														<input type="hidden" name='bo_role' value='${bo_role}'>
+														<input type="hidden" name='bo_hasfiles' value='false' id='has-files'>
 													</td>
 												</tr>
 												<tr>
@@ -143,6 +144,9 @@
 		        imageUploadMethod: 'POST',
 		        // 허용 파일 타입
 		        imageAllowedTypes: ['jpeg', 'jpg', 'png']
+			})
+			.on('froalaEditor.image.inserted', function (e, editor, $img, response) {
+				$('#has-files').val('true');
 			})
 			
 			/* null값 방지 스크립트 */

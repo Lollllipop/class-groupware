@@ -68,6 +68,11 @@ public class OpenBoardRestController {
 	
 	@RequestMapping(value="/image",  method = RequestMethod.POST)
 	public UploadedLinkDTO addImage(MultipartFile file, HttpServletRequest request) throws Exception {
+		/**
+		 * 게시글 작성시 이미지와 게시글이 따로 올라가도록 설계가 되어있는데 (에디터 사용의 특성상)
+		 * 이미지가 옹라가고 게시글이 오류로 인해 안올라갈 경우를 해결할 transaction을 걸고 싶으나 
+		 * 마땅히 방도가 생각이 안남. 그냥 로직적으로 처리라도 해야하는게 맞을듯 시간이 나면 (리팩토링 대상임)
+		 */
 		UploadedLinkDTO uploadedLinkDTO = new UploadedLinkDTO();
 		
 		FileUploadManager fileUploadManager = new FileUploadManager();

@@ -24,5 +24,6 @@ public class BoardVO {
 	private int 	bo_views;
 	private Date 	bo_updatedate;
 	private int 	bo_comments;
+	private String  bo_hasfiles;
 	
 }

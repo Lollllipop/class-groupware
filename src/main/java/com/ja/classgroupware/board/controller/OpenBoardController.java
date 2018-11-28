@@ -80,6 +80,8 @@ public class OpenBoardController {
 	public String make(RedirectAttributes rttr, MultipartHttpServletRequest mrequest) throws Exception {
 		rttr.addFlashAttribute("msg", "SUCCESS");
 		
+		// 글 올린 거 있는지 파라미터로 받아서 체크하고 있으면 값 넣어주기 post.setBo_hasfiles로 
+		
 		BoardVO post = new BoardVO();
 		post.setBo_title(mrequest.getParameter("bo_title"));
 		post.setUser_idx(Integer.parseInt(mrequest.getParameter("user_idx")));
@@ -87,6 +89,7 @@ public class OpenBoardController {
 		post.setBo_content(mrequest.getParameter("bo_content"));
 		post.setBo_role(mrequest.getParameter("bo_role"));
 		post.setBo_isnotice(mrequest.getParameter("bo_isnotice") == null ? "false" : "true");
+		post.setBo_hasfiles(mrequest.getParameter("bo_hasfiles").equals("false") ? "false" : "true");
 
 		openBoardService.addPostContent(post);
 

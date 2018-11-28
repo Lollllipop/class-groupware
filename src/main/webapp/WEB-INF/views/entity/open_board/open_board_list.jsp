@@ -135,7 +135,10 @@
 													<c:when test="${post.bo_isnotice}">
 														<tr style='background-color: #f9f9f8; font-weight: 900;'>
 															<td style='color: #f44336;'>공지</td>
-															<td><a href="/openboard/${post.bo_idx}">${post.bo_title}</a></td>
+															<td>
+																<a href="/openboard/${post.bo_idx}">${post.bo_title}</a>
+																<c:if test="${post.bo_hasfiles eq 'true'}"><i class="far fa-image"></i></c:if>
+															</td>
 															<td>${post.user_name}</td>
 															<td>${post.bo_convertedwritedate}</td>
 															<td>${post.bo_views}</td>
@@ -145,7 +148,10 @@
 													<c:otherwise>
 														<tr>
 															<td>${post.view_idx}</td>
-															<td><a href="/openboard/${post.bo_idx}">${post.bo_title}</a></td>
+															<td>
+																<a href="/openboard/${post.bo_idx}">${post.bo_title}</a>
+																<c:if test="${post.bo_hasfiles eq 'true'}"><i class="far fa-image"></i></c:if>
+															</td>
 															<td>${post.user_name}</td>
 															<td>${post.bo_convertedwritedate}</td>
 															<td>${post.bo_views}</td>
@@ -287,12 +293,19 @@
 				    var view_idx 	= item.bo_isnotice === 'true'
 				    					? `<td style='color: #f44336;'>공지</td>`
 				    					: `<td>` + item.view_idx + `</td>`;
-		        	
+				    var view_title	= item.bo_hasfiles === 'true'
+				    					? 	
+			    							`<td>
+				    							<a href="/openboard/` + item.bo_idx + `">` + item.bo_title + `</a>
+				    							<i class="far fa-image"></i>
+				    						</td>`
+				    					: `<td><a href="/openboard/` + item.bo_idx + `">` + item.bo_title + `</a></td>`
+		        		
 		       		var post =
 						post_tr +
 							view_idx +
-						   `<td><a href="/openboard/` + item.bo_idx + `">` + item.bo_title + `</a></td>
-							<td>` + item.user_name + `</td>
+							view_title +
+							`<td>` + item.user_name + `</td>
 							<td>` + item.bo_convertedwritedate + `</td>
 							<td>` + item.bo_views + `</td>
 							<td>` + item.bo_comments + `</td>
