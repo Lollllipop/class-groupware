@@ -26,4 +26,6 @@ public interface OpenBoardService {
 
 	public void removePost(Integer bo_idx) throws Exception;
 
+	public void updatePost(BoardVO boardVO) throws Exception;
+
 }

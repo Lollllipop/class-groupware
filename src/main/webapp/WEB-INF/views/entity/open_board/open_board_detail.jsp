@@ -65,8 +65,7 @@
 													<ul class="list-inline">
 														<li>${post.user_name}</li>
 														<li>| 작성일 ${post.bo_writedate}</li>
-														<li id="updatedate" style="display: none;">| 수정일
-															${post.bo_updatedate}</li>
+														<li id="updatedate" style="display: none;">| 수정일 ${post.bo_updatedate}</li>
 														<div style="float: right;">
 															<li><i class="material-icons dp48">chat_bubble</i> <b>${post.bo_comments}</b>
 															</li>
@@ -94,7 +93,7 @@
 											<tr>
 												<c:if test="${isAuthor}">
 													<td>
-														<a href='#' id='update-button'><button class="btn">수정</button></a>
+														<a href='/openboard/${bo_idx}/edit' id='update-button'><button class="btn">수정</button></a>
 														<a id='delete-button'><button class="btn">삭제</button></a>
 													</td>
 												</c:if>
@@ -294,15 +293,13 @@
 		src="${contextPath}/resources/open_board/js/open_board_detail.js"></script>
 
 	<script type="text/javascript">
-		$(document).ready(function() {
+		$(window).load(function() {
 			var isUpdated = ${post.bo_updatedate} + "";
-
+			
 			if (isUpdated) {
 				$('#updatedate').css('display', 'inline-block');
 			}
-		});
-		
-		$(window).load(function() {
+			
 			$('#delete-button').on("click", function(){
 				var bo_idx 			= ${post.bo_idx};
 				var prevPage 		= '${prevPage}';

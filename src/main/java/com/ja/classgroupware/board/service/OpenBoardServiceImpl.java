@@ -84,6 +84,11 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 	@Override
 	public void removePost(Integer bo_idx) throws Exception {
 		boardDAO.delete(bo_idx);
+	}
+
+	@Override
+	public void updatePost(BoardVO boardVO) throws Exception {
+		boardDAO.update(boardVO);
 	}	
 
 }

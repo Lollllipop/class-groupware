@@ -2,6 +2,7 @@ package com.ja.classgroupware.board.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -78,6 +81,8 @@ public class OpenBoardController {
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public String make(RedirectAttributes rttr, MultipartHttpServletRequest mrequest) throws Exception {
 		rttr.addFlashAttribute("msg", "SUCCESS");
+		
+		System.out.println("?  ?? ? ? ? ? ? ? ?");
 		
 		BoardVO post = new BoardVO();
 		post.setBo_title(mrequest.getParameter("bo_title"));
@@ -151,5 +156,23 @@ public class OpenBoardController {
 		return "";
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/{bo_idx}", method = RequestMethod.PATCH)
+	public String updatePost(@PathVariable("bo_idx") Integer bo_idx, @RequestBody BoardVO boardVO, HttpServletRequest request) throws Exception {
+		System.out.println(boardVO.getBo_title());
+		openBoardService.updatePost(boardVO);
+
+		return "";
+	}
+	
+	@RequestMapping(value = "/{bo_idx}/edit", method = RequestMethod.GET)
+	public String getUpdatePostView(@PathVariable("bo_idx") Integer bo_idx, Model model, HttpServletRequest request) throws Exception {
+		String page = "entity/open_board/open_board_update";
+		
+		PostMainDTO postMainDTO = openBoardService.getDetail(bo_idx);
+		model.addAttribute("post", postMainDTO);
+		
+		return page;
+	}
 	
 }
