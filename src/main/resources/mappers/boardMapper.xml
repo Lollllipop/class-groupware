@@ -29,6 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update board 
 		set bo_title = #{bo_title},
 			bo_content = #{bo_content},
+			bo_isnotice = #{bo_isnotice},
 			bo_updatedate = SYSDATE
 		where bo_idx = #{bo_idx}
 	</update>

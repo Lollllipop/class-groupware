@@ -85,7 +85,6 @@
 														</td>
 														<td>
 															<input type="checkbox" class="filled-in" id="filled-in-box" name="bo_isnotice" value="true">
-															<input type="hidden" name='user1' value='666'>
 															<label for="filled-in-box" style="height:11px !important;"></label>
 														</td>
 														

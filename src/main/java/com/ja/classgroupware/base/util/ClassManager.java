@@ -24,7 +24,7 @@ public class ClassManager {
 
 	public String getUserRole() {
 //		String user_role = (int) request.getSession().getAttribute("user").getUser_idx();
-		String user_role = "student";
+		String user_role = "teacher";
 		return user_role;
 	}
 

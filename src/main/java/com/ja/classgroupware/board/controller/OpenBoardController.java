@@ -82,8 +82,6 @@ public class OpenBoardController {
 	public String make(RedirectAttributes rttr, MultipartHttpServletRequest mrequest) throws Exception {
 		rttr.addFlashAttribute("msg", "SUCCESS");
 		
-		System.out.println("?  ?? ? ? ? ? ? ? ?");
-		
 		BoardVO post = new BoardVO();
 		post.setBo_title(mrequest.getParameter("bo_title"));
 		post.setUser_idx(Integer.parseInt(mrequest.getParameter("user_idx")));
@@ -159,7 +157,14 @@ public class OpenBoardController {
 	@ResponseBody
 	@RequestMapping(value = "/{bo_idx}", method = RequestMethod.PATCH)
 	public String updatePost(@PathVariable("bo_idx") Integer bo_idx, @RequestBody BoardVO boardVO, HttpServletRequest request) throws Exception {
-		System.out.println(boardVO.getBo_title());
+		System.out.println(boardVO.getBo_isnotice());
+		
+		if (boardVO.getBo_isnotice() == null) {
+			boardVO.setBo_isnotice("false");
+		}
+		
+		System.out.println(boardVO.getBo_isnotice());
+		
 		openBoardService.updatePost(boardVO);
 
 		return "";
@@ -169,8 +174,13 @@ public class OpenBoardController {
 	public String getUpdatePostView(@PathVariable("bo_idx") Integer bo_idx, Model model, HttpServletRequest request) throws Exception {
 		String page = "entity/open_board/open_board_update";
 		
+		classManager 		= new ClassManager(request);
+		String 	user_role 	= classManager.getUserRole();
+		
 		PostMainDTO postMainDTO = openBoardService.getDetail(bo_idx);
+		
 		model.addAttribute("post", postMainDTO);
+		model.addAttribute("hasNoticeAuth", user_role.equals("student") ? false : true);
 		
 		return page;
 	}

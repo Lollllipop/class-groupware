@@ -78,14 +78,11 @@
 													<tr>
 														<td style="text-align: center">
 															공지 여부
-															<input type="hidden" name='user2' value='777'>
 														</td>
 														<td>
 															<input type="checkbox" class="filled-in" id="filled-in-box" name="bo_isnotice" value="true">
-															<input type="hidden" name='user1' value='666'>
 															<label for="filled-in-box" style="height:11px !important;"></label>
 														</td>
-														
 													</tr>
 												</c:if>
 											</tbody>
@@ -146,7 +143,7 @@
 				$('#has-files').val('true');
 			})
 			
-			/* null값 방지 스크립트 */
+			/* 수정 버튼 클릭시 수정 액션!! null값 방지 스크립트 */
 			$('#submit-btn').on('click', function() {
 				var titlaVal = $('#post-title').val();
 				var contentVal = $('#editor-area').val();
@@ -164,12 +161,13 @@
 				var bo_idx 			= ${post.bo_idx};
 				var bo_title		= $('#post-title').val();
 				var bo_content		= $('#editor-area').val();
+				var bo_isnotice		= $('#filled-in-box').val();
 				
-				// 데이터 보내야 함
 				var sendData = {
-						'bo_idx' : bo_idx,
-						'bo_title' : bo_title,
-						'bo_content' : bo_content
+						'bo_idx' 		: bo_idx,
+						'bo_title' 		: bo_title,
+						'bo_content' 	: bo_content,
+						'bo_isnotice' 	: bo_isnotice
 				}
 				
 				$.ajax({
@@ -183,8 +181,14 @@
 						window.location.href = '/openboard/' + bo_idx;
 					}
 				})
-				
 			})
+			
+			/* 공지글이면 공지 처리 해놓기 */
+			var bo_isnotice = '${post.bo_isnotice}';
+			
+			if (bo_isnotice === 'true') {
+				$("#filled-in-box").prop("checked", true); 
+			}
 		});
 	</script>
 
