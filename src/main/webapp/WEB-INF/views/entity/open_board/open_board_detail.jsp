@@ -92,12 +92,12 @@
 												</td>
 											</tr>
 											<tr>
-													<c:if test="${isAuthor}">
-														<td>
-															<button class="btn">수정</button>
-															<button class="btn">삭제</button>
-														</td>
-													</c:if>
+												<c:if test="${isAuthor}">
+													<td>
+														<a href='#' id='update-button'><button class="btn">수정</button></a>
+														<a id='delete-button'><button class="btn">삭제</button></a>
+													</td>
+												</c:if>
 											</tr>
 											<tr>
 												<td>
@@ -280,8 +280,8 @@
 
 
 	<!-- jQuery Js -->
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<!-- Bootstrap Js -->
 	<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 	<script
@@ -295,12 +295,31 @@
 
 	<script type="text/javascript">
 		$(document).ready(function() {
-			var isUpdated = ${post.bo_updatedate};
+			var isUpdated = ${post.bo_updatedate} + "";
 
 			if (isUpdated) {
 				$('#updatedate').css('display', 'inline-block');
 			}
 		});
+		
+		$(window).load(function() {
+			$('#delete-button').on("click", function(){
+				var bo_idx 			= ${post.bo_idx};
+				var prevPage 		= '${prevPage}';
+				var pagePath 		= prevPage.substring(window.location.origin.length);
+				var isWantDelete 	= confirm('정말 삭제하시겠습니까?');
+				
+				if (isWantDelete) {
+					$.ajax({
+						type 	: 'DELETE',
+						url		: '/openboard/' + bo_idx,
+						success	: function(data, textStatus, xhr) {
+							window.location.href = pagePath;
+						}
+					})
+				}
+			})
+		})
 	</script>
 
 </body>

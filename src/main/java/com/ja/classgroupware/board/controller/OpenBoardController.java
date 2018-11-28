@@ -75,12 +75,9 @@ public class OpenBoardController {
 		return page;
 	}
 	
-	// 글 작성시 이미지가 아닌 데이터들은 이리로 들어옴
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public String make(RedirectAttributes rttr, MultipartHttpServletRequest mrequest) throws Exception {
 		rttr.addFlashAttribute("msg", "SUCCESS");
-		
-		// 글 올린 거 있는지 파라미터로 받아서 체크하고 있으면 값 넣어주기 post.setBo_hasfiles로 
 		
 		BoardVO post = new BoardVO();
 		post.setBo_title(mrequest.getParameter("bo_title"));
@@ -94,6 +91,26 @@ public class OpenBoardController {
 		openBoardService.addPostContent(post);
 
 		return "redirect:/openboard";
+	}
+	
+	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	public String regist(Model model, HttpServletRequest request) throws Exception {
+		String page = "entity/open_board/open_board_write";
+		
+		classManager 		= new ClassManager(request);
+		int 	class_idx 	= classManager.getClassIdx();
+		int 	user_idx 	= classManager.getUserIdx();
+		String 	user_name 	= classManager.getUserName();
+		String 	user_role 	= classManager.getUserRole();
+		
+		model.addAttribute("class_idx", 	class_idx);
+		model.addAttribute("user_idx", 		user_idx);
+		model.addAttribute("user_name", 	user_name);
+		model.addAttribute("bo_role", 		boardSeparator);
+		model.addAttribute("prevPage", 		request.getHeader("referer"));
+		model.addAttribute("hasNoticeAuth", user_role.equals("student") ? false : true );
+		
+		return page;
 	}
 	
 	@RequestMapping(value = "/{bo_idx}", method = RequestMethod.GET)
@@ -125,34 +142,14 @@ public class OpenBoardController {
 		return page;
 	}
 	
-	@RequestMapping(value = "/new", method = RequestMethod.GET)
-	public String regist(Model model, HttpServletRequest request) throws Exception {
-		String page = "entity/open_board/open_board_write";
-		
-		classManager 		= new ClassManager(request);
-		int 	class_idx 	= classManager.getClassIdx();
-		int 	user_idx 	= classManager.getUserIdx();
-		String 	user_name 	= classManager.getUserName();
-		String 	user_role 	= classManager.getUserRole();
-		
-		model.addAttribute("class_idx", 	class_idx);
-		model.addAttribute("user_idx", 		user_idx);
-		model.addAttribute("user_name", 	user_name);
-		model.addAttribute("bo_role", 		boardSeparator);
-		model.addAttribute("prevPage", 		request.getHeader("referer"));
-		model.addAttribute("hasNoticeAuth", user_role.equals("student") ? false : true );
-		
-		return page;
+	@ResponseBody
+	@RequestMapping(value = "/{bo_idx}", method = RequestMethod.DELETE)
+	public String removePost(@PathVariable("bo_idx") Integer bo_idx, HttpServletRequest request) throws Exception {
+		openBoardService.removePost(bo_idx);
+		// TODO 파일 실제로 삭제할 것
+		// TODO 삭제된 메세지 띄우기 위해서 데이터 더 보내야 함
+		return "";
 	}
 	
-	
-	// WYSIWYG 이미지 Ajax 업로드 받는 컨트롤러 부분
-	@ResponseBody // 반환을 바로 하겠다 view형태가 아닌 데이터 형태로
-	@RequestMapping(value = "/uploadfiles", method = RequestMethod.POST)
-	public ResponseEntity<String> upload(MultipartFile file) throws Exception {
-		ResponseEntity<String> entity = null;
-		System.out.println("file : " + file.getOriginalFilename());
-		return entity;
-	}
 	
 }

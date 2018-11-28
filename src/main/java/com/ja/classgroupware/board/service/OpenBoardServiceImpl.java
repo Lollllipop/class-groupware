@@ -79,6 +79,11 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 	@Override
 	public void addPostImage(FilesVO filesVO) throws Exception {
 		filesDAO.insert(filesVO);
+	}
+
+	@Override
+	public void removePost(Integer bo_idx) throws Exception {
+		boardDAO.delete(bo_idx);
 	}	
 
 }

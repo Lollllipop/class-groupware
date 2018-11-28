@@ -24,4 +24,6 @@ public interface OpenBoardService {
 
 	public void addPostImage(FilesVO filesVO) throws Exception;
 
+	public void removePost(Integer bo_idx) throws Exception;
+
 }
