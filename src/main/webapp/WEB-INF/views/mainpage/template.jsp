@@ -35,7 +35,7 @@
 
       <div id="page-wrapper">
          <div class="header">
-            <h1 class="page-header">메인 페이지</h1>
+            <h1 class="page-header">여기에 제목을 쓰시오</h1>
          </div>
          <div id="page-inner">
          

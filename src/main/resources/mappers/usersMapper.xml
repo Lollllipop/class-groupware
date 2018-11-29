@@ -15,7 +15,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from users
 		where user_idx = #{user_idx}
 	</select>
-
+	
+	<!-- 아이디 찾기 이메일로 select문 -->
+	<select id="selectByEmail" resultType="com.ja.classgroupware.base.vo.UsersVO">
+		select user_id
+		from users 
+		where user_email = #{user_email}
+	</select>
+	
+	
 	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.UsersVO">
 		 <![CDATA[
 			select user_idx, user_id, user_email, user_name, user_password, user_role
@@ -38,5 +46,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from users 
 		where user_idx = #{user_idx}
 	</delete>
+	
+	<!-- 로그인 처리 -->
+	 <select id="login" resultType="com.ja.classgroupware.base.vo.UsersVO">
+        select * from users where user_id = #{user_id} and user_password = #{user_password}
+    </select>
+
+
+
+	
+ 	<update id="keepLogin">
+		update users set sessionKey = #{sessionId}, sessionLimit = #{next} where
+		user_id = #{user_id}
+	</update>
+
+	<select id="checkUserWithSessionKey" resultType="com.ja.classgroupware.base.vo.UsersVO">
+		select * from users where sessionKey = #{value} and sessionlimit > now()
+	</select>
+	
+	
 
 </mapper>
