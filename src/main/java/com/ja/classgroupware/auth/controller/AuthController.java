@@ -39,10 +39,9 @@ public class AuthController {
 	}
 	
 	@RequestMapping(value = "/checkidpopup", method = RequestMethod.POST)
-	public void checkedidpopup(UsersVO vo, Model model, String user_email) throws Exception 	{
-		System.out.println("111");
-		System.out.println("checkidpopup" + user_email);
-		model.addAttribute("user_id",service.selectByEmail(user_email));
+	public String checkedidpopup(@ModelAttribute String user_email ) throws Exception {
+		service.selectByEmail(user_email);
+		return "/entity/auth/completeidpopup";
 		
 	}
 	
