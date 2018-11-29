@@ -1,74 +1,65 @@
 package com.ja.classgroupware.userlist.domain;
 
-import java.util.Arrays;
 import java.util.Date;
 
-public class BoardVO {
+public class UserlistVO {
 	
-	private Integer bno;
-	private String title;
-	private String content;
-	private String writer;
-	private Date regdate;
-	private int viewcnt;
-	private int replycnt;
+	private Integer user_idx;
+	private Integer class_idx;
+	private String user_status;
+	private Date class_joindate;
+	private String user_name;
+	private String user_email;
+	private String user_role;
 	
-	private String[] files;
+	public Integer getUser_idx() {
+		return user_idx;
+	}
+	public void setUser_idx(Integer user_idx) {
+		this.user_idx = user_idx;
+	}
+	public Integer getClass_idx() {
+		return class_idx;
+	}
+	public void setClass_idx(Integer class_idx) {
+		this.class_idx = class_idx;
+	}
+	public String getUser_status() {
+		return user_status;
+	}
+	public void setUser_status(String user_status) {
+		this.user_status = user_status;
+	}
+	public Date getClass_joindate() {
+		return class_joindate;
+	}
+	public void setClass_joindate(Date class_joindate) {
+		this.class_joindate = class_joindate;
+	}
+	public String getUser_name() {
+		return user_name;
+	}
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
+	}
+	public String getUser_email() {
+		return user_email;
+	}
+	public void setUser_email(String user_email) {
+		this.user_email = user_email;
+	}
+	public String getUser_role() {
+		return user_role;
+	}
+	public void setUser_role(String user_role) {
+		this.user_role = user_role;
+	}
 	
-	public String[] getFiles() {
-		return files;
-	}
-	public void setFiles(String[] files) {
-		this.files = files;
-	}
-	public int getReplycnt() {
-		return replycnt;
-	}
-	public void setReplycnt(int replycnt) {
-		this.replycnt = replycnt;
-	}
-	public Integer getBno() {
-		return bno;
-	}
-	public void setBno(Integer bno) {
-		this.bno = bno;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getContent() {
-		return content;
-	}
-	public void setContent(String content) {
-		this.content = content;
-	}
-	public String getWriter() {
-		return writer;
-	}
-	public void setWriter(String writer) {
-		this.writer = writer;
-	}
-	public Date getRegdate() {
-		return regdate;
-	}
-	public void setRegdate(Date regdate) {
-		this.regdate = regdate;
-	}
-	public int getViewcnt() {
-		return viewcnt;
-	}
-	public void setViewcnt(int viewcnt) {
-		this.viewcnt = viewcnt;
-	}
 	@Override
 	public String toString() {
-		return "BoardVO [bno=" + bno + ", title=" + title + ", content="
-				+ content + ", writer=" + writer + ", regdate=" + regdate
-				+ ", viewcnt=" + viewcnt + ", replycnt=" + replycnt
-				+ ", files=" + Arrays.toString(files) + "]";
+		return "UserlistVO [user_idx=" + user_idx + ", class_idx=" + class_idx + ", user_status=" + user_status
+				+ ", class_joindate=" + class_joindate + ", user_name=" + user_name + ", user_email=" + user_email
+				+ ", user_role=" + user_role + "]";
 	}
-
+	
 }

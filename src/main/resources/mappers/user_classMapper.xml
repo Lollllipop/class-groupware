@@ -5,36 +5,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.ja.classgroupware.base.persistence.User_classDAO">
 
+
 	<insert id="insert">
 		insert into user_class
-		values(#{user_idx}, #{class_idx}, #{user_status}, #{user_joindate})
+		values(#{user_idx}, #{class_idx}, 'waiting', null)
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.User_classVO">
 		select user_idx, class_idx, user_status, class_joindate 
 		from user_class
-		where class_idx = #{class_idx}
+		where user_idx = #{user_idx} and class_idx = #{class_idx}
 	</select>
 
-	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.User_classVO">
+	<select id="selectByClass" resultType="com.ja.classgroupware.userlist.domain.UserlistVO">
 		 <![CDATA[
-			select user_idx, class_idx, user_status, user_joindate
-			from user_class
-			where class_idx > 0
+			select users.user_idx, class_idx, user_status, class_joindate, user_name, user_email, user_role 
+			from user_class, users
+			where class_idx = #{class_idx} and user_class.user_idx = users.user_idx
 		 ]]>
 	</select>
 
-	<update id="update">
-		update user_class 
-		set user_status = #{user_status},
-			user_joindate = #{user_joindate}
-		where class_idx = #{class_idx}
+	<update id="update" parameterType="hashmap">
+		update user_class set user_status = 'accept', class_joindate = sysdate 
+		where user_idx = #{h} and class_idx = #{h2}
 	</update>
 
-	<delete id="delete">
-		delete 
-		from user_class 
-		where class_idx = #{class_idx}
+	<delete id="delete" parameterType="hashmap">
+		delete from user_class 
+		where user_idx = #{h} and class_idx = #{h2}
 	</delete>
 
 </mapper>

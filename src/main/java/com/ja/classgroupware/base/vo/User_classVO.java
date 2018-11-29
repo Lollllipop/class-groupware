@@ -16,6 +16,5 @@ public class User_classVO {
 	private int user_idx;
 	private int class_idx;
 	private String user_status;
-	private Date class_joindate;
 
 }
