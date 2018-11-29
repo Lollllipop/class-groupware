@@ -50,9 +50,6 @@
 									<div class="ref_file_area" style='padding: 8px;'>
 										<div>
 											<div class="content_title">${post.bo_title}</div>
-											<div class="ref_file_icon">
-												<i class="fas fa-file-invoice"></i>
-											</div>
 										</div>
 										<div>
 											<a href="${prevPage}"><button class="btn" style="float: right;">목록</button></a>
@@ -294,12 +291,14 @@
 
 	<script type="text/javascript">
 		$(window).load(function() {
+			/* 수정된 게시물인지 체크 */
 			var isUpdated = ${post.bo_updatedate} + "";
 			
 			if (isUpdated) {
 				$('#updatedate').css('display', 'inline-block');
 			}
 			
+			/* 삭제 액션 */
 			$('#delete-button').on("click", function(){
 				var bo_idx 			= ${post.bo_idx};
 				var prevPage 		= '${prevPage}';

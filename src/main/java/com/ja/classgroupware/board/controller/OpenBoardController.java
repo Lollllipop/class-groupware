@@ -133,14 +133,26 @@ public class OpenBoardController {
 	public String readDetail(@PathVariable("bo_idx") Integer bo_idx, Model model, HttpServletRequest request) throws Exception {
 		String page = "entity/open_board/open_board_detail";
 		
+		// 들어온 리스트로 이동하기 위한 코드
+		String prevPage = null;
+		
+		if (request.getSession().getAttribute("updatedPostPrevPage") != null) {
+			prevPage = (String) request.getSession().getAttribute("updatedPostPrevPage");
+			request.getSession().removeAttribute("updatedPostPrevPage");
+		} else {
+			prevPage = request.getHeader("referer");
+			request.getSession().setAttribute("updatedPostPrevPage", prevPage);
+		}
+		
+		model.addAttribute("prevPage", prevPage);
+		
+		System.out.println(prevPage);
+		
 		classManager = new ClassManager(request);
 		int user_idx = classManager.getUserIdx();
 		
 		// 조회수 증가 시킴
 		openBoardService.addOneAtViews(bo_idx);
-		
-		// 이전에 있던 리스트 페이지 위치를 위한 정보
-		model.addAttribute("prevPage", request.getHeader("referer"));
 		
 		// TODO 총 3개를 model에 담으면 됨
 		
@@ -187,6 +199,8 @@ public class OpenBoardController {
 		String 	user_role 	= classManager.getUserRole();
 		
 		PostMainDTO postMainDTO = openBoardService.getDetail(bo_idx);
+		
+		String prevPage = null;
 		
 		model.addAttribute("post", postMainDTO);
 		model.addAttribute("hasNoticeAuth", user_role.equals("student") ? false : true);
