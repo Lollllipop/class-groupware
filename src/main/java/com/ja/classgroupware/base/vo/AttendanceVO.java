@@ -13,10 +13,10 @@ import lombok.Setter;
 @AllArgsConstructor	// 모든 필드를 파라미터로 가지는 생성자 자동 생성
 public class AttendanceVO {
 
-	private int attendace_idx;
+	private int attendance_idx;
 	private int class_idx;
 	private int user_idx;
-	private String attendace_event;
-	private Date attendace_date;
+	private String attendance_event;
+	private Date attendance_date;
 	
 }

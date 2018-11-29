@@ -46,14 +46,12 @@
 	href="${contextPath}/resources/calendar/dist/css/AdminLTE.min.css">
 <link rel="stylesheet"
 	href="${contextPath}/resources/calendar/dist/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+<script src="//apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 
 </head>
 <body>
-
-
-<!-- 학생의 출결 첫 페이지/ 마스터,강사의 출결 두번째 페이지(첫페이지에서 이름 선택시 넘어옴) -->
-
-
 	<div id="wrapper">
 		<%@ include file="/WEB-INF/views/include/nav_top.jsp"%>
 		<%@ include file="/WEB-INF/views/include/nav_side.jsp"%>
@@ -67,17 +65,13 @@
 				<div class="row">
 					<div class="col-lg-6">
 						<div class="card">
-							<!-- 해당 학생 이름 나와야함 -->
-							<div class="card-action">조문규님의 현재 출석률</div>
-							<div class="card-content">
-								<div class="progress-group">
-								<!-- 해당 학생의 출석률 계산 -->
-									<span class="progress-number"><b>80</b>/100</span>
-									<div class="progress">
-										<div class="progress-bar progress-bar-success" style="width: 80%"></div>
-									</div>
-								</div>
+							<div class="card-action">
+								${list[0].user_name} 님의 현재 출석률
 							</div>
+							<div class="card-content">
+								<div id="progressbar"></div>
+							
+						  	</div>
 						</div>
 					</div>
 
@@ -87,7 +81,6 @@
 							<div class="card-content">
 								<div class="box box-primary">
 									<div class="box-body no-padding">
-									<!-- 출석 데이터만 불러와서 읽어야함. 수정 불가 -->
 										<div id="calendar"></div>
 									</div>
 								</div>
@@ -151,104 +144,96 @@
 	<script
 		src="${contextPath}/resources/calendar/bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
 	<!-- Page specific script -->
-	<script>
-		$(function() {
-
-			/* initialize the external events
-			 -----------------------------------------------------------------*/
-			function init_events(ele) {
-				ele.each(function() {
-
-					// create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
-					// it doesn't need to have a start or end
-					var eventObject = {
-						title : $.trim($(this).text())
-					// use the element's text as the event title
-					}
-
-					// store the Event Object in the DOM element so we can get to it later
-					$(this).data('eventObject', eventObject)
-
-					// make the event draggable using jQuery UI
-					$(this).draggable({
-						zIndex : 1070,
-						revert : true, // will cause the event to go back to its
-						revertDuration : 0
-					//  original position after the drag
-					})
-
-				})
+	<script type = "text/javascript">
+	$(function(){
+		var result = new Array();
+		
+		<c:forEach items="${list}" var="list">
+			var json = new Object();
+			json.event = "${list.attendance_event}";
+			json.date = "${list.attendance_date}"
+			result.push(json);
+		</c:forEach> 
+	
+		var events = [];
+		var state = null;
+		var stateColor = null;
+		var count = null;
+		
+		for(var i =0; i < result.length; i++) {
+			if(result[i].event =="y"){
+				state = "출석";
+				stateColor = "blue"
+				count = count + 1;
+			}else if(result[i].event =="e"){
+				state = "조퇴";
+				stateColor = "orange"
+				count = count + 0.5;
+			}else if(result[i].event =="l"){
+				state = "지각";
+				stateColor = "orange"
+					count = count + 0.5;
+			}else if(result[i].event =="n"){
+				state = "결석";
+				stateColor = "red"
 			}
+			events.push( {title: state , start: result[i].date, color : stateColor})
+		}
+		
+		var date = new Date()
+		var d = date.getDate(), m = date.getMonth(), y = date.getFullYear()
+		$('#calendar').fullCalendar(
+			{
+				header : {
+					left : 'prev,next today',
+					center : 'title',
+					right : 'month,agendaWeek,agendaDay'
+				},
+				buttonText : {
+					today : 'today',
+					month : 'month',
+					week : 'week',
+					day : 'day'
+				},
+				events: events,
+				editable : false,
+				droppable : false
+						
+		});
+		
+		function parse(str) {
+		    var y = str.substr(0, 4);
+		    var m = str.substr(5, 2);
+		    var d = str.substr(8, 2);
+		    return new Date(y,m-1,d);
+		}
+		
+		var startdate = parse("${classList.class_startdate}");
+		var enddate = parse("${classList.class_enddate}");
+		
+	    function dateDiff(startdate, enddate) {
+	    	var diff = Math.abs(enddate.getTime() - startdate.getTime());
+		    diff = Math.ceil(diff / (1000 * 3600 * 24));
+	     
+	        return diff;
+	    }
+	    
+	    var diff = dateDiff(startdate, enddate);
+	    var tmp = (count/diff)*100;
+	    var rate = Math.floor(tmp);
 
-			init_events($('#external-events div.external-event'))
+		$("#progressbar").progressbar({
+            max : 100,
+            value : rate
+        });
 
-			/* initialize the calendar
-			 -----------------------------------------------------------------*/
-			//Date for the calendar events (dummy data)
-			var date = new Date()
-			var d = date.getDate(), m = date.getMonth(), y = date.getFullYear()
-			$('#calendar').fullCalendar(
-					{
-						header : {
-							left : 'prev,next today',
-							center : 'title',
-							right : 'month,agendaWeek,agendaDay'
-						},
-						buttonText : {
-							today : 'today',
-							month : 'month',
-							week : 'week',
-							day : 'day'
-						},
-						//Random default events
-						events : [ {
-							title : '결석',
-							start : new Date(y, m, 3),
-							backgroundColor : '#f56954', //red
-							borderColor : '#f56954' //red
-						}, {
-							title : '지각',
-							start : new Date(y, m, d),
-							allDay : false,
-							backgroundColor : '#0073b7', //Blue
-							borderColor : '#0073b7' //Blue
-						}, {
-							title : '조퇴',
-							start : new Date(y, m, d + 1, 19, 0),
-							end : new Date(y, m, d + 1, 22, 30),
-							allDay : false,
-							backgroundColor : '#00a65a', //Success (green)
-							borderColor : '#00a65a' //Success (green)
-						}, ],
-						editable : false,
-						droppable : false, // this allows things to be dropped onto the calendar !!!
-						drop : function(date, allDay) { // this function is called when something is dropped
+        $(document).ready(function() {
+            $("#progressbar ").children('div.ui-progressbar-value').html(rate + '%');
 
-							// retrieve the dropped element's stored Event Object
-							var originalEventObject = $(this).data(
-									'eventObject')
+        });
 
-							// we need to copy it, so that multiple events don't have a reference to the same object
-							var copiedEventObject = $.extend({},
-									originalEventObject)
-
-							// assign it the date that was reported
-							copiedEventObject.start = date
-							copiedEventObject.allDay = allDay
-							copiedEventObject.backgroundColor = $(this).css(
-									'background-color')
-							copiedEventObject.borderColor = $(this).css(
-									'border-color')
-
-							// render the event on the calendar
-							// the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-							$('#calendar').fullCalendar('renderEvent',
-									copiedEventObject, true)
-
-						}
-					})
-
-		})
+	});
+	
 	</script>
 </body>
 </html>

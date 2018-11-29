@@ -5,18 +5,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.ja.classgroupware.base.persistence.AttendanceDAO">
 
-	<insert id="insert">
-		insert into attendance
-		values(attendance_seq.nextval, #{class_idx}, #{user_idx}, #{attendace_event}, #{attendance_date})
-	</insert>
-
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.AttendanceVO">
 		select attendance_idx, class_idx, user_idx, attendance_event, attendance_date
 		from attendance
 		where attendance_idx = #{attendance_idx}
 	</select>
 
-	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.AttendanceVO">
+ 	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.AttendanceVO">
  <![CDATA[
  select attendance_idx, class_idx, user_idx,
 		attendace_event, attendace_date from
@@ -24,8 +19,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  where attendace_idx > 0 
  order by attendace_idx desc
  ]]>
-	</select>
-
+	</select> 
+	
 	<update id="update">
 		update attendance set attendace_event
 		=#{attendace_event}, attendace_date
@@ -38,5 +33,87 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		delete from attendance where attendace_idx =
 		#{attendace_idx}
 	</delete>
+	
+	
+	<!-- custom -->
+	<insert id="insert">
+		<!-- insert into attendance
+		values(attendance_seq.nextval, #{class_idx}, #{user_idx}, #{attendance_event}, #{attendance_date}) -->
+		
+		MERGE INTO attendance
+    	USING DUAL
+       	ON (attendance.class_idx = #{class_idx} AND attendance.attendance_date = #{attendance_date} AND attendance.user_idx = #{user_idx})
+    	WHEN MATCHED THEN
+        	UPDATE SET attendance.attendance_event= #{attendance_event}
+    	WHEN NOT MATCHED THEN
+        	INSERT (attendance.attendance_idx, attendance.user_idx, attendance.class_idx, attendance.attendance_event, attendance.attendance_date)
+        	VALUES (attendance_seq.nextval, #{user_idx}, #{class_idx}, #{attendance_event}, #{attendance_date})
+		
+	</insert>
+	
+	<select id="selectList" resultType="com.ja.classgroupware.attendance.domain.AttendanceDTO">
+		select distinct user_class.class_idx, users.user_idx, users.user_name
+		from attendance, users, user_class
+		where user_class.class_idx = #{class_idx} AND user_class.user_idx = users.user_idx
+		order by users.user_name
+		<!-- 
+		select distinct attendance.class_idx, attendance.user_idx, users.user_name
+		from attendance, users
+		where attendance.class_idx = #{class_idx} AND attendance.user_idx = users.user_idx
+		order by users.user_name -->
+	</select>
+	
+	<select id="selectAttendanceList" resultType="com.ja.classgroupware.attendance.domain.AttendanceDTO">
+	<!-- 	select distinct attendance.attendance_idx, attendance.class_idx, attendance.user_idx, users.user_name, 
+						attendance.attendance_event, attendance.attendance_date 
+		from attendance, users
+		where attendance.class_idx = #{class_idx} AND attendance.user_idx = users.user_idx AND attendance.attendance_date = #{dateText}
+		order by users.user_name  -->
+		
+		<!-- select distinct attendance.attendance_idx, attendance.class_idx, attendance.user_idx, users.user_name, 
+						attendance.attendance_event, attendance.attendance_date 
+		from attendance, users
+		where attendance.class_idx = #{class_idx} AND attendance.user_idx = users.user_idx AND attendance.attendance_date like to_date(#{dateText},'YYYY-MM-DD')
+		order by users.user_name -->
+<!-- 		
+		
+		SELECT distinct users.user_name, user_class.class_idx, users.user_idx,
+     CASE WHEN EXISTS (SELECT 1
+                       FROM attendance
+                       WHERE attendance_date=#{dateText}) 
+               THEN #{dateText}
+               ELSE #{dateText}
+               END as attendance_date,
+    CASE WHEN EXISTS (SELECT 1
+                      FROM attendance
+                      WHERE attendance_date=#{dateText}) 
+               THEN attendance_event
+               ELSE 'y' 
+               END as attendance_event
+FROM attendance, users, user_class
+where attendance.class_idx = #{class_idx} and user_class.class_idx = #{class_idx} 
+and attendance.user_idx = users.user_idx and user_class.user_idx = users.user_idx -->
+
+SELECT distinct users.user_name, user_class.class_idx, users.user_idx,
+       DECODE(attendance.attendance_date,to_date(#{dateText},'YYYY-MM-DD'),attendance_date,#{dateText})  as attendance_date,
+       DECODE(attendance.attendance_date,to_date(#{dateText},'YYYY-MM-DD'),attendance.attendance_event,'y')  as attendance_event,
+       DECODE(attendance.attendance_date,to_date(#{dateText},'YYYY-MM-DD'),attendance.attendance_idx)  as attendance_idx
+FROM attendance, users, user_class
+where attendance.class_idx = #{class_idx} and user_class.class_idx = #{class_idx} 
+and attendance.user_idx = users.user_idx and user_class.user_idx = users.user_idx
+and users.user_role = 'student'
+order by attendance_idx desc, users.user_name 
+		
+		
+	</select>
+	
+	<select id="selectDetail" resultType="com.ja.classgroupware.attendance.domain.AttendanceDTO">
+		select distinct attendance.attendance_idx, attendance.class_idx, attendance.user_idx, users.user_name, 
+						attendance.attendance_event, attendance.attendance_date 
+		from attendance, users
+		where attendance.class_idx = #{class_idx} AND attendance.user_idx = #{user_idx} AND users.user_idx = #{user_idx}
+	</select>
+
+	
 
 </mapper>

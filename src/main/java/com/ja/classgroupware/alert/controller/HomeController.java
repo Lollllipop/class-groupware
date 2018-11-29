@@ -15,7 +15,7 @@ import com.ja.classgroupware.base.vo.AlertVO;
 
 @Controller
 public class HomeController {
-	
+
 	@Autowired
 	private AlertDAO boardMapper;
 
@@ -28,14 +28,14 @@ public class HomeController {
 	public String home(Locale locale, Model model) throws Exception {
 		// throw new Exception();
 		logger.info("Welcome home! The client locale is {}.", locale);
-		
+
 		// 임시 코드...
-/*		AlertVO alertVO = new AlertVO(2,2,2,"2",2,"2");
-		boardMapper.insert(alertVO);*/
-		System.out.println("개선 성공!!!!!!!!!!!!");
+		/*AlertVO alertVO = new AlertVO(2, 2, 2, "2", 2, "2");
+		boardMapper.insert(alertVO);
+		System.out.println("개선 성공!!!!!!!!!!!!");*/
 		//
-		
+
 		return "template";
 	}
-	
+
 }
