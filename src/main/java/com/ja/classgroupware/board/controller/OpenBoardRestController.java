@@ -11,11 +11,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ja.classgroupware.base.domain.PageInfo;
 import com.ja.classgroupware.base.domain.PagingNavInfo;
+import com.ja.classgroupware.base.domain.SearchInfo;
 import com.ja.classgroupware.base.util.ClassManager;
 import com.ja.classgroupware.base.util.DateConverter;
 import com.ja.classgroupware.base.util.FileUploadManager;
@@ -48,15 +50,26 @@ public class OpenBoardRestController {
 		int class_idx 	= classManager.getClassIdx();
 		dateConverter 	= new DateConverter();
 		
-		ArrayList<BoardDTO> posts 			= openBoardService.getPageList(pageInfo, class_idx, boardSeparator);
-		int 				totalCount 		= openBoardService.getTotalCount();
+		String searchValue 		= request.getParameter("searchvalue");
+		String searchType 		= request.getParameter("searchtype");
+		SearchInfo searchInfo 	= new SearchInfo(searchValue, searchType);
+
+		ArrayList<BoardDTO> posts = openBoardService.getPageList(pageInfo, searchInfo, class_idx, boardSeparator);
+
+		int selectedPostsCount = openBoardService.getSelectedPostsCount(searchType, searchValue);
 		
-		pageMaker = new PageMaker(pageInfo, totalCount);
+		pageMaker = new PageMaker(pageInfo, selectedPostsCount);
 		
 		PagingNavInfo 		pagingNavInfo 	= pageMaker.make();
 		
-		for (int i = 0; i < posts.size(); i++) {
-			posts.get(i).setView_idx(totalCount - (((pagingNavInfo.getCurrentPage() - 1) * pageMaker.getCount()) + i));
+		for (int i = 0, j = 0; i < posts.size(); i++, j++) {
+			if (posts.get(i).getBo_isnotice().equals("true")) {
+				posts.get(i).setBo_convertedwritedate(dateConverter.convert(posts.get(i).getBo_writedate()));
+				j--;
+				continue;
+			}
+			
+			posts.get(i).setView_idx(selectedPostsCount - (((pagingNavInfo.getCurrentPage() - 1) * pageMaker.getCount()) + j));
 			posts.get(i).setBo_convertedwritedate(dateConverter.convert(posts.get(i).getBo_writedate()));
 		}
 		

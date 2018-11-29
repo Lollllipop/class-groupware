@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ja.classgroupware.base.domain.PageInfo;
+import com.ja.classgroupware.base.domain.SearchInfo;
 import com.ja.classgroupware.base.persistence.BoardDAO;
 import com.ja.classgroupware.base.persistence.FilesDAO;
 import com.ja.classgroupware.base.vo.BoardVO;
@@ -46,10 +47,11 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 	}
 	
 	@Override
-	public ArrayList<BoardDTO> getPageList(PageInfo pageInfo, int class_idx, String bo_role) throws Exception {
+	public ArrayList<BoardDTO> getPageList(PageInfo pageInfo, SearchInfo searchInfo, int class_idx, String bo_role) throws Exception {
 		paramMap = new HashMap<String, Object>();
 		
 		paramMap.put("pageInfo", pageInfo);
+		paramMap.put("searchInfo", searchInfo);
 		paramMap.put("class_idx", class_idx);
 		paramMap.put("bo_role", bo_role);
 		
@@ -89,6 +91,18 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 	@Override
 	public void updatePost(BoardVO boardVO) throws Exception {
 		boardDAO.update(boardVO);
+	}
+
+	@Override
+	public int getSelectedPostsCount(String searchType, String searchValue) throws Exception {
+		paramMap = new HashMap<String, Object>();
+		
+		paramMap.put("searchType", searchType);
+		paramMap.put("searchValue", searchValue);
+		
+		int selectedPostCount = boardDAO.selectSelectedPostsCount(paramMap);
+		
+		return selectedPostCount;
 	}	
 
 }

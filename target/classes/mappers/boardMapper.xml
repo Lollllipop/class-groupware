@@ -63,6 +63,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from board
 	</select>
 	
+	<select id="selectSelectedPostsCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM board
+		WHERE bo_isnotice != 'true'
+		<include refid="selectCount"></include>
+	</select>
+	
 	<update id="updateViewsWithPlusOne">
 		update board 
 		set bo_views = bo_views + 1
@@ -70,21 +77,59 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<select id="selectPage" resultType="com.ja.classgroupware.board.domain.BoardDTO">
+	<!-- 여기 수정해야함 공지사항 맨 위에 항상 나오도록  sql을 union으로 바꾸면 될듯 -->
 		<![CDATA[
-			SELECT *
-			FROM (
-			        SELECT a.*, ROWNUM AS rnum
-			        FROM (
-			                SELECT bo_idx, s.user_idx, bo_title, bo_writedate, bo_isnotice, bo_role, bo_views, user_name, bo_comments, bo_hasfiles
-			                FROM board b, users s
-			                WHERE b.user_idx = s.user_idx
-			                AND class_idx = #{class_idx}
-			                AND bo_role = #{bo_role} 
-			                ORDER BY bo_isnotice desc, ${pageInfo.sort} ${pageInfo.order}, bo_idx desc
-			             ) a
-			        WHERE ROWNUM <= #{pageInfo.max}
-			    )
-			WHERE rnum > #{pageInfo.offset}
+			SELECT * 
+			FROM
+			(
+			    SELECT bo_idx, s.user_idx, bo_title, bo_writedate, bo_isnotice, bo_role, bo_views, user_name, bo_comments, bo_hasfiles
+			    FROM board b, users s
+			    WHERE b.user_idx = s.user_idx
+			    AND bo_isnotice = 'true'
+			    UNION
+				SELECT bo_idx, user_idx, bo_title, bo_writedate, bo_isnotice, bo_role, bo_views, user_name, bo_comments, bo_hasfiles
+				FROM (
+				        SELECT a.*, ROWNUM AS rnum
+				        FROM (
+				                SELECT bo_idx, s2.user_idx, bo_title, bo_writedate, bo_isnotice, bo_role, bo_views, user_name, bo_comments, bo_hasfiles
+				                FROM board b2, users s2
+				                WHERE b2.user_idx = s2.user_idx
+				                AND class_idx = #{class_idx}
+				                AND bo_role = #{bo_role}
+				                AND bo_isnotice != 'true' 
+		]]>
+			                	<include refid="search"></include>             
+		<![CDATA[
+				                ORDER BY bo_idx desc
+				             ) a
+				        WHERE ROWNUM <= #{pageInfo.max}
+				    )
+				WHERE rnum > #{pageInfo.offset}
+			)
+			ORDER BY bo_isnotice desc, ${pageInfo.sort} ${pageInfo.order}, bo_idx desc
 		]]>
 	</select>
+	
+	<!-- include 내용들 -->
+	<sql id="search">
+		<if test="searchInfo.searchType != null">
+			<if test="searchInfo.searchType == 't'.toString()">
+				AND bo_title like ('%' || #{searchInfo.searchValue} || '%')
+			</if>
+			<if test="searchInfo.searchType == 'u'.toString()">
+				AND user_name like ('%' || #{searchInfo.searchValue} || '%')
+			</if>
+		</if>
+	</sql>
+	
+	<sql id="selectCount">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">
+				AND bo_title LIKE ('%' || #{searchValue} || '%')
+			</if>
+			<if test="searchType == 'u'.toString()">
+				AND user_name LIKE ('%' || #{searchValue} || '%')
+			</if>
+		</if>
+	</sql>
 </mapper>

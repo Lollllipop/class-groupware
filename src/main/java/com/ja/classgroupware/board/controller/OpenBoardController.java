@@ -25,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ja.classgroupware.base.domain.PageInfo;
 import com.ja.classgroupware.base.domain.PagingNavInfo;
+import com.ja.classgroupware.base.domain.SearchInfo;
 import com.ja.classgroupware.base.util.ClassManager;
 import com.ja.classgroupware.base.util.PageMaker;
 import com.ja.classgroupware.base.vo.BoardVO;
@@ -59,20 +60,32 @@ public class OpenBoardController {
 		int class_idx 	= classManager.getClassIdx();
 		dateConverter 	= new DateConverter();
 		
-		ArrayList<BoardDTO> posts 			= openBoardService.getPageList(pageInfo, class_idx, boardSeparator);
-		int 				totalCount 		= openBoardService.getTotalCount();
+		String searchValue 		= request.getParameter("searchvalue");
+		String searchType 		= request.getParameter("searchtype");
+		SearchInfo searchInfo 	= new SearchInfo(searchValue, searchType);
 		
-		pageMaker = new PageMaker(pageInfo, totalCount);
+		ArrayList<BoardDTO> posts = openBoardService.getPageList(pageInfo, searchInfo, class_idx, boardSeparator);
+		
+		int selectedPostsCount = openBoardService.getSelectedPostsCount(searchType, searchValue);
+		
+		pageMaker = new PageMaker(pageInfo, selectedPostsCount);
 		
 		PagingNavInfo pagingNavInfo = pageMaker.make();
 		
-		for (int i = 0; i < posts.size(); i++) {
-			posts.get(i).setView_idx(totalCount - (((pagingNavInfo.getCurrentPage() - 1) * pageMaker.getCount()) + i));
+		for (int i = 0, j = 0; i < posts.size(); i++, j++) {
+			if (posts.get(i).getBo_isnotice().equals("true")) {
+				posts.get(i).setBo_convertedwritedate(dateConverter.convert(posts.get(i).getBo_writedate()));
+				j--;
+				continue;
+			}
+			
+			posts.get(i).setView_idx(selectedPostsCount - (((pagingNavInfo.getCurrentPage() - 1) * pageMaker.getCount()) + j));
 			posts.get(i).setBo_convertedwritedate(dateConverter.convert(posts.get(i).getBo_writedate()));
 		}
 		
 		model.addAttribute("posts", posts);
-		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("totalCount", selectedPostsCount);
+		model.addAttribute("searchInfo", searchInfo);
 		model.addAttribute("pagingNavInfo", pagingNavInfo);
 		
 		return page;
@@ -156,14 +169,10 @@ public class OpenBoardController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/{bo_idx}", method = RequestMethod.PATCH)
-	public String updatePost(@PathVariable("bo_idx") Integer bo_idx, @RequestBody BoardVO boardVO, HttpServletRequest request) throws Exception {
-		System.out.println(boardVO.getBo_isnotice());
-		
+	public String updatePost(@PathVariable("bo_idx") Integer bo_idx, @RequestBody BoardVO boardVO, HttpServletRequest request) throws Exception {		
 		if (boardVO.getBo_isnotice() == null) {
 			boardVO.setBo_isnotice("false");
 		}
-		
-		System.out.println(boardVO.getBo_isnotice());
 		
 		openBoardService.updatePost(boardVO);
 

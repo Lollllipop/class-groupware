@@ -6,6 +6,7 @@
 <%
 	request.setAttribute("path", "openboard");
 	request.setAttribute("p", request.getAttribute("pagingNavInfo"));
+	request.setAttribute("s", request.getAttribute("searchInfo"));
 %>
 
 <c:set var="contextPath" value="<%=request.getContextPath()%>"></c:set>
@@ -92,22 +93,20 @@
 							<div class="clear"></div>
 							<div class="cntAllTextArea">총 ${totalCount} 개</div>
 							<div class="searcharea">
-								<form class="form-inline d-flex justify-content-center">
+								<form class="form-inline d-flex justify-content-center" id='search-form' method="GET">
 
 									<div class="selectSearchValue">
-										<select class="form-control input-sm" name="selectReadCount">
-											<option value="제목" selected="selected">제목</option>
-											<option value="내용">내용</option>
-											<option value="작성자">작성자</option>
+										<select class="form-control input-sm" name="searchtype" id='search-type-select'>
+											<option value="t" selected="selected">제목</option>
+											<option value="u">작성자</option>
 										</select>
 									</div>
 
 									<div class="search_icon">
-										<i class="material-icons dp48">search</i>
+										<i class="material-icons dp48" style="cursor:pointer" id='search-button'>search</i>
 									</div>
 									<div class="search_area_form_input">
-										<input type="text" class="form-control"
-											placeholder="으로 검색합니다." id="saerch_form_input_value">
+										<input type="text" class="form-control" placeholder="검색어 입력..." id="saerch_form_input_value" name='searchvalue'>
 									</div>
 								</form>
 							</div>
@@ -186,10 +185,10 @@
 											
 											<!-- 처음 및 이전 페이지 버튼 -->
 											<c:if test="${p.firstPage}">
-												<li class="page-item"><a class="page-link" href="/${path}?offset=${p.firstPageOffset}&max=${p.firstPageMax}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}"><span>≪</span></a></li>
+												<li class="page-item"><a class="page-link" href="/${path}?offset=${p.firstPageOffset}&max=${p.firstPageMax}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}&searchtype=${s.searchType}&searchvalue=${s.searchValue}"><span>≪</span></a></li>
 											</c:if>
 											<c:if test="${p.prev}">
-												<li class="page-item"><a class="page-link" href="/${path}?offset=${p.prevPageOffset}&max=${p.prevPageMax}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}"><span>＜</span></a></li>
+												<li class="page-item"><a class="page-link" href="/${path}?offset=${p.prevPageOffset}&max=${p.prevPageMax}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}&searchtype=${s.searchType}&searchvalue=${s.searchValue}"><span>＜</span></a></li>
 											</c:if>
 											
 											<!-- 페이지 버튼 -->
@@ -197,10 +196,10 @@
 											<c:forEach var="i" begin="${p.startPage}" end="${p.endPage}">
 												<c:choose>
 													<c:when test="${i eq p.currentPage}">
-														<li class="page-item"><a class="page-link" style="color: white; background-color: #f44336;" href="/${path}?offset=${p.offset + postsCount}&max=${p.max + postsCount}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}">${i}</a></li>
+														<li class="page-item"><a class="page-link" style="color: white; background-color: #f44336;" href="/${path}?offset=${p.offset + postsCount}&max=${p.max + postsCount}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}&searchtype=${s.searchType}&searchvalue=${s.searchValue}">${i}</a></li>
 													</c:when>
 													<c:otherwise>
-														<li class="page-item"><a class="page-link" href="/${path}?offset=${p.offset + postsCount}&max=${p.max + postsCount}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}">${i}</a></li>
+														<li class="page-item"><a class="page-link" href="/${path}?offset=${p.offset + postsCount}&max=${p.max + postsCount}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}&searchtype=${s.searchType}&searchvalue=${s.searchValue}">${i}</a></li>
 													</c:otherwise>
 												</c:choose>
 												<c:set var="postsCount" value="${postsCount + p.postsCount}"/>
@@ -208,10 +207,10 @@
 											
 											<!-- 다음 및 마지막 페이지 버튼 -->
 											<c:if test="${p.next}">
-												<li class="page-item"><a class="page-link" href="/${path}?offset=${p.nextPageOffset}&max=${p.nextPageMax}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}"><span>＞</span></a></li>
+												<li class="page-item"><a class="page-link" href="/${path}?offset=${p.nextPageOffset}&max=${p.nextPageMax}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}&searchtype=${s.searchType}&searchvalue=${s.searchValue}"><span>＞</span></a></li>
 											</c:if>
 											<c:if test="${p.lastPage}">
-												<li class="page-item"><a class="page-link" href="/${path}?offset=${p.lastPageOffset}&max=${p.lastPageMax}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}"><span>≫</span></a></li>
+												<li class="page-item"><a class="page-link" href="/${path}?offset=${p.lastPageOffset}&max=${p.lastPageMax}&sort=${p.pageInfo.sort}&order=${p.pageInfo.order}&searchtype=${s.searchType}&searchvalue=${s.searchValue}"><span>≫</span></a></li>
 											</c:if>
 											
 										</ul>
@@ -241,6 +240,8 @@
 	var max 			= '${p.pageInfo.max}';
 	var sort 			= 'bo_idx'; // 정렬 가운데에 들어갈 값
 	var order 			= 'desc';   // 정렬 가운데에 들어갈 값
+	var searchValue		= null;
+	var searchType		= null;
 	var selectedCount 	= $('#readCountOfPosts option:selected').val();
 	
 	function setSelectedCountWhenAjaxCall() {
@@ -259,12 +260,20 @@
 		this.order = order;
 	}
 	
+	function setSearchValue(searchValue) {
+		this.searchValue = searchValue;
+	}
+	
+	function setSearchType(searchType) {
+		this.searchType = searchType;
+	}
+	
 	function getQuerystring(paramName){ 
 		var tempUrl = window.location.search.substring(1);
 		var tempArray = tempUrl.split('&'); 
 		
 		if (tempArray[0] !== '') {
-			for(var i = 0; tempArray.length; i++) { 
+			for(var i = 0; i < tempArray.length; i++) { 
 				var keyValuePair = tempArray[i].split('=');
 				
 				if(keyValuePair[0] == paramName){
@@ -272,14 +281,21 @@
 				} 
 			} 
 		} else {
-			return 0;
+			return null;
 		}
+		return null;
 	}
 
 	function changeBoardAndPagingNav() {
+		var url = '/openboardajax?offset=' + offset + '&max=' + max + '&sort=' + sort + '&order=' + order;
+		
+		if (getQuerystring('searchtype') && getQuerystring('searchvalue')) {
+			url =  url + '&searchtype=' + getQuerystring('searchtype') + '&searchvalue=' + getQuerystring('searchvalue');
+		}
+			
 		$.ajax({
 			type	: 'GET',
-			url		: '/openboardajax?offset=' + offset + '&max=' + max + '&sort=' + sort + '&order=' + order,
+			url		: url,
 			success : function(data, textStatus, xhr) {
 				console.log(data);
 				
@@ -317,19 +333,26 @@
 		        var path = 'openboard';
 		        var p	 = data.pagingNavInfo;
 		        
+		        var orderAndSearchQueryString = '&sort=' + p.pageInfo.sort + '&order=' + p.pageInfo.order;
+		        
+		        if (getQuerystring('searchvalue')) {
+		        	orderAndSearchQueryString = orderAndSearchQueryString + '&searchtype=' + getQuerystring('searchtype') + '&searchvalue=' + getQuerystring('searchvalue');
+		        }
+		        
 		        var firstButton = p.firstPage 
-		        					? `<li class="page-item"><a class="page-link" href="/` + path + `?offset=` + p.firstPageOffset + `&max=` + p.firstPageMax + `&sort=` + p.pageInfo.sort + `&order=` + p.pageInfo.order + `"><span>≪</span></a></li>`
+		        					? `<li class="page-item"><a class="page-link" href="/` + path + `?offset=` + p.firstPageOffset + `&max=` + p.firstPageMax + orderAndSearchQueryString + `"><span>≪</span></a></li>`
 		        					: ``;
+		        
 		        var prevButton = p.prev
-		        					? `<li class="page-item"><a class="page-link" href="/` + path + `?offset=` + p.prevPageOffset + `&max=` + p.prevPageMax + `&sort=` + p.pageInfo.sort + `&order=` + p.pageInfo.order + `"><span>＜</span></a></li>`
+		        					? `<li class="page-item"><a class="page-link" href="/` + path + `?offset=` + p.prevPageOffset + `&max=` + p.prevPageMax + orderAndSearchQueryString + `"><span>＜</span></a></li>`
 		        					: ``;
 
 		        var nextButton = p.lastPage
-									? `<li class="page-item"><a class="page-link" href="/` + path + `?offset=` + p.nextPageOffset + `&max=` + p.nextPageMax + `&sort=` + p.pageInfo.sort + `&order=` + p.pageInfo.order + `"><span>＞</span></a></li>`
+									? `<li class="page-item"><a class="page-link" href="/` + path + `?offset=` + p.nextPageOffset + `&max=` + p.nextPageMax + orderAndSearchQueryString + `"><span>＞</span></a></li>`
 									: ``; 
 		        
 		        var lastButton = p.lastPage
-									? `<li class="page-item"><a class="page-link" href="/` + path + `?offset=` + p.lastPageOffset + `&max=` + p.lastPageMax + `&sort=` + p.pageInfo.sort + `&order=` + p.pageInfo.order + `"><span>≫</span></a></li>`			
+									? `<li class="page-item"><a class="page-link" href="/` + path + `?offset=` + p.lastPageOffset + `&max=` + p.lastPageMax + orderAndSearchQueryString + `"><span>≫</span></a></li>`			
 									: ``;
 									
 				var currentPageList = ``;
@@ -337,8 +360,8 @@
 				
 				for (var i = p.startPage; i <= p.endPage; i++) {
 					currentPageList += i === p.currentPage 
-											? `<li class="page-item"><a class="page-link" style="color: white; background-color: #f44336;" href="/` + path + `?offset=` + (p.offset + postsCount) + `&max=` + (p.max + postsCount) + `&sort=` + p.pageInfo.sort + `&order=` + p.pageInfo.order + `"><span>` + i + `</span></a></li>`
-											: `<li class="page-item"><a class="page-link" href="/` + path + `?offset=` + (p.offset + postsCount) + `&max=` + (p.max + postsCount) + `&sort=` + p.pageInfo.sort + `&order=` + p.pageInfo.order + `"><span>` + i + `</span></a></li>`
+											? `<li class="page-item"><a class="page-link" style="color: white; background-color: #f44336;" href="/` + path + `?offset=` + (p.offset + postsCount) + `&max=` + (p.max + postsCount) + orderAndSearchQueryString + `"><span>` + i + `</span></a></li>`
+											: `<li class="page-item"><a class="page-link" href="/` + path + `?offset=` + (p.offset + postsCount) + `&max=` + (p.max + postsCount) + orderAndSearchQueryString + `"><span>` + i + `</span></a></li>`
 												  
 					postsCount += p.postsCount
 				}
@@ -354,13 +377,22 @@
 	}
 	
 	// 게시물 수 옵션이 현재 렌더링 되는 게시물수와 동일하게 선택되어 있도록 하는 코드
-	function setSelectOptionWherRefreshing() {
+	function setSelectOptionWhenRefreshing() {
 		var offset 		= getQuerystring('offset');
 		var max 		= getQuerystring('max');
 		var postsCount 	= max - offset;
 		
 		$('#readCountOfPosts').find('option[seleted=true]').attr('selected', false);
 		$('#readCountOfPosts').find('option[value=' + postsCount +']').attr('selected', true);
+	}
+	
+	// 검색한 단어가 보존되도록 유지하는 코드
+	function setSearchKeyword() {
+		var searchValue = getQuerystring('searchvalue');
+		
+		if (searchValue) {
+			$('#saerch_form_input_value').val(searchValue);
+		}
 	}
 	
 	
@@ -421,7 +453,19 @@
 			changeBoardAndPagingNav();
 		})
 		
-		setSelectOptionWherRefreshing();
+		/* 검색 버튼 클릭시 실행 */
+		$('#search-button').on("click", function(){
+			setSearchValue($('#saerch_form_input_value').val());
+			setSearchType($('#search-type-select option:selected').val());
+			
+			$('#search-form').submit();
+			
+			// changeBoardAndPagingNav(); AJAX 이용시
+		})
+		
+		setSelectOptionWhenRefreshing();
+ 		
+ 		setSearchKeyword();
 		
  		// TODO 부트스트랩 버전을 올려야 할지 흠.. 현재 부트스트랩 버전으로는 적용이 안된다.
 		// 작성일에 마우스를 가져다대면 자세한 날짜가 나오도록 하는 코드

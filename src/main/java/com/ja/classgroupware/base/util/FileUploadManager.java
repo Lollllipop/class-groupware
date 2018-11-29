@@ -78,6 +78,7 @@ public class FileUploadManager {
 		if (boardKind.equals("openboard")) {
 			openboardPath = realPath + imageFolderPath + "\\" + boardKind + "\\"  + year + "\\" + month + "\\" + date + "\\";
 		}
+		System.out.println(openboardPath);
 	}
 	
 	public String getUploadedLink() {

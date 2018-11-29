@@ -161,7 +161,7 @@
 				var bo_idx 			= ${post.bo_idx};
 				var bo_title		= $('#post-title').val();
 				var bo_content		= $('#editor-area').val();
-				var bo_isnotice		= $('#filled-in-box').val();
+				var bo_isnotice		= $('#filled-in-box').is(':checked') ? 'true' : 'false';
 				
 				var sendData = {
 						'bo_idx' 		: bo_idx,
@@ -177,7 +177,6 @@
 					dataType: 'text',
 					url		: '/openboard/' + bo_idx,
 					success	: function(data, textStatus, xhr) {
-						console.log(data);
 						window.location.href = '/openboard/' + bo_idx;
 					}
 				})

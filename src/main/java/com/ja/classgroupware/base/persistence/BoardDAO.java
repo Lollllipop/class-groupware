@@ -32,4 +32,6 @@ public interface BoardDAO {
 	
 	public ArrayList<BoardDTO> selectPage(Map<String, Object> paramMap) throws Exception;
 
+	public int selectSelectedPostsCount(Map<String, Object> paramMap) throws Exception;
+
 }
