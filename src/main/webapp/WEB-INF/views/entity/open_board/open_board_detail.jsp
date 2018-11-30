@@ -31,6 +31,106 @@
 <!-- Include Editor style. -->
 <link href="https://cdn.jsdelivr.net/npm/froala-editor@2.9.1/css/froala_style.min.css" rel="stylesheet" type="text/css" />
 
+<style>
+
+	.timeline {
+	   position: relative;
+	   margin: 0 0 30px 0;
+	   padding: 0;
+	   list-style: none
+	}
+	
+	.timeline:before {
+	   content: '';
+	   position: absolute;
+	   top: 0px;
+	   bottom: 0;
+	   width: 4px;
+	   background: #ddd;
+	   left: 22px;
+	   margin: 0;
+	   border-radius: 2px
+	}
+	
+	.timeline>li {
+	   position: relative;
+	   margin-right: 0px;
+	   margin-bottom: 15px
+	}
+	
+	.timeline>li:before, .timeline>li:after {
+	   content: " ";
+	   display: table
+	}
+	
+	.timeline>li:after {
+	   clear: both
+	}
+	
+	.timeline>li>.timeline-item {
+	   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+	   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+	   border-radius: 3px;
+	   margin-top: 0px;
+	   background: #fff;
+	   color: #444;
+	   margin-left: 50px;
+	   margin-right: 0px;
+	   padding: 0;
+	   position: relative
+	}
+	
+	.timeline>li>.timeline-item>.time {
+	   color: #999;
+	   float: right;
+	   padding: 10px 10px 0px 10px;
+	   font-size: 12px
+	}
+	
+	.timeline>li>.timeline-item>.timeline-header {
+	   margin: 0;
+	   color: #555;
+	   padding: 0px 10px;
+	   font-size: 16px;
+	   line-height: 1.1
+	}
+	
+	.timeline>li>.timeline-item>.timeline-header>a {
+	   font-weight: 600;
+	}
+	
+	.timeline>li>.timeline-item>.timeline-body {
+	   padding: 0px 10px;
+	}
+	
+	.timeline>li>.timeline-item>.timeline-footer {
+		padding: 0px 10px 10px 10px;
+	}
+	
+	.timeline>li.time-label>span {
+	   font-weight: 600;
+	   padding: 5px;
+	   display: inline-block;
+	   background-color: #fff;
+	   border-radius: 4px
+	}
+	
+	.timeline>li>.fa, .timeline>li>.glyphicon, .timeline>li>.ion {
+	   width: 30px;
+	   height: 30px;
+	   font-size: 15px;
+	   line-height: 30px;
+	   position: absolute;
+	   color: #666;
+	   background: #d2d6de;
+	   border-radius: 50%;
+	   text-align: center;
+	   left: 10px;
+	   top: 0
+	}
+
+</style>
+
 </head>
 <body>
 	<div id="wrapper">
@@ -98,10 +198,10 @@
 											<tr>
 												<td>
 													<div class="form-group">
-														<form>
-															<textarea class="form-control" rows="5" placeholder="댓글을 작성해주세요." class="span2"></textarea>
+														<form action='/openboard/${bo_idx}/comment' method="POST">
+															<textarea class="form-control" rows="5" placeholder="댓글을 작성해주세요." class="span2" name='comm_content'></textarea>
 															<td>
-																<button class="btn">등록</button>
+																<input type="submit" value="등록" class="btn" id='comment-submit-btn'>
 															</td>
 														</form>
 													</div>
@@ -113,167 +213,71 @@
 							</div>
 						</div>
 					</div>
-
-
-					<div class="col-md-12">
-						<div class="card">
-							<div class="card-content">
-								<div class="box box-solid">
-									<div class="box-body">
-										<div class="box-group" id="accordion">
-											<div class="panel box box-primary">
-												<table class="table-responsive">
-													<thead>
-														<tr>
-															<td>
-																<ul class="list-inline">
-																	<li>댓글 작성자1</li>|
-																	<li>작성일 2018.10.29</li>|
-																	<li><div class="box-header with-border">
-																			<a data-toggle="collapse" data-parent="#accordion"
-																				href="#collapseOne"> <i class="fas fa-reply"></i>답글
-																				달기
-																			</a>
-																		</div></li>
-																</ul>
-															</td>
-														</tr>
-													</thead>
-													<tbody>
-														<tr>
-															<td>호호'ㅅ'</td>
-														</tr>
-													</tbody>
-												</table>
-
-												<div id="collapseOne" class="panel-collapse collapse in">
-													<div class="box-body">
-														<div class="reply_write_area">
-															<form>
-																<div class="reply_write_left">닉네임</div>
-																<div class="reply_write_right">
-																	<div class="reply_write_text">
-																		<textarea class="form-control" rows="5" cols="70"
-																			placeholder="답글 달기 누르면 나오는 모양" class="span10"></textarea>
-																	</div>
-																	<div class="clear"></div>
-																	<div class="reply_write_button">
-																		<button class="btn" style="float: right">등록</button>
-																	</div>
-																</div>
-															</form>
-														</div>
-													</div>
-												</div>
-											</div>
-
-											<div class="panel box box-primary">
-												<table class="table-responsive">
-													<thead>
-														<tr>
-															<td>
-																<ul class="list-inline">
-																	<li>댓글 작성자2</li>|
-																	<li>작성일 2018.10.29</li>|
-																	<li><div class="box-header with-border">
-																			<a data-toggle="collapse" data-parent="#accordion"
-																				href="#collapseTwo"> <i class="fas fa-reply"></i>답글
-																				달기
-																			</a>
-																		</div></li>
-																</ul>
-															</td>
-														</tr>
-													</thead>
-													<tbody>
-														<tr>
-															<td>기여운 카와이한 고양이 <br> 기여운 카와이한 멍뭉이 <br>
-																ㅇㅅㅇ, ㅇㅂㅇ, ㅇㅁㅇ, '^'(~~~~~~!@!@!@!@!@@#@#@#@#@#@#@#@#@# <br>
-																ㅁㄴㅇㅁㄴㅇㄴ
-															</td>
-														</tr>
-													</tbody>
-												</table>
-
-
-												<div id="collapseTwo" class="panel-collapse collapse">
-													<div class="box-body">
-														<div class="reply_write_area">
-															<form>
-																<div class="reply_write_left">닉네임</div>
-																<div class="reply_write_right">
-																	<div class="reply_write_text">
-																		<textarea class="form-control" rows="5" cols="70"
-																			placeholder="답글 달기 누르면 나오는 모양" class="span10"></textarea>
-																	</div>
-																	<div class="clear"></div>
-																	<div class="reply_write_button">
-																		<button class="btn" style="float: right">등록</button>
-																	</div>
-																</div>
-															</form>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="panel box box-primary">
-												<table class="table-responsive">
-													<thead>
-														<tr>
-															<td>
-																<ul class="list-inline">
-																	<li>댓글 작성자3</li>|
-																	<li>작성일 2018.10.29</li>|
-																	<li><div class="box-header with-border">
-																			<a data-toggle="collapse" data-parent="#accordion"
-																				href="#collapseThree"> <i class="fas fa-reply"></i>답글
-																				달기
-																			</a>
-																		</div></li>
-																</ul>
-															</td>
-														</tr>
-													</thead>
-													<tbody>
-														<tr>
-															<td>너는 모르지? <br> 귀여운 <br> 푸들의 복실복실함 <br></td>
-														</tr>
-													</tbody>
-												</table>
-
-												<div id="collapseThree" class="panel-collapse collapse">
-													<div class="box-body">
-														<div class="reply_write_area">
-															<form>
-																<div class="reply_write_left">닉네임</div>
-																<div class="reply_write_right">
-																	<div class="reply_write_text">
-																		<textarea class="form-control" rows="5" cols="70"
-																			placeholder="답글 달기 누르면 나오는 모양" class="span10"></textarea>
-																	</div>
-																	<div class="clear"></div>
-																	<div class="reply_write_button">
-																		<button class="btn" style="float: right">등록</button>
-																	</div>
-																</div>
-															</form>
-														</div>
-													</div>
-												</div>
-											</div>
+					
+					<div style="clear : both"></div>
+					
+					<div class='col-md-12'>
+						<ul class="timeline">
+							<c:forEach var="comment" items="${comments}">
+								<li class="replyLi" data-hw_submit_idx='${comment.bo_idx}' name="listSubmit">
+									<i class="fa fa-comments bg-blue"></i>
+					 				<div class="timeline-item">
+										<span class="time">
+											<div style="float : left;"><i class="fa fa-clock-o"></i></div><div style="float : left;"><p id="hw_submit_content_writedate_p">${comment.comm_convertedwritedate}</p></div>
+										</span>
+					
+										<input type="hidden" name="hw_submit_idx_strong" value="${comment.bo_idx}">
+					
+					 					<h3 class="timeline-header"><input type="text" name="user_name_p" value ="${comment.user_name}" readonly="readonly" style="color : black;"></h3> 
+					
+										<div class="timeline-body">
+											<input type="text" name="hw_submit_content_p" value="${comment.comm_content}" readonly="readonly" style="color : black;">
 										</div>
-									</div>
-									<div class="clear"></div>
-								</div>
-							</div>
-						</div>
+					
+					    				<div class="timeline-footer">
+					     					<div onclick="submitModTry()" style="float : left;"><a class="btn btn-primary btn-xs">수정</a></div>
+					    					<div onclick="submitDel()" style="float : left;"><a class="btn btn-danger btn-xs" data-targer="modifyModal">삭제</a></div>
+					   						<div style="clear:both;"></div>
+					    				</div>
+									</div>         
+								</li>
+							</c:forEach>                     
+	                     </ul>
 					</div>
+                     
 				</div>
 				<%@ include file="/WEB-INF/views/include/footer.jsp"%>
 			</div>
 		</div>
-	</div>
+		</div>
+	
+	<!-- Handlbars Templates -->
+	<script id='comment-template' type='text/x-handlebars-template'>
+		{{#comments}}
+			<li class="replyLi" data-hw_submit_idx={{hw_submit_idx}} name="listSubmit">
+				<i class="fa fa-comments bg-blue"></i>
+ 				<div class="timeline-item">
+					<span class="time">
+						<div style="float : left;"><i class="fa fa-clock-o"></i></div><div style="float : left;"><p id="hw_submit_content_writedate_p">{{prettifyDate hw_submit_content_writedate}}</p></div>
+					</span>
 
+					<input type="hidden" name="hw_submit_idx_strong" value="{{hw_submit_idx}}">
+
+ 					<h3 class="timeline-header"><input type="text" name="user_name_p" value ="{{user_name}}" readonly="readonly" style="color : black;"></h3> 
+
+					<div class="timeline-body">
+						<input type="text" name="hw_submit_content_p" value="{{hw_submit_content}}" readonly="readonly" style="color : black;">
+					</div>
+
+    				<div class="timeline-footer">
+     					<div onclick="submitModTry({{@key}})" style="float : left;"><a class="btn btn-primary btn-xs">수정</a></div>
+    					<div onclick="submitDel()" style="float : left;"><a class="btn btn-danger btn-xs" data-targer="modifyModal">삭제</a></div>
+   						<div style="clear:both;"></div>
+    				</div>
+				</div>         
+			</li>
+		{{/comments}}
+	</script>
 
 	<!-- jQuery Js -->
 	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
@@ -286,8 +290,9 @@
 	<script src="${contextPath}/resources/js/jquery.metisMenu.js"></script>
 	<!-- Custom Js -->
 	<script src="${contextPath}/resources/js/custom-scripts.js"></script>
-	<script
-		src="${contextPath}/resources/open_board/js/open_board_detail.js"></script>
+	<script src="${contextPath}/resources/open_board/js/open_board_detail.js"></script>
+	<!-- Handlebars -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script> 
 
 	<script type="text/javascript">
 		$(window).load(function() {

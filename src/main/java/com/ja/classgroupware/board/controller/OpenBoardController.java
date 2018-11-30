@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -25,6 +26,7 @@ import com.ja.classgroupware.base.util.DateConverter;
 import com.ja.classgroupware.base.util.PageMaker;
 import com.ja.classgroupware.base.vo.BoardVO;
 import com.ja.classgroupware.board.domain.BoardDTO;
+import com.ja.classgroupware.board.domain.CommentDTO;
 import com.ja.classgroupware.board.domain.PostMainDTO;
 import com.ja.classgroupware.board.service.OpenBoardService;
 
@@ -141,15 +143,11 @@ public class OpenBoardController {
 		
 		model.addAttribute("prevPage", prevPage);
 		
-		System.out.println(prevPage);
-		
 		classManager = new ClassManager(request);
 		int user_idx = classManager.getUserIdx();
 		
 		// 조회수 증가 시킴
 		openBoardService.addOneAtViews(bo_idx);
-		
-		// TODO 총 3개를 model에 담으면 됨
 		
 		// 리스트 디테일
 		PostMainDTO postMainDTO = openBoardService.getDetail(bo_idx);
@@ -159,8 +157,15 @@ public class OpenBoardController {
 		boolean  isAuthor = postMainDTO.getUser_idx() == user_idx ? true : false;
 		model.addAttribute("isAuthor", isAuthor);
 		
-		// 첨부된 파일들
 		// 댓글들
+		ArrayList<CommentDTO> comments = openBoardService.getComments(bo_idx);
+		// for 문 돌면서 date 상세하게 나타나도록 바꿔야할듯
+		dateConverter 	= new DateConverter();
+		for (CommentDTO comment : comments) {
+			comment.setComm_convertedwritedate(dateConverter.convert(comment.getComm_writedate()));
+		}
+		
+		model.addAttribute("comments", comments);
 		
 		return page;
 	}
@@ -199,6 +204,29 @@ public class OpenBoardController {
 		
 		model.addAttribute("post", postMainDTO);
 		model.addAttribute("hasNoticeAuth", user_role.equals("student") ? false : true);
+		
+		return page;
+	}
+	
+	@RequestMapping(value = "/{bo_idx}/comment", method = RequestMethod.POST)
+	public String getAfterCommentRegistredView(
+			@PathVariable("bo_idx") Integer bo_idx, 
+			@RequestParam(value = "comm_content")String comm_content,
+			Model model, 
+			HttpServletRequest request) throws Exception {
+		String page = "redirect:/openboard/" + bo_idx;
+		
+		CommentDTO commentDTO = new CommentDTO();
+		
+		classManager 		= new ClassManager(request);
+		int user_idx 		= classManager.getUserIdx();
+		
+		commentDTO.setBo_idx(bo_idx);
+		commentDTO.setComm_content(comm_content);
+		commentDTO.setComm_role(boardSeparator);
+		commentDTO.setUser_idx(user_idx);
+		
+		openBoardService.addComment(commentDTO);
 		
 		return page;
 	}

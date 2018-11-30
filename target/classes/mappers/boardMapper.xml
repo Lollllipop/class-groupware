@@ -102,12 +102,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		]]>
 	</select>
 	
-	<update id="updateViewsWithPlusOne">
-		update board 
-		set bo_views = bo_views + 1
-		where bo_idx = #{bo_idx}
-	</update>
-	
 	<select id="selectPage" resultType="com.ja.classgroupware.board.domain.BoardDTO">
 	<!-- 여기 수정해야함 공지사항 맨 위에 항상 나오도록  sql을 union으로 바꾸면 될듯 -->
 		<![CDATA[
@@ -141,6 +135,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			ORDER BY bo_isnotice desc, ${pageInfo.sort} ${pageInfo.order}, bo_idx desc
 		]]>
 	</select>
+	
+	<select id="selectComments" resultType="com.ja.classgroupware.board.domain.CommentDTO">
+		SELECT comment_idx, bo_idx, u.user_idx, user_name, comm_content, comm_writedate, comm_role
+		FROM comments c, users u
+		WHERE c.user_idx = u.user_idx 
+		AND bo_idx = #{bo_idx}
+		ORDER BY comm_writedate
+	</select>
+	
+	<update id="updateViewsWithPlusOne">
+		update board 
+		set bo_views = bo_views + 1
+		where bo_idx = #{bo_idx}
+	</update>
+	
+	<insert id="insertComment">
+		INSERT INTO comments(comment_idx, bo_idx, user_idx, comm_content, comm_writedate, comm_role)
+		VALUES(comments_seq.NEXTVAL, #{bo_idx}, #{user_idx}, #{comm_content}, SYSDATE, #{comm_role})
+	</insert>
 	
 	<!-- include 내용들 -->
 	<sql id="search">

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.ja.classgroupware.base.vo.BoardVO;
 import com.ja.classgroupware.board.domain.BoardDTO;
+import com.ja.classgroupware.board.domain.CommentDTO;
 import com.ja.classgroupware.board.domain.PostMainDTO;
 
 public interface BoardDAO {
@@ -35,5 +36,9 @@ public interface BoardDAO {
 	public int selectSelectedPostsCount(Map<String, Object> paramMap) throws Exception;
 
 	public ArrayList<String> selectKeyword(Map<String, Object> paramMap) throws Exception;
+	
+	public void insertComment(CommentDTO commentDTO) throws Exception;
+	
+	public ArrayList<CommentDTO> selectComments(int bo_idx) throws Exception;
 
 }

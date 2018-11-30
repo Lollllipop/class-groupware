@@ -7,6 +7,7 @@ import com.ja.classgroupware.base.domain.SearchInfo;
 import com.ja.classgroupware.base.vo.BoardVO;
 import com.ja.classgroupware.base.vo.FilesVO;
 import com.ja.classgroupware.board.domain.BoardDTO;
+import com.ja.classgroupware.board.domain.CommentDTO;
 import com.ja.classgroupware.board.domain.PostMainDTO;
 
 public interface OpenBoardService {
@@ -32,5 +33,9 @@ public interface OpenBoardService {
 	public int getSelectedPostsCount(String searchType, String searchValue) throws Exception;
 
 	public ArrayList<String> getKeyword(String searchType, String debouncedSearchKeyword) throws Exception;
+	
+	public void addComment(CommentDTO commentDTO) throws Exception;
+
+	public ArrayList<CommentDTO> getComments(Integer bo_idx) throws Exception;
 
 }
