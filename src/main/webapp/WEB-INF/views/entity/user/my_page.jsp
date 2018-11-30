@@ -52,7 +52,7 @@
 							</div>
 							.
 							<div class="card-action">
-								<a href="#">내가 쓴 글</a> <a href="#">수정</a>
+								<a href="#">수정</a>
 							</div>
 						</div>
 
@@ -60,7 +60,7 @@
 					<div class="col-md-6">
 						<div class="card" style="height: 250px;">
 							<div class="card-content">
-								<span class="card-title">나의 클래스</span>
+								<span class="card-title">내가 쓴 글</span>
 								<p>소속 클래스 : B</p>
 								<p>담당 강사 : 이민규 강사</p>
 								<p>

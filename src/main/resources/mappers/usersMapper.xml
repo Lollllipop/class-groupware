@@ -5,27 +5,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.ja.classgroupware.base.persistence.UsersDAO">
 	
-	<insert id="insert">
-		insert into users
-		values(users_seq.nextval, #{user_id}, #{user_email}, #{user_name}, #{user_password}, #{user_role})
-	</insert>
-
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.UsersVO">
 		select user_idx, user_id, user_email, user_name, user_password, user_role
 		from users
 		where user_idx = #{user_idx}
 	</select>
 
-	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.UsersVO">
+	<select id="selectPosts" resultType="com.ja.classgroupware.user.domain.myPostsVO">
 		 <![CDATA[
-			select user_idx, user_id, user_email, user_name, user_password, user_role
-			from users
-			where user_idx > 0
+			select bo_idx, class_idx, bo_title, bo_role, class_name
+			from users, class
+			where user_idx = #{user_idx} and board.class_idx = class.class_idx
 		 ]]>
 	</select>
 
 	<update id="update">
-		update class
+		update users
 		set user_email = #{user_email},
 			user_name = #{user_name},
 			user_password = #{user_password},
@@ -33,10 +28,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where user_idx = #{user_idx}
 	</update>
 
-	<delete id="delete">
-		delete 
-		from users 
-		where user_idx = #{user_idx}
-	</delete>
 
 </mapper>
