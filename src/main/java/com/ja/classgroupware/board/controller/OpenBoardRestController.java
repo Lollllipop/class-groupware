@@ -63,14 +63,15 @@ public class OpenBoardRestController {
 		PagingNavInfo 		pagingNavInfo 	= pageMaker.make();
 		
 		for (int i = 0, j = 0; i < posts.size(); i++, j++) {
+			posts.get(i).setBo_convertedwritedate(dateConverter.convert(posts.get(i).getBo_writedate()));
+			posts.get(i).setBo_isNew(posts.get(i).getBo_convertedwritedate().equals("방금 전") ? "true" : "false");
+			
 			if (posts.get(i).getBo_isnotice().equals("true")) {
-				posts.get(i).setBo_convertedwritedate(dateConverter.convert(posts.get(i).getBo_writedate()));
 				j--;
 				continue;
 			}
 			
 			posts.get(i).setView_idx(selectedPostsCount - (((pagingNavInfo.getCurrentPage() - 1) * pageMaker.getCount()) + j));
-			posts.get(i).setBo_convertedwritedate(dateConverter.convert(posts.get(i).getBo_writedate()));
 		}
 		
 		datas.put("posts", posts);
@@ -109,5 +110,15 @@ public class OpenBoardRestController {
 
 		return uploadedLinkDTO;
 	}
+
+	@RequestMapping(value="/recommandSeachKeyword",  method = RequestMethod.GET)
+	public ArrayList<String> readRecommandSeachKeyword(
+			@RequestParam String debouncedsearchkeyword, 
+			@RequestParam String searchtype,
+			HttpServletRequest request) throws Exception {
+		
+		return openBoardService.getKeyword(searchtype, debouncedsearchkeyword);
+	}
+	
 	
 }

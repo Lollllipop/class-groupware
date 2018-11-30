@@ -70,6 +70,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<include refid="selectCount"></include>
 	</select>
 	
+	<select id="selectKeyword" resultType="string">
+		<choose>
+			<when test="searchType = 't'.toString()">
+				SELECT DISTINCT bo_title
+			</when>
+			<when test="searchType = 'u'.toString()">
+				SELECT DISTINCT user_name
+			</when>
+		</choose>
+		<![CDATA[
+		    FROM board b, users u
+		    WHERE b.user_idx = u.user_idx
+		]]>
+		<choose>
+			<when test="searchType = 't'.toString()">
+				<![CDATA[
+					AND bo_title LIKE ('%' || #{debouncedSearchKeyword} || '%')
+					AND LENGTH(bo_title) < 15
+				]]>
+			</when>
+			<when test="searchType = 'u'.toString()">
+				<![CDATA[
+					AND user_name LIKE ('%' || #{debouncedSearchKeyword} || '%')
+					AND LENGTH(user_name) < 15
+				]]>
+			</when>
+		</choose>
+		<![CDATA[
+		    AND ROWNUM <= 11
+		]]>
+	</select>
+	
 	<update id="updateViewsWithPlusOne">
 		update board 
 		set bo_views = bo_views + 1

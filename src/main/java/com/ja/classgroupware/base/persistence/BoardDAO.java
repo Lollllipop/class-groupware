@@ -34,4 +34,6 @@ public interface BoardDAO {
 
 	public int selectSelectedPostsCount(Map<String, Object> paramMap) throws Exception;
 
+	public ArrayList<String> selectKeyword(Map<String, Object> paramMap) throws Exception;
+
 }

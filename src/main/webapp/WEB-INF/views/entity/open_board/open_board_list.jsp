@@ -68,6 +68,21 @@
 		width: 170px !important;
 	}
 	
+	#saerch_form_input_value {
+		margin-bottom: 0px;
+	}
+	
+	#keywords-box {
+		position: absolute;
+		background-color: white;
+		width: 166px;
+	}
+	
+	#keywords-box div {
+	    padding: 7px;
+    	border: 1px solid #a2a2a2;
+    	cursor:pointer;
+	}
 
 	
 </style>
@@ -105,8 +120,9 @@
 									<div class="search_icon">
 										<i class="material-icons dp48" style="cursor:pointer" id='search-button'>search</i>
 									</div>
-									<div class="search_area_form_input">
-										<input type="text" class="form-control" placeholder="검색어 입력..." id="saerch_form_input_value" name='searchvalue'>
+									<div class="search_area_form_input" id='search-area-form-input-box'>
+										<input type="text" class="form-control" placeholder="검색어 입력..." id="saerch_form_input_value" name='searchvalue' autocomplete="off">
+										<div id='keywords-box'></div>
 									</div>
 								</form>
 							</div>
@@ -137,6 +153,9 @@
 															<td>
 																<a href="/openboard/${post.bo_idx}">${post.bo_title}</a>
 																<c:if test="${post.bo_hasfiles eq 'true'}"><i class="far fa-image"></i></c:if>
+																<c:if test="${post.bo_isNew eq 'true'}">
+																	<i class="badge red">new</i>
+																</c:if>
 															</td>
 															<td>${post.user_name}</td>
 															<td>${post.bo_convertedwritedate}</td>
@@ -150,6 +169,9 @@
 															<td>
 																<a href="/openboard/${post.bo_idx}">${post.bo_title}</a>
 																<c:if test="${post.bo_hasfiles eq 'true'}"><i class="far fa-image"></i></c:if>
+																<c:if test="${post.bo_isNew eq 'true'}">
+																	<i class="badge red">new</i>
+																</c:if>
 															</td>
 															<td>${post.user_name}</td>
 															<td>${post.bo_convertedwritedate}</td>
@@ -224,6 +246,15 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- Handlbars Templates -->
+	<script id='keyword-template' type='text/x-handlebars-template'>
+		{{#keywords}}
+		<div onclick='moveRecommendKeywordToInputValue()'>
+			{{keyword}}
+		</div>
+		{{/keywords}}
+	</script>
 
 	<!-- jQuery Js -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -234,6 +265,10 @@
 	<script src="${contextPath}/resources/js/jquery.metisMenu.js"></script>
 	<!-- Custom Js -->
 	<script src="${contextPath}/resources/js/custom-scripts.js"></script>
+	<!-- Lodash -->
+	<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
+	<!-- Handlebars -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script> 
 	<script>
 	
 	var offset 			= '${p.pageInfo.offset}';
@@ -297,8 +332,6 @@
 			type	: 'GET',
 			url		: url,
 			success : function(data, textStatus, xhr) {
-				console.log(data);
-				
 		        $('#posts-body').empty();
 		        $('#paging-buttons').empty();
 		        
@@ -315,8 +348,28 @@
 				    							<a href="/openboard/` + item.bo_idx + `">` + item.bo_title + `</a>
 				    							<i class="far fa-image"></i>
 				    						</td>`
-				    					: `<td><a href="/openboard/` + item.bo_idx + `">` + item.bo_title + `</a></td>`
-		        		
+				    					: `<td><a href="/openboard/` + item.bo_idx + `">` + item.bo_title + `</a></td>`;
+
+				    // ajax로 요청되서 새로 들어오는 데이터에 new 뱃지를 달기 위한 코드
+					if (item.bo_hasfiles === 'true') {
+						if (item.bo_isNew === 'true') {
+							view_title = 
+										`<td>
+			    							<a href="/openboard/` + item.bo_idx + `">` + item.bo_title + `</a>
+			    							<i class="far fa-image"></i>
+			    							<i class="badge red">new</i>
+			    						</td>`
+						}
+					} else {
+						if (item.bo_isNew === 'true') {
+							view_title = 
+								`<td>
+	    							<a href="/openboard/` + item.bo_idx + `">` + item.bo_title + `</a>
+	    							<i class="badge red">new</i>
+	    						</td>`
+						}
+					}
+				    					
 		       		var post =
 						post_tr +
 							view_idx +
@@ -395,6 +448,38 @@
 		}
 	}
 	
+	function renderRecommendKeywords(keywords) {		
+		$('#keywords-box').empty();
+		
+		// handlebars에서 편하게 사용하기 위해 배열 내용을 object 형태로 변환
+		for (var i = 0; i < keywords.length; i++) {
+			keywords[i] = {
+					'keyword' : keywords[i]
+			}
+		}
+		
+		// handlebars 템플릿 가져오기
+		var source = $("#keyword-template").html();
+		
+		// handlebars 템플릿 컴파일
+		var template = Handlebars.compile(source);
+		
+		// handlebars 템플릿에 바인딩할 데이터를 객체 형태로 만듬
+		var data = {
+			'keywords' : keywords
+		}
+		
+		// handlebars 템플릿에 데이터 바인딩 후 html 생성
+		var html = template(data);
+		
+		$('#keywords-box').append(html);
+	}
+	
+	function moveRecommendKeywordToInputValue() {
+		var keyword = event.target.innerText;
+		
+		$('#saerch_form_input_value').val(keyword);
+	}
 	
  	$(window).load(function(){
  		// html에 이벤트 등록하는 코드
@@ -463,14 +548,31 @@
 			// changeBoardAndPagingNav(); AJAX 이용시
 		})
 		
-		setSelectOptionWhenRefreshing();
- 		
- 		setSearchKeyword();
+		/* 검색어 입력시 추천검색어 ajax로 긁어옴 */
+		$('#saerch_form_input_value').on('input', _.debounce(function() {		
+			var debouncedSearchKeyword 	= $('#saerch_form_input_value').val();
+			var searchType				= $('#search-type-select option:selected').val();
+			
+			if (debouncedSearchKeyword === '') {
+				$('#keywords-box').empty();
+				
+				return;
+			}
+			
+			var url = '/openboardajax/recommandSeachKeyword?debouncedsearchkeyword=' + debouncedSearchKeyword + '&searchtype=' + searchType;
+			
+			$.ajax({
+				type	: 'GET',
+				url		: url,
+				success : function(data, textStatus, xhr) {
+					renderRecommendKeywords(data);
+			    },
+			    error	: function(request, status, error) {
+			    	alert("code:"+request.status+"\n"+"error:"+error);
+			    }
+			});
+		}, 600)) 
 		
- 		// TODO 부트스트랩 버전을 올려야 할지 흠.. 현재 부트스트랩 버전으로는 적용이 안된다.
-		// 작성일에 마우스를 가져다대면 자세한 날짜가 나오도록 하는 코드
-		// $('[data-toggle="tooltip"]').tooltip()
-
 	});
  	
 	</script>

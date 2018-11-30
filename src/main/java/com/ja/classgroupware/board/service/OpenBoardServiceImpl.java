@@ -103,6 +103,16 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 		int selectedPostCount = boardDAO.selectSelectedPostsCount(paramMap);
 		
 		return selectedPostCount;
+	}
+
+	@Override
+	public ArrayList<String> getKeyword(String searchType, String debouncedSearchKeyword) throws Exception {
+		paramMap = new HashMap<String, Object>();
+		
+		paramMap.put("searchType", searchType);
+		paramMap.put("debouncedSearchKeyword", debouncedSearchKeyword);
+		
+		return boardDAO.selectKeyword(paramMap);
 	}	
 
 }

@@ -31,4 +31,6 @@ public interface OpenBoardService {
 	
 	public int getSelectedPostsCount(String searchType, String searchValue) throws Exception;
 
+	public ArrayList<String> getKeyword(String searchType, String debouncedSearchKeyword) throws Exception;
+
 }

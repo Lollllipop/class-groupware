@@ -1,15 +1,11 @@
 package com.ja.classgroupware.board.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,9 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -27,9 +21,9 @@ import com.ja.classgroupware.base.domain.PageInfo;
 import com.ja.classgroupware.base.domain.PagingNavInfo;
 import com.ja.classgroupware.base.domain.SearchInfo;
 import com.ja.classgroupware.base.util.ClassManager;
+import com.ja.classgroupware.base.util.DateConverter;
 import com.ja.classgroupware.base.util.PageMaker;
 import com.ja.classgroupware.base.vo.BoardVO;
-import com.ja.classgroupware.base.util.DateConverter;
 import com.ja.classgroupware.board.domain.BoardDTO;
 import com.ja.classgroupware.board.domain.PostMainDTO;
 import com.ja.classgroupware.board.service.OpenBoardService;
@@ -73,14 +67,15 @@ public class OpenBoardController {
 		PagingNavInfo pagingNavInfo = pageMaker.make();
 		
 		for (int i = 0, j = 0; i < posts.size(); i++, j++) {
+			posts.get(i).setBo_convertedwritedate(dateConverter.convert(posts.get(i).getBo_writedate()));
+			posts.get(i).setBo_isNew(posts.get(i).getBo_convertedwritedate().equals("방금 전") ? "true" : "false");
+			
 			if (posts.get(i).getBo_isnotice().equals("true")) {
-				posts.get(i).setBo_convertedwritedate(dateConverter.convert(posts.get(i).getBo_writedate()));
 				j--;
 				continue;
 			}
 			
 			posts.get(i).setView_idx(selectedPostsCount - (((pagingNavInfo.getCurrentPage() - 1) * pageMaker.getCount()) + j));
-			posts.get(i).setBo_convertedwritedate(dateConverter.convert(posts.get(i).getBo_writedate()));
 		}
 		
 		model.addAttribute("posts", posts);
