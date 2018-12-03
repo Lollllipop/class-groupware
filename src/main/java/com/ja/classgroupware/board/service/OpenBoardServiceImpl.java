@@ -138,6 +138,16 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 	@Override
 	public void addOneAtComments(Integer bo_idx) throws Exception {
 		boardDAO.updateCommentsWithPlusOne(bo_idx);
+	}
+
+	@Override
+	public void updateComment(Integer comment_idx, String comm_content) throws Exception {
+		paramMap = new HashMap<String, Object>();
+		
+		paramMap.put("comment_idx", comment_idx);
+		paramMap.put("comm_content", comm_content);
+		
+		commentsDAO.update(paramMap);
 	}	
 
 }

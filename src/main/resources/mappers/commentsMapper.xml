@@ -31,10 +31,9 @@ select comment_idx, bo_idx, class_idx,
 	</select>
 
 	<update id="update">
-		update comments set comm_content
-		=#{comm_content}, comm_writedate = SYSDATE
-		where
-		comment_idx = #{comment_idx}
+		update comments 
+		set comm_content = #{comm_content}
+		where comment_idx = #{comment_idx}
 	</update>
 
 	<delete id="delete">

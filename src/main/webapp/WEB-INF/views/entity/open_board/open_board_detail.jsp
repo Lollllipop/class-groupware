@@ -218,10 +218,10 @@
 					
 					<div class='col-md-12'>
 						<ul class="timeline">
-							<c:forEach var="comment" items="${comments}">
+							<c:forEach var="comment" items="${comments}" varStatus="status">
 								<li class="replyLi" data-hw_submit_idx='${comment.bo_idx}' name="listSubmit">
 									<i class="fa fa-comments bg-blue"></i>
-					 				<div class="timeline-item">
+					 				<div class="timeline-item" id='comment-update-button${status.index}'>
 										<span class="time">
 											<div style="float : left;"><i class="fa fa-clock-o"></i></div><div style="float : left;"><p id="hw_submit_content_writedate_p">${comment.comm_convertedwritedate}</p></div>
 										</span>
@@ -233,8 +233,12 @@
 										</div>
 					
 					    				<div class="timeline-footer">
-					     					<div onclick="submitModTry()" style="float : left;"><a class="btn btn-primary btn-xs">수정</a></div>
-					    					<div onclick="deleteComment(${post.bo_idx}, ${comment.comment_idx})" style="float : left;"><a class="btn btn-danger btn-xs" data-targer="modifyModal">삭제</a></div>
+					     					<div style="float : left;">
+					     						<a class="btn btn-primary btn-xs" onclick="updateComment(${status.index}, ${post.bo_idx}, ${comment.comment_idx}, '${comment.comm_content}')">수정</a>
+					     					</div>
+					    					<div style="float : left;">
+					    						<a class="btn btn-danger btn-xs" onclick="deleteComment(${status.index}, ${post.bo_idx}, ${comment.comment_idx})">삭제</a>
+					    					</div>
 					   						<div style="clear:both;"></div>
 					    				</div>
 									</div>         
@@ -265,8 +269,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script> 
 
 	<script type="text/javascript">
-		function deleteComment(bo_idx, comment_idx) {
-			var isWantDelete 	= confirm('정말 삭제하시겠습니까?');
+		function deleteComment(idx, bo_idx, comment_idx) {
+			var isWantDelete = confirm('정말 삭제하시겠습니까?');
 			
 			if (isWantDelete) {
 				$.ajax({
@@ -278,6 +282,55 @@
 				})
 			}
 			
+		}
+		
+		function updateComment(idx, bo_idx, comment_idx, comm_content) {
+			// 입력창 활성화
+			event.target.parentElement.parentElement.parentElement.children[2].innerHTML = ''
+                + '<div class="timeline-body">'
+                + '<input type="text" value="' + comm_content + '" id="hw_submit_content_p" style="color : black;"></div>'
+                + '<div class="timeline-footer">';
+            
+            // 확인, 취소 버튼 활성화
+            event.target.parentElement.parentElement.innerHTML = ''
+            	+ '<div style="float : left;">'
+				+ 	'<a class="btn btn-primary btn-xs" onclick="updateConfirm(' + idx + ',' + bo_idx + ',' + comment_idx + ',' + comm_content + ')">확인</a>'
+				+ '</div>'
+				+ '<div style="float: left;>"'
+				+ 	'<a class="btn btn-danger btn-xs" onclick="updateCancle(' + idx + ',' + bo_idx + ',' + comment_idx + ',' + comm_content +')">취소</a>'
+				+ '</div>'
+				+ '<div style="clear:both;"></div>';
+		}
+		
+		function updateConfirm(idx, bo_idx, comment_idx, comm_content) {	
+			var data = {
+					'comm_content': $('#comment-update-button' + idx + ' .timeline-body input').val()
+			}
+			
+  			$.ajax({
+				type 	: 'POST',
+				data 	: JSON.stringify(data),
+				headers	: {"Content-Type": "application/json"},
+				dataType: 'text',
+				url		: '/openboardajax/' + bo_idx + '/comments/' + comment_idx,
+				success	: function(data, textStatus, xhr) {
+					window.location.href = window.location.href;
+				}
+			})   
+		}
+		
+		function updateCancle(idx, bo_idx, comment_idx, comm_content) {
+			event.target.parentElement.parentElement.children[2].innerHTML = ''
+				+ '<input type="text" name="hw_submit_content_p" value="' + comm_content + '" readonly="readonly" style="color : black;">';
+			
+			event.target.parentElement.innerHTML = ''
+            	+ '<div style="float : left;">'
+				+ 	'<a class="btn btn-primary btn-xs" onclick="updateComment(' + idx + ',' + bo_idx + ',' + comment_idx + ',' + comm_content + ')">수정</a>'
+				+ '</div>'
+				+ '<div style="float: left;>"'
+				+ 	'<a class="btn btn-danger btn-xs" onclick="deleteComment(' + idx + ',' + bo_idx + ',' + comment_idx + ')">삭제</a>'
+				+ '</div>'
+				+ '<div style="clear:both;"></div>';
 		}
 	
 		$(window).load(function() {

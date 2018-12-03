@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -118,6 +120,16 @@ public class OpenBoardRestController {
 			HttpServletRequest request) throws Exception {
 		
 		return openBoardService.getKeyword(searchtype, debouncedsearchkeyword);
+	}
+	
+	@RequestMapping(value="/{bo_idx}/comments/{comment_idx}",  method = RequestMethod.POST)
+	public void updateComment(
+			@PathVariable("bo_idx") Integer bo_idx,
+			@PathVariable("comment_idx") Integer comment_idx,
+			@RequestBody Map<String, String> json,
+			HttpServletRequest request) throws Exception {
+		
+		openBoardService.updateComment(comment_idx, json.get("comm_content"));
 	}
 	
 	
