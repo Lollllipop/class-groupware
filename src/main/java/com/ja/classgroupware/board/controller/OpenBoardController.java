@@ -221,6 +221,9 @@ public class OpenBoardController {
 		classManager 		= new ClassManager(request);
 		int user_idx 		= classManager.getUserIdx();
 		
+		// 해당 board의 commets 갯수 1 증가 시킴
+		openBoardService.addOneAtComments(bo_idx);
+		
 		commentDTO.setBo_idx(bo_idx);
 		commentDTO.setComm_content(comm_content);
 		commentDTO.setComm_role(boardSeparator);

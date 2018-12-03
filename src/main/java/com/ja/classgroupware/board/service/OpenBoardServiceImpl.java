@@ -133,6 +133,11 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 	@Override
 	public void removeComment(Integer comment_idx) throws Exception {
 		commentsDAO.delete(comment_idx);
+	}
+
+	@Override
+	public void addOneAtComments(Integer bo_idx) throws Exception {
+		boardDAO.updateCommentsWithPlusOne(bo_idx);
 	}	
 
 }

@@ -41,4 +41,6 @@ public interface BoardDAO {
 	
 	public ArrayList<CommentDTO> selectComments(int bo_idx) throws Exception;
 
+	public void updateCommentsWithPlusOne(Integer bo_idx) throws Exception;
+
 }

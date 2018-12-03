@@ -151,6 +151,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where bo_idx = #{bo_idx}
 	</update>
 	
+	<update id="updateCommentsWithPlusOne">
+		update board 
+		set bo_comments = bo_comments + 1
+		where bo_idx = #{bo_idx}
+	</update>
+	
 	<insert id="insertComment">
 		INSERT INTO comments(comment_idx, bo_idx, user_idx, comm_content, comm_writedate, comm_role)
 		VALUES(comments_seq.NEXTVAL, #{bo_idx}, #{user_idx}, #{comm_content}, SYSDATE, #{comm_role})

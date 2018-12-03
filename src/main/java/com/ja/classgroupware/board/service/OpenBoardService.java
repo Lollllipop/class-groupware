@@ -40,4 +40,6 @@ public interface OpenBoardService {
 
 	public void removeComment(Integer comment_idx) throws Exception;
 
+	public void addOneAtComments(Integer bo_idx) throws Exception;
+
 }
