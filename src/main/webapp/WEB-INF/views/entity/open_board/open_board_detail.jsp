@@ -198,7 +198,7 @@
 											<tr>
 												<td>
 													<div class="form-group">
-														<form action='/openboard/${bo_idx}/comment' method="POST">
+														<form action='/openboard/${bo_idx}/comments' method="POST">
 															<textarea class="form-control" rows="5" placeholder="댓글을 작성해주세요." class="span2" name='comm_content'></textarea>
 															<td>
 																<input type="submit" value="등록" class="btn" id='comment-submit-btn'>
@@ -226,8 +226,6 @@
 											<div style="float : left;"><i class="fa fa-clock-o"></i></div><div style="float : left;"><p id="hw_submit_content_writedate_p">${comment.comm_convertedwritedate}</p></div>
 										</span>
 					
-										<input type="hidden" name="hw_submit_idx_strong" value="${comment.bo_idx}">
-					
 					 					<h3 class="timeline-header"><input type="text" name="user_name_p" value ="${comment.user_name}" readonly="readonly" style="color : black;"></h3> 
 					
 										<div class="timeline-body">
@@ -236,7 +234,7 @@
 					
 					    				<div class="timeline-footer">
 					     					<div onclick="submitModTry()" style="float : left;"><a class="btn btn-primary btn-xs">수정</a></div>
-					    					<div onclick="submitDel()" style="float : left;"><a class="btn btn-danger btn-xs" data-targer="modifyModal">삭제</a></div>
+					    					<div onclick="deleteComment(${post.bo_idx}, ${comment.comment_idx})" style="float : left;"><a class="btn btn-danger btn-xs" data-targer="modifyModal">삭제</a></div>
 					   						<div style="clear:both;"></div>
 					    				</div>
 									</div>         
@@ -251,34 +249,6 @@
 		</div>
 		</div>
 	
-	<!-- Handlbars Templates -->
-	<script id='comment-template' type='text/x-handlebars-template'>
-		{{#comments}}
-			<li class="replyLi" data-hw_submit_idx={{hw_submit_idx}} name="listSubmit">
-				<i class="fa fa-comments bg-blue"></i>
- 				<div class="timeline-item">
-					<span class="time">
-						<div style="float : left;"><i class="fa fa-clock-o"></i></div><div style="float : left;"><p id="hw_submit_content_writedate_p">{{prettifyDate hw_submit_content_writedate}}</p></div>
-					</span>
-
-					<input type="hidden" name="hw_submit_idx_strong" value="{{hw_submit_idx}}">
-
- 					<h3 class="timeline-header"><input type="text" name="user_name_p" value ="{{user_name}}" readonly="readonly" style="color : black;"></h3> 
-
-					<div class="timeline-body">
-						<input type="text" name="hw_submit_content_p" value="{{hw_submit_content}}" readonly="readonly" style="color : black;">
-					</div>
-
-    				<div class="timeline-footer">
-     					<div onclick="submitModTry({{@key}})" style="float : left;"><a class="btn btn-primary btn-xs">수정</a></div>
-    					<div onclick="submitDel()" style="float : left;"><a class="btn btn-danger btn-xs" data-targer="modifyModal">삭제</a></div>
-   						<div style="clear:both;"></div>
-    				</div>
-				</div>         
-			</li>
-		{{/comments}}
-	</script>
-
 	<!-- jQuery Js -->
 	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -295,7 +265,23 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script> 
 
 	<script type="text/javascript">
+		function deleteComment(bo_idx, comment_idx) {
+			var isWantDelete 	= confirm('정말 삭제하시겠습니까?');
+			
+			if (isWantDelete) {
+				$.ajax({
+					type 	: 'DELETE',
+					url		: '/openboard/' + bo_idx + '/comments/' + comment_idx,
+					success	: function(data, textStatus, xhr) {
+						window.location.href = window.location.href;
+					}
+				})
+			}
+			
+		}
+	
 		$(window).load(function() {
+			
 			/* 수정된 게시물인지 체크 */
 			var isUpdated = ${post.bo_updatedate} + "";
 			
@@ -303,7 +289,7 @@
 				$('#updatedate').css('display', 'inline-block');
 			}
 			
-			/* 삭제 액션 */
+			/* 게시물 삭제 액션 */
 			$('#delete-button').on("click", function(){
 				var bo_idx 			= ${post.bo_idx};
 				var prevPage 		= '${prevPage}';
@@ -320,6 +306,7 @@
 					})
 				}
 			})
+			
 		})
 	</script>
 

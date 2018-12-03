@@ -65,17 +65,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="selectSelectedPostsCount" resultType="_int">
 		SELECT COUNT(*)
-		FROM board
-		WHERE bo_isnotice != 'true'
+		FROM board b, users u
+		WHERE b.user_idx = u.user_idx 
+		AND bo_isnotice != 'true'
 		<include refid="selectCount"></include>
 	</select>
 	
 	<select id="selectKeyword" resultType="string">
 		<choose>
-			<when test="searchType = 't'.toString()">
+			<when test="searchType == 't'.toString()">
 				SELECT DISTINCT bo_title
 			</when>
-			<when test="searchType = 'u'.toString()">
+			<when test="searchType == 'u'.toString()">
 				SELECT DISTINCT user_name
 			</when>
 		</choose>
@@ -84,13 +85,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		    WHERE b.user_idx = u.user_idx
 		]]>
 		<choose>
-			<when test="searchType = 't'.toString()">
+			<when test="searchType == 't'.toString()">
 				<![CDATA[
 					AND bo_title LIKE ('%' || #{debouncedSearchKeyword} || '%')
 					AND LENGTH(bo_title) < 15
 				]]>
 			</when>
-			<when test="searchType = 'u'.toString()">
+			<when test="searchType == 'u'.toString()">
 				<![CDATA[
 					AND user_name LIKE ('%' || #{debouncedSearchKeyword} || '%')
 					AND LENGTH(user_name) < 15

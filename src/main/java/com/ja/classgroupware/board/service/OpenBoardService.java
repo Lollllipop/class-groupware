@@ -38,4 +38,6 @@ public interface OpenBoardService {
 
 	public ArrayList<CommentDTO> getComments(Integer bo_idx) throws Exception;
 
+	public void removeComment(Integer comment_idx) throws Exception;
+
 }

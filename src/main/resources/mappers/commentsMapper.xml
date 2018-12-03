@@ -38,8 +38,9 @@ select comment_idx, bo_idx, class_idx,
 	</update>
 
 	<delete id="delete">
-		delete from comments where comment_idx =
-		#{comment_idx}
+		delete 
+		from comments 
+		where comment_idx = #{comment_idx}
 	</delete>
 
 

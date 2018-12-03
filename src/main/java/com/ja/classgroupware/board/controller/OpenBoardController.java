@@ -59,7 +59,7 @@ public class OpenBoardController {
 		String searchValue 		= request.getParameter("searchvalue");
 		String searchType 		= request.getParameter("searchtype");
 		SearchInfo searchInfo 	= new SearchInfo(searchValue, searchType);
-		
+
 		ArrayList<BoardDTO> posts = openBoardService.getPageList(pageInfo, searchInfo, class_idx, boardSeparator);
 		
 		int selectedPostsCount = openBoardService.getSelectedPostsCount(searchType, searchValue);
@@ -208,7 +208,7 @@ public class OpenBoardController {
 		return page;
 	}
 	
-	@RequestMapping(value = "/{bo_idx}/comment", method = RequestMethod.POST)
+	@RequestMapping(value = "/{bo_idx}/comments", method = RequestMethod.POST)
 	public String getAfterCommentRegistredView(
 			@PathVariable("bo_idx") Integer bo_idx, 
 			@RequestParam(value = "comm_content")String comm_content,
@@ -229,6 +229,18 @@ public class OpenBoardController {
 		openBoardService.addComment(commentDTO);
 		
 		return page;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/{bo_idx}/comments/{comment_idx}", method = RequestMethod.DELETE)
+	public String removeComment(
+			@PathVariable("bo_idx") Integer bo_idx,
+			@PathVariable("comment_idx") Integer comment_idx,
+			Model model, 
+			HttpServletRequest request) throws Exception {
+		openBoardService.removeComment(comment_idx);
+		
+		return "";
 	}
 	
 }

@@ -53,7 +53,7 @@ public class OpenBoardRestController {
 		String searchValue 		= request.getParameter("searchvalue");
 		String searchType 		= request.getParameter("searchtype");
 		SearchInfo searchInfo 	= new SearchInfo(searchValue, searchType);
-
+		
 		ArrayList<BoardDTO> posts = openBoardService.getPageList(pageInfo, searchInfo, class_idx, boardSeparator);
 
 		int selectedPostsCount = openBoardService.getSelectedPostsCount(searchType, searchValue);

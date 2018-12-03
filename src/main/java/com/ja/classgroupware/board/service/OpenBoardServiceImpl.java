@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.ja.classgroupware.base.domain.PageInfo;
 import com.ja.classgroupware.base.domain.SearchInfo;
 import com.ja.classgroupware.base.persistence.BoardDAO;
+import com.ja.classgroupware.base.persistence.CommentsDAO;
 import com.ja.classgroupware.base.persistence.FilesDAO;
 import com.ja.classgroupware.base.vo.BoardVO;
 import com.ja.classgroupware.base.vo.FilesVO;
@@ -26,6 +27,9 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 	
 	@Autowired
 	FilesDAO filesDAO;
+	
+	@Autowired
+	CommentsDAO commentsDAO;
 	
 	Map<String, Object> paramMap;
 		
@@ -124,6 +128,11 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 	@Override
 	public ArrayList<CommentDTO> getComments(Integer bo_idx) throws Exception {
 		return boardDAO.selectComments(bo_idx);
+	}
+
+	@Override
+	public void removeComment(Integer comment_idx) throws Exception {
+		commentsDAO.delete(comment_idx);
 	}	
 
 }
