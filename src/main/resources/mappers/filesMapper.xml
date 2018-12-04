@@ -43,5 +43,11 @@ select file_idx, bo_idx, class_idx,
 		delete from files where file_idx =
 		#{file_idx}
 	</delete>
-
+	
+	<delete id="deleteWithFileLink">
+		delete 
+		from files 
+		where file_link = #{file_link}
+	</delete>
+	
 </mapper>

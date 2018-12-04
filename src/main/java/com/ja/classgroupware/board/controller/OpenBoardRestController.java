@@ -113,6 +113,19 @@ public class OpenBoardRestController {
 
 		return uploadedLinkDTO;
 	}
+	
+	@RequestMapping(value="/image",  method = RequestMethod.DELETE)
+	public void removeImage(@RequestBody Map<String, String> json, HttpServletRequest request) throws Exception {
+		String fileLink = json.get("src");
+		
+		// DB에 삭제
+		openBoardService.removePostImage(fileLink);
+		
+		// 물리 파일 삭제
+		FileUploadManager fileUploadManager = new FileUploadManager();
+		fileUploadManager.setRealPath(request);
+		fileUploadManager.delete(fileLink);
+	}
 
 	@RequestMapping(value="/recommandSeachKeyword",  method = RequestMethod.GET)
 	public ArrayList<String> readRecommandSeachKeyword(
@@ -129,8 +142,6 @@ public class OpenBoardRestController {
 			@PathVariable("comment_idx") Integer comment_idx,
 			@RequestBody Map<String, String> json,
 			HttpServletRequest request) throws Exception {
-		
-		System.out.println(json.get("comm_content"));
 		
 		openBoardService.updateComment(comment_idx, json.get("comm_content"));
 	}

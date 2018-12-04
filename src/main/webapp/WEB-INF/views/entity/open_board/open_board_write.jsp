@@ -147,6 +147,31 @@
 			.on('froalaEditor.image.inserted', function (e, editor, $img, response) {
 				$('#has-files').val('true');
 			})
+			.on('froalaEditor.image.removed', function (e, editor, $img) {
+				var data = {
+						src: $img.attr('src')
+				}
+				
+				$.ajax({
+					// Request method.
+					method	: "DELETE",
+					
+					// Request URL.
+					url		: "/openboardajax/image",
+					
+					// Request params.
+					data 	: JSON.stringify(data),
+					headers	: {"Content-Type": "application/json"},
+					dataType: 'text',
+				})
+	 			.done (function (data) {
+					  console.log ('image was deleted');
+					  $('#has-files').val('false');
+				})
+				.fail (function () {
+					  console.log ('image delete problem');
+				}) 
+			})
 			
 			/* null값 방지 스크립트 */
 			$('#submit-btn').on('click', function() {

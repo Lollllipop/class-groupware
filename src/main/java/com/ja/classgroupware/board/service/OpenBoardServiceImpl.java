@@ -158,6 +158,12 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 	@Override
 	public void addReComment(CommentDTO commentDTO) throws Exception {
 		commentsDAO.insertReComment(commentDTO);
+	}
+
+	@Override
+	public void removePostImage(String file_link) throws Exception {
+		filesDAO.deleteWithFileLink(file_link);
+		
 	}	
 
 }

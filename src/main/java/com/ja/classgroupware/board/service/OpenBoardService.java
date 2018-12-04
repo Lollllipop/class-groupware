@@ -48,4 +48,6 @@ public interface OpenBoardService {
 
 	public void addReComment(CommentDTO commentDTO) throws Exception;
 
+	public void removePostImage(String file_link) throws Exception;
+
 }

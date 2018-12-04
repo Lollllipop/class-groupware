@@ -81,8 +81,36 @@ public class FileUploadManager {
 		System.out.println(openboardPath);
 	}
 	
+	public String changeBackSlashToSlash(String stringWithBackSlash) {
+		return stringWithBackSlash.replace("\\", "/");
+	}
+	
+	public void setRealPath(HttpServletRequest request) {
+		realPath = request.getSession().getServletContext().getRealPath("");
+	}
+	
+	public String getRealPath() {
+		return realPath;
+	}
+	
 	public String getUploadedLink() {
 		return uploadedLink;
+	}
+
+	public void delete(String fileLink) {
+		String src = this.changeBackSlashToSlash(this.getRealPath()) + fileLink.substring(1, fileLink.length());
+		
+		File file = new File(src);
+			
+        if (file.exists()) {
+            if (file.delete()) {
+                System.out.println("파일삭제 성공");
+            } else {
+                System.out.println("파일삭제 실패");
+            }
+		} else {
+		    System.out.println("파일이 존재하지 않습니다.");
+		}
 	}
 
 }
