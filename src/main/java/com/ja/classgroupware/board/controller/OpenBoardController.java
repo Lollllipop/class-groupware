@@ -159,10 +159,30 @@ public class OpenBoardController {
 		
 		// 댓글들
 		ArrayList<CommentDTO> comments = openBoardService.getComments(bo_idx);
+		
 		// for 문 돌면서 date 상세하게 나타나도록 바꿔야할듯
 		dateConverter 	= new DateConverter();
-		for (CommentDTO comment : comments) {
-			comment.setComm_convertedwritedate(dateConverter.convert(comment.getComm_writedate()));
+		
+		for (int i = 0; i < comments.size(); i++) {
+			comments.get(i).setComm_convertedwritedate(dateConverter.convert(comments.get(i).getComm_writedate()));
+			
+			// 자식을 부모의 배열에 넣고 리스트에서는 삭제해주는 작업이 필요할 듯
+			if (comments.get(i).hasParent()) {
+				for (int j = 0; j < i; j++) { 
+					if (comments.get(i).getComm_parent_idx() == comments.get(j).getComment_idx()) {
+						if (comments.get(j).getReComments() == null) {
+							comments.get(j).setReComments(new ArrayList<>());
+						}
+						
+						comments.get(j).getReComments().add(comments.get(i));
+						
+						comments.remove(i);
+						i--;
+						
+						break;
+					}
+				}
+			}
 		}
 		
 		model.addAttribute("comments", comments);
@@ -242,6 +262,8 @@ public class OpenBoardController {
 			Model model, 
 			HttpServletRequest request) throws Exception {
 		openBoardService.removeComment(comment_idx);
+		
+		openBoardService.subOneAtComments(bo_idx);
 		
 		return "";
 	}

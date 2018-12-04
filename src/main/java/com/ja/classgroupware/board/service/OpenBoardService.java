@@ -44,4 +44,8 @@ public interface OpenBoardService {
 
 	public void updateComment(Integer comment_idx, String comm_content) throws Exception;
 
+	public void subOneAtComments(Integer bo_idx) throws Exception;
+
+	public void addReComment(CommentDTO commentDTO) throws Exception;
+
 }

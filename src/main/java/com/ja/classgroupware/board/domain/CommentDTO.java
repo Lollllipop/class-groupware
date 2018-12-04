@@ -1,6 +1,7 @@
 package com.ja.classgroupware.board.domain;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import lombok.Setter;
 public class CommentDTO {
 	
 	private int comment_idx;
+	private int comm_parent_idx;
 	private int bo_idx;
 	private int user_idx;
 	private String user_name;
@@ -21,5 +23,14 @@ public class CommentDTO {
 	private Date comm_writedate;
 	private String comm_role;
 	private String comm_convertedwritedate;
+	private ArrayList<CommentDTO> reComments;
+	
+	public boolean hasParent() {
+		if (this.getComm_parent_idx() == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 	
 }

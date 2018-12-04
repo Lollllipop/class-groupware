@@ -26,6 +26,7 @@ import com.ja.classgroupware.base.util.FileUploadManager;
 import com.ja.classgroupware.base.util.PageMaker;
 import com.ja.classgroupware.base.vo.FilesVO;
 import com.ja.classgroupware.board.domain.BoardDTO;
+import com.ja.classgroupware.board.domain.CommentDTO;
 import com.ja.classgroupware.board.domain.UploadedLinkDTO;
 import com.ja.classgroupware.board.service.OpenBoardService;
 
@@ -122,14 +123,42 @@ public class OpenBoardRestController {
 		return openBoardService.getKeyword(searchtype, debouncedsearchkeyword);
 	}
 	
-	@RequestMapping(value="/{bo_idx}/comments/{comment_idx}",  method = RequestMethod.POST)
+	@RequestMapping(value="/{bo_idx}/comments/{comment_idx}",  method = RequestMethod.PATCH)
 	public void updateComment(
 			@PathVariable("bo_idx") Integer bo_idx,
 			@PathVariable("comment_idx") Integer comment_idx,
 			@RequestBody Map<String, String> json,
 			HttpServletRequest request) throws Exception {
 		
+		System.out.println(json.get("comm_content"));
+		
 		openBoardService.updateComment(comment_idx, json.get("comm_content"));
+	}
+	
+	@RequestMapping(value="/{bo_idx}/comments/{comm_parent_idx}/recomments/new",  method = RequestMethod.POST)
+	public void makeReComment(
+			@PathVariable("bo_idx") Integer bo_idx,
+			@PathVariable("comm_parent_idx") Integer comm_parent_idx,
+			@RequestBody Map<String, String> json,
+			HttpServletRequest request) throws Exception {
+		
+		CommentDTO commentDTO = new CommentDTO();
+		
+		classManager 		= new ClassManager(request);
+		int user_idx 		= classManager.getUserIdx();
+		
+		// 해당 board의 commets 갯수 1 증가 시킴
+		openBoardService.addOneAtComments(bo_idx);
+		
+		// 값 셋팅
+		commentDTO.setBo_idx(bo_idx);
+		commentDTO.setComm_content(json.get("comm_content"));
+		commentDTO.setComm_role(boardSeparator);
+		commentDTO.setUser_idx(user_idx);
+		commentDTO.setComm_parent_idx(comm_parent_idx);
+		
+		// 커멘트 생성
+		openBoardService.addReComment(commentDTO);
 	}
 	
 	

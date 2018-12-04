@@ -138,7 +138,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectComments" resultType="com.ja.classgroupware.board.domain.CommentDTO">
-		SELECT comment_idx, bo_idx, u.user_idx, user_name, comm_content, comm_writedate, comm_role
+		SELECT comment_idx, bo_idx, u.user_idx, user_name, comm_content, comm_writedate, comm_role, comm_parent_idx
 		FROM comments c, users u
 		WHERE c.user_idx = u.user_idx 
 		AND bo_idx = #{bo_idx}

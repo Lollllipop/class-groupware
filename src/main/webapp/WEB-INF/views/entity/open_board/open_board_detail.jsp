@@ -116,17 +116,29 @@
 	}
 	
 	.timeline>li>.fa, .timeline>li>.glyphicon, .timeline>li>.ion {
-	   width: 30px;
-	   height: 30px;
-	   font-size: 15px;
-	   line-height: 30px;
-	   position: absolute;
-	   color: #666;
-	   background: #d2d6de;
-	   border-radius: 50%;
-	   text-align: center;
-	   left: 10px;
-	   top: 0
+		width: 30px;
+		height: 30px;
+		font-size: 15px;
+		line-height: 30px;
+		position: absolute;
+		color: #666;
+		background: #d2d6de;
+		border-radius: 50%;
+		text-align: center;
+		left: 10px;
+		top: 0
+	}
+	
+	.recomment, .prev-recomment {
+	    background-color: #fff;
+		margin-left: 100px;
+		margin-top: 7px;
+		border-radius: 3px;
+		padding: 10px;
+	}
+	
+	.recomment-content input{
+		padding: 0px;
 	}
 
 </style>
@@ -231,17 +243,57 @@
 										<div class="timeline-body">
 											<input type="text" name="hw_submit_content_p" value="${comment.comm_content}" readonly="readonly" style="color : black;">
 										</div>
-					
+										
 					    				<div class="timeline-footer">
+					    				
+					    					<!-- if문 사용해서 현재 세션의 user_idx와 현재 댓글의 user_idx를 비교해서 동일하면 보이도록 처리해야함 -->
 					     					<div style="float : left;">
 					     						<a class="btn btn-primary btn-xs" onclick="updateComment(${status.index}, ${post.bo_idx}, ${comment.comment_idx}, '${comment.comm_content}')">수정</a>
 					     					</div>
 					    					<div style="float : left;">
 					    						<a class="btn btn-danger btn-xs" onclick="deleteComment(${status.index}, ${post.bo_idx}, ${comment.comment_idx})">삭제</a>
 					    					</div>
+					    					<!--  -->
+					    					
+					    					<div style="float : left;">
+					    						<a class="btn btn-primary btn-xs" onclick="createReComment(${status.index}, ${post.bo_idx}, ${comment.comment_idx}, '${comment.user_name}')">대댓글 작성</a>
+					    					</div>
 					   						<div style="clear:both;"></div>
 					    				</div>
-									</div>         
+									</div>   <!-- timeline-item end -->  
+									<c:if test="${not empty comment.reComments}">
+										<c:forEach var="reComment" items="${comment.reComments}" varStatus="status2">
+											<div class="recomment" id='comment-update-button${status.index}${status2.index}'>
+											
+												<div style="float: right; color: #999;">
+													<div style="float : left;">
+														<i class="fa fa-clock-o"></i>
+													</div>
+													<div style="float : left;">
+														<p id="hw_submit_content_writedate_p">${reComment.comm_convertedwritedate}</p>
+													</div>
+												</div>
+												
+												<div class="recomment-user-name" style="clear: both;">
+													${reComment.user_name} 
+												</div>
+												
+												<div class="recomment-content timeline-body">
+													<input type="text" value="${reComment.comm_content}" readonly="readonly" style="color : black;">
+												</div>
+												
+												<div class="recomment-buttons">
+													<div style="float: left;">
+														<a class="btn btn-primary btn-xs" onclick="updateReComment('${status.index}' + '${status2.index}', ${post.bo_idx}, ${reComment.comment_idx}, '${reComment.comm_content}')">수정</a>
+													</div>
+													<div style="float: left;">
+														<a class="btn btn-danger btn-xs" onclick="deleteComment('${status.index}' + '${status2.index}', ${post.bo_idx}, ${reComment.comment_idx})">삭제</a>
+													</div>
+													<div style="clear: both;"></div>
+												</div>
+											</div>
+										</c:forEach>
+									</c:if>    
 								</li>
 							</c:forEach>                     
 	                     </ul>
@@ -269,6 +321,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script> 
 
 	<script type="text/javascript">
+		var isOpenReCommentWriteBox = false;
+	
 		function deleteComment(idx, bo_idx, comment_idx) {
 			var isWantDelete = confirm('정말 삭제하시겠습니까?');
 			
@@ -282,6 +336,56 @@
 				})
 			}
 			
+		}
+		
+		function createReComment(idx, bo_idx, comment_idx, user_name) {
+			if (isOpenReCommentWriteBox) {
+				return;
+			} else {
+				isOpenReCommentWriteBox = true;
+			}
+			
+			// comment_idx에 대한 댓글 작성하면 될 듯
+			
+			var view = ''
+				+ '<div class="prev-recomment">'
+				+ 	'<div class="recomment-user-name">'
+				+		user_name
+				+	'</div>'
+				+ 	'<div class="recomment-content">'
+				+		'<input type="text">'
+				+	'</div>'
+				+ 	'<div class="recomment-buttons">'
+				+		'<a class="btn btn-primary btn-xs" onclick="createReCommentConfirm(' + bo_idx + ',' + comment_idx + ')">확인</a>'
+				+		'<a class="btn btn-danger btn-xs" onclick="createReCommentCancle()">취소</a>'
+				+	'</div>'
+				+ '</div>';
+				
+			$('#comment-update-button' + idx).after(view);
+		}
+		
+		// TODO 이거 하는 중임 지금 (대댓글)
+		function createReCommentConfirm(bo_idx, comm_parent_idx) {
+			var data = {
+					'comm_content' : $('.prev-recomment .recomment-content input').val()
+			}
+			
+ 			$.ajax({
+				type 	: 'POST',
+				data 	: JSON.stringify(data),
+				headers	: {"Content-Type": "application/json"},
+				dataType: 'text',
+				url		: '/openboardajax/' + bo_idx + '/comments/' + comm_parent_idx + '/recomments/new',
+				success	: function(data, textStatus, xhr) {
+					window.location.href = window.location.href;
+				}
+			}) 
+		}
+		
+		function createReCommentCancle() {
+			$('.prev-recomment').remove();
+			
+			isOpenReCommentWriteBox = false;
 		}
 		
 		function updateComment(idx, bo_idx, comment_idx, comm_content) {
@@ -302,13 +406,31 @@
 				+ '<div style="clear:both;"></div>';
 		}
 		
+		function updateReComment(idx, bo_idx, comment_idx, comm_content) {
+			event.target.parentElement.parentElement.parentElement.children[2].innerHTML = ''
+                + '<div class="recomment-content">'
+                + '<input type="text" value="' + comm_content + '" id="hw_submit_content_p" style="color : black;">'
+                + '</div>';
+
+            event.target.parentElement.parentElement.innerHTML = ''
+            	+ '<div style="float : left;">'
+				+ 	'<a class="btn btn-primary btn-xs" onclick="updateConfirm(\'' + idx + '\',' + bo_idx + ',' + comment_idx + ',' + comm_content + ')">확인</a>'
+				+ '</div>'
+				+ '<div style="float: left;>"'
+				+ 	'<a class="btn btn-danger btn-xs" onclick="updateCancle(' + idx + ',' + bo_idx + ',' + comment_idx + ',' + comm_content +')">취소</a>'
+				+ '</div>'
+				+ '<div style="clear:both;"></div>';
+		}
+		
 		function updateConfirm(idx, bo_idx, comment_idx, comm_content) {	
+			console.log(idx);
+			
 			var data = {
 					'comm_content': $('#comment-update-button' + idx + ' .timeline-body input').val()
 			}
 			
   			$.ajax({
-				type 	: 'POST',
+				type 	: 'PATCH',
 				data 	: JSON.stringify(data),
 				headers	: {"Content-Type": "application/json"},
 				dataType: 'text',

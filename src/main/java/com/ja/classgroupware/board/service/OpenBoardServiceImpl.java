@@ -148,6 +148,16 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 		paramMap.put("comm_content", comm_content);
 		
 		commentsDAO.update(paramMap);
+	}
+
+	@Override
+	public void subOneAtComments(Integer bo_idx) throws Exception {
+		commentsDAO.updateCommentsWithMinusOne(bo_idx);
+	}
+
+	@Override
+	public void addReComment(CommentDTO commentDTO) throws Exception {
+		commentsDAO.insertReComment(commentDTO);
 	}	
 
 }
