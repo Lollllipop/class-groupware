@@ -28,20 +28,20 @@ import com.ja.classgroupware.base.vo.BoardVO;
 import com.ja.classgroupware.board.domain.BoardDTO;
 import com.ja.classgroupware.board.domain.CommentDTO;
 import com.ja.classgroupware.board.domain.PostMainDTO;
-import com.ja.classgroupware.board.service.OpenBoardService;
+import com.ja.classgroupware.board.service.ReferenceBoardService;
 
 // board : 게시판
 // post : 게시글
 // posts : 게시글 여러개
 
 @Controller
-@RequestMapping("/openboard")
-public class OpenBoardController {
+@RequestMapping("/referenceboard")
+public class ReferenceBoardController {
 	
 	@Autowired
-	private OpenBoardService openBoardService;
+	private ReferenceBoardService referenceBoardService;
 	
-	@Value("${separator.openboard}")
+	@Value("${separator.referenceboard}")
 	private String boardSeparator;
 	
 	private ClassManager 	classManager;
@@ -50,8 +50,8 @@ public class OpenBoardController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String readAll(@ModelAttribute("pageInfo") PageInfo pageInfo, Model model, HttpServletRequest request) throws Exception {
-		String page = "entity/open_board/open_board_list";
-		
+		String page = "entity/reference_board/reference_board_list";
+
 		classManager 	= new ClassManager(request);
 		int class_idx 	= classManager.getClassIdx();
 		dateConverter 	= new DateConverter();
@@ -60,9 +60,9 @@ public class OpenBoardController {
 		String searchType 		= request.getParameter("searchtype");
 		SearchInfo searchInfo 	= new SearchInfo(searchValue, searchType);
 
-		ArrayList<BoardDTO> posts = openBoardService.getPageList(pageInfo, searchInfo, class_idx, boardSeparator);
+		ArrayList<BoardDTO> posts = referenceBoardService.getPageList(pageInfo, searchInfo, class_idx, boardSeparator);
 		
-		int selectedPostsCount = openBoardService.getSelectedPostsCount(searchType, searchValue, boardSeparator);
+		int selectedPostsCount = referenceBoardService.getSelectedPostsCount(searchType, searchValue, boardSeparator);
 		
 		pageMaker = new PageMaker(pageInfo, selectedPostsCount);
 		
@@ -97,18 +97,18 @@ public class OpenBoardController {
 		post.setUser_idx(Integer.parseInt(mrequest.getParameter("user_idx")));
 		post.setClass_idx(Integer.parseInt(mrequest.getParameter("class_idx")));
 		post.setBo_content(mrequest.getParameter("bo_content"));
-		post.setBo_role(mrequest.getParameter("bo_role"));
+		post.setBo_role(boardSeparator);
 		post.setBo_isnotice(mrequest.getParameter("bo_isnotice") == null ? "false" : "true");
 		post.setBo_hasfiles(mrequest.getParameter("bo_hasfiles").equals("false") ? "false" : "true");
 
-		openBoardService.addPostContent(post);
+		referenceBoardService.addPostContent(post);
 
-		return "redirect:/openboard";
+		return "redirect:/referenceboard";
 	}
 	
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
 	public String regist(Model model, HttpServletRequest request) throws Exception {
-		String page = "entity/open_board/open_board_write";
+		String page = "entity/reference_board/reference_board_write";
 		
 		classManager 		= new ClassManager(request);
 		int 	class_idx 	= classManager.getClassIdx();
@@ -128,7 +128,7 @@ public class OpenBoardController {
 	
 	@RequestMapping(value = "/{bo_idx}", method = RequestMethod.GET)
 	public String readDetail(@PathVariable("bo_idx") Integer bo_idx, Model model, HttpServletRequest request) throws Exception {
-		String page = "entity/open_board/open_board_detail";
+		String page = "entity/reference_board/reference_board_detail";
 		
 		// 들어온 리스트로 이동하기 위한 코드
 		String prevPage = null;
@@ -147,10 +147,10 @@ public class OpenBoardController {
 		int user_idx = classManager.getUserIdx();
 		
 		// 조회수 증가 시킴
-		openBoardService.addOneAtViews(bo_idx);
+		referenceBoardService.addOneAtViews(bo_idx);
 		
 		// 리스트 디테일
-		PostMainDTO postMainDTO = openBoardService.getDetail(bo_idx);
+		PostMainDTO postMainDTO = referenceBoardService.getDetail(bo_idx);
 		model.addAttribute("post", postMainDTO);
 		
 		// 작성자 본인인지 아닌지 구분하기 위한 정보
@@ -158,7 +158,7 @@ public class OpenBoardController {
 		model.addAttribute("isAuthor", isAuthor);
 		
 		// 댓글들
-		ArrayList<CommentDTO> comments = openBoardService.getComments(bo_idx);
+		ArrayList<CommentDTO> comments = referenceBoardService.getComments(bo_idx);
 		
 		// for 문 돌면서 date 상세하게 나타나도록 바꿔야할듯
 		dateConverter 	= new DateConverter();
@@ -193,9 +193,7 @@ public class OpenBoardController {
 	@ResponseBody
 	@RequestMapping(value = "/{bo_idx}", method = RequestMethod.DELETE)
 	public String removePost(@PathVariable("bo_idx") Integer bo_idx, HttpServletRequest request) throws Exception {
-		openBoardService.removePost(bo_idx);
-		// TODO 파일 실제로 삭제할 것
-		// TODO 삭제된 메세지 띄우기 위해서 데이터 더 보내야 함
+		referenceBoardService.removePost(bo_idx);
 		return "";
 	}
 	
@@ -206,19 +204,19 @@ public class OpenBoardController {
 			boardVO.setBo_isnotice("false");
 		}
 		
-		openBoardService.updatePost(boardVO);
+		referenceBoardService.updatePost(boardVO);
 
 		return "";
 	}
 	
 	@RequestMapping(value = "/{bo_idx}/edit", method = RequestMethod.GET)
 	public String getUpdatePostView(@PathVariable("bo_idx") Integer bo_idx, Model model, HttpServletRequest request) throws Exception {
-		String page = "entity/open_board/open_board_update";
+		String page = "entity/reference_board/reference_board_update";
 		
 		classManager 		= new ClassManager(request);
 		String 	user_role 	= classManager.getUserRole();
 		
-		PostMainDTO postMainDTO = openBoardService.getDetail(bo_idx);
+		PostMainDTO postMainDTO = referenceBoardService.getDetail(bo_idx);
 		
 		String prevPage = null;
 		
@@ -234,22 +232,21 @@ public class OpenBoardController {
 			@RequestParam(value = "comm_content")String comm_content,
 			Model model, 
 			HttpServletRequest request) throws Exception {
-		String page = "redirect:/openboard/" + bo_idx;
+		String page = "redirect:/referenceboard/" + bo_idx;
 		
 		CommentDTO commentDTO = new CommentDTO();
 		
 		classManager 		= new ClassManager(request);
 		int user_idx 		= classManager.getUserIdx();
 		
-		// 해당 board의 commets 갯수 1 증가 시킴
-		openBoardService.addOneAtComments(bo_idx);
+		referenceBoardService.addOneAtComments(bo_idx);
 		
 		commentDTO.setBo_idx(bo_idx);
 		commentDTO.setComm_content(comm_content);
 		commentDTO.setComm_role(boardSeparator);
 		commentDTO.setUser_idx(user_idx);
 		
-		openBoardService.addComment(commentDTO);
+		referenceBoardService.addComment(commentDTO);
 		
 		return page;
 	}
@@ -261,9 +258,9 @@ public class OpenBoardController {
 			@PathVariable("comment_idx") Integer comment_idx,
 			Model model, 
 			HttpServletRequest request) throws Exception {
-		openBoardService.removeComment(comment_idx);
+		referenceBoardService.removeComment(comment_idx);
 		
-		openBoardService.subOneAtComments(bo_idx);
+		referenceBoardService.subOneAtComments(bo_idx);
 		
 		return "";
 	}

@@ -33,57 +33,6 @@
 <link href="https://cdn.jsdelivr.net/npm/froala-editor@2.9.1/css/froala_style.min.css" rel="stylesheet" type="text/css" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css" rel="stylesheet" />
 
-<style>
-
-#upload-box {
-	height: 130px; 
-	width: 100%;
-	border: 1px solid #fdb6b6;
-	border-radius: 2px;
-	background-color: #ffe3e1;
-	/* line-height: 100px;
-	color: white; */
-}
-
-.upload-item {
-	display: inline-block;
-	margin-right: 5px;
-	height: 120px;
-	padding: 5px;
-	width: 160px;
-}
-
-.upload-image {
-	height: 80px;
-}
-
-.upload-top {
-	background-color: white;
-	padding: 5px;
-}
-
-.upload-bottom {
-	background-color: #e0e0e0;
-	padding: 0 5px 0 5px;
-	text-align: left;
-}
-
-.upload-bottom .fa-window-close {
-    margin-left: 65px;
-}
-
-.upload-file-name {
-	display: inline-block;
-}
-
-.fa-window-close {
-	cursor: pointer; 
-}
-
-
-
-</style>
-
 </head>
 <body>
 	<div id="wrapper">
@@ -102,7 +51,7 @@
 							<div class="card-content">
 								<!-- 멀티파트 폼데이터를 받는 무언가가 필요할듯 -->
 								<!-- enctype='multipart/form-data' -->
-								<form id="submit-form" action="/referenceboard" method="POST" enctype="multipart/form-data">
+								<form id="submit-form" enctype="multipart/form-data">
 									<div class="table-responsive">
 										<table class="table" id="dataTables-example"
 											style="width: 60%; margin-left: auto; margin-right: auto;">
@@ -110,47 +59,30 @@
 												<tr>
 													<td style="text-align: center; vertical-align: middle;">제목</td>
 													<td colspan="2">
-														<input type="text" name='bo_title' id='post-title' class="form-control" placeholder="내용을 입력해주세요" style="vertical-align: middle;">
-														<input type="hidden" name='user_idx' value='${user_idx}'>
-														<input type="hidden" name='class_idx' value='${class_idx}'>
-														<input type="hidden" name='bo_role' value='${bo_role}'>
+														<input type="text" value='${post.bo_title}' name='bo_title' id='post-title' class="form-control" placeholder="내용을 입력해주세요" style="vertical-align: middle;">
 														<input type="hidden" name='bo_hasfiles' value='false' id='has-files'>
 													</td>
 												</tr>
 												<tr>
 													<td style="text-align: center">작성자</td>
-													<td>${user_name}</td>
+													<td>${post.user_name}</td>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
 													<td colspan="3">
-														<textarea id='content-box' name='bo_content' style='height: 230px;'></textarea>
+														<textarea id='editor-area' name='bo_content'>${post.bo_content}</textarea>
 													</td>
 												</tr>
-												<tr>
-													<td style="text-align: center">
-														파일 첨부
-													</td>
-												</tr>
-												<tr>
-													<td style="text-align: center" colspan="3">
-														<div id='upload-box'>
-														</div>
-													</td>
-												</tr>
-
 												<c:if test="${hasNoticeAuth}">
 													<tr>
 														<td style="text-align: center">
 															공지 여부
-															<input type="hidden" name='user2' value='777'>
 														</td>
 														<td>
 															<input type="checkbox" class="filled-in" id="filled-in-box" name="bo_isnotice" value="true">
 															<label for="filled-in-box" style="height:11px !important;"></label>
 														</td>
-														
 													</tr>
 												</c:if>
 											</tbody>
@@ -158,8 +90,8 @@
 												<tr>
 													<td colspan="3">
 														<div style="float: right;">
-															<input type="submit" value="등록" class="btn btn-success" id='submit-btn'>
-															<a href="${prevPage}"><input type="button" value="목록으로" class="btn btn-primary"></a>
+															<input type="button" value="수정" class="btn btn-success" id='submit-btn'>
+															<a href='/referenceboard/${post.bo_idx}'><input type="button" value="취소" class="btn btn-primary"></a>
 														</div>
 													</td>
 												</tr>
@@ -191,121 +123,71 @@
 	<!-- WYSIWYG Editor JS -->
 	<!-- package (all plugins included) -->
 	<script src="https://cdn.jsdelivr.net/npm/froala-editor@2.9.1/js/froala_editor.pkgd.min.js"></script>
-	<!-- Handlebars JS -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
-	
-	<script id="thumbnail-template" type="text/x-handlebars-template">
-		<div class='upload-item'>
-			<div class='upload-top'>
-				<span>
-					<img src="{{thumbnail_link}}" alt="Attachment" class='upload-image'>
-				</span>
-			</div>
-			<div class='upload-bottom'>
-				<p class='upload-file-name'>{{file_name}}</p>
-				<i class="far fa-window-close" onclick='deleteUploadedFile()' id='{{thumbnail_link}}'></i>
-			</div>
-		</div>              
-	</script>  
 	
 	<script>
-		var uploadCount = 0;
-		
-		function deleteUploadedFile() {
-			// 일단 div 삭제
-			event.target.parentElement.parentElement.remove();
-			
-			// ajax로 실제 데이터도 삭제
-			var data = {
-					thumbnailFileLink: event.target.id
-			}
-			
-			$.ajax({
-				url			: '/referenceboardajax/file',
-				data 		: JSON.stringify(data),
-				headers		: {"Content-Type": "application/json"},
-				dataType	: 'text',
-				type		: 'DELETE'
-			}); 
-			
-			// 카운트 1 줄임
-			uploadCount--;
-		}
-	
 		$(function() {
+			/* Initialize the editor. */
+			$('#editor-area').froalaEditor({
+				// 에디터 세로 길이
+				height : 300,
+				
+				/* 이미지 업로드 */
+				// 이미지 업로드 경로
+				imageUploadURL: '/referenceboardajax/image',
+		        // 이미지 전송 방법
+		        imageUploadMethod: 'POST',
+		        // 허용 파일 타입
+		        imageAllowedTypes: ['jpeg', 'jpg', 'png']
+			})
+			.on('froalaEditor.image.inserted', function (e, editor, $img, response) {
+				$('#has-files').val('true');
+			})
 			
-			/* null값 방지 스크립트 */
+			/* 수정 버튼 클릭시 수정 액션!! null값 방지 스크립트 */
 			$('#submit-btn').on('click', function() {
 				var titlaVal = $('#post-title').val();
 				var contentVal = $('#editor-area').val();
 				
 				if (titlaVal === "") {
 					alert("제목을 입력해주세요.");
+					return;
 				} else {
 					if (contentVal === "") {
 						alert("내용을 입력해주세요.");
+						return;
 					}
 				}
-			})
-			
-			/* 임시...
- 			$('#upload-box').mouseenter(function(e) {
-				$(this).css('background-color', '#ff8178');
-				$(this).text("파일을 여기에 놓아주세요");
-			})
-			
-			$('#upload-box').mouseleave(function(e) {
-				$(this).css('background-color', '#ffe3e1');
-				$(this).text("");
-			})
-			 */
-			
-			$("#upload-box").on("dragenter dragover", function(event){
-				event.preventDefault();
-			});
-			
-			/* 파일 드래그시 */
-			$("#upload-box").on("drop", function(event){
-				event.preventDefault();
 				
-				if (uploadCount > 2) {
-					alert('파일은 세개이상 첨부할 수 없습니다.');
-					return;
+				var bo_idx 			= ${post.bo_idx};
+				var bo_title		= $('#post-title').val();
+				var bo_content		= $('#editor-area').val();
+				var bo_isnotice		= $('#filled-in-box').is(':checked') ? 'true' : 'false';
+				
+				var sendData = {
+						'bo_idx' 		: bo_idx,
+						'bo_title' 		: bo_title,
+						'bo_content' 	: bo_content,
+						'bo_isnotice' 	: bo_isnotice
 				}
 				
-				uploadCount++;
-				
- 				// TODO 다중 파일 한번에 올리는 것 나중에 처리할 것
- 				
-				var files = event.originalEvent.dataTransfer.files;
-				
-				var file = files[0];
-
-				var formData = new FormData();
-				
-				formData.append("file", file);	
-				
 				$.ajax({
-					  url			: '/referenceboardajax/file',
-					  data			: formData,
-					  dataType		:'text',
-					  processData	: false,
-					  contentType	: false,
-					  type			: 'POST',
-					  success		: function(data){
-						  var source = $('#thumbnail-template').html();
-						  
-						  var template = Handlebars.compile(source);
-						  
-						  var data = JSON.parse(data);
-						  
-						  var html = template(data);
-						  
-						  $("#upload-box").append(html);
-					  }
-				}); 	 
-			});
+					type 	: 'PATCH',
+					data 	: JSON.stringify(sendData),
+					headers	: {"Content-Type": "application/json"},
+					dataType: 'text',
+					url		: '/referenceboard/' + bo_idx,
+					success	: function(data, textStatus, xhr) {
+						window.location.href = '/referenceboard/' + bo_idx;
+					}
+				})
+			})
 			
+			/* 공지글이면 공지 처리 해놓기 */
+			var bo_isnotice = '${post.bo_isnotice}';
+			
+			if (bo_isnotice === 'true') {
+				$("#filled-in-box").prop("checked", true); 
+			}
 		});
 	</script>
 

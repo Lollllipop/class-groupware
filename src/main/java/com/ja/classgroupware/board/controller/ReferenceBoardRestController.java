@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,17 +29,18 @@ import com.ja.classgroupware.base.util.PageMaker;
 import com.ja.classgroupware.base.vo.FilesVO;
 import com.ja.classgroupware.board.domain.BoardDTO;
 import com.ja.classgroupware.board.domain.CommentDTO;
+import com.ja.classgroupware.board.domain.ThumbnailDTO;
 import com.ja.classgroupware.board.domain.UploadedLinkDTO;
-import com.ja.classgroupware.board.service.OpenBoardService;
+import com.ja.classgroupware.board.service.ReferenceBoardService;
 
 @RestController
-@RequestMapping("/openboardajax")
-public class OpenBoardRestController {
+@RequestMapping("/referenceboardajax")
+public class ReferenceBoardRestController {
 	
 	@Autowired
-	private OpenBoardService openBoardService;
+	private ReferenceBoardService referenceBoardService;
 	
-	@Value("${separator.openboard}")
+	@Value("${separator.referenceboard}")
 	private String boardSeparator;
 	
 	private ClassManager 	classManager;
@@ -57,9 +60,9 @@ public class OpenBoardRestController {
 		String searchType 		= request.getParameter("searchtype");
 		SearchInfo searchInfo 	= new SearchInfo(searchValue, searchType);
 		
-		ArrayList<BoardDTO> posts = openBoardService.getPageList(pageInfo, searchInfo, class_idx, boardSeparator);
+		ArrayList<BoardDTO> posts = referenceBoardService.getPageList(pageInfo, searchInfo, class_idx, boardSeparator);
 
-		int selectedPostsCount = openBoardService.getSelectedPostsCount(searchType, searchValue, boardSeparator);
+		int selectedPostsCount = referenceBoardService.getSelectedPostsCount(searchType, searchValue, boardSeparator);
 		
 		pageMaker = new PageMaker(pageInfo, selectedPostsCount);
 		
@@ -94,7 +97,7 @@ public class OpenBoardRestController {
 		
 		FileUploadManager fileUploadManager = new FileUploadManager();
 		
-		fileUploadManager.setPath("openboard", request);
+		fileUploadManager.setPath("referenceboard", request);
 		fileUploadManager.upload(file);
 		
 		classManager = new ClassManager(request);
@@ -105,7 +108,7 @@ public class OpenBoardRestController {
 		filesVO.setFile_name(file.getOriginalFilename());
 		filesVO.setFile_role(boardSeparator);
 		
-		openBoardService.addPostImage(filesVO);
+		referenceBoardService.addPostImage(filesVO);
 		
 		String uploadedLink = fileUploadManager.getUploadedLink();
 		
@@ -114,26 +117,89 @@ public class OpenBoardRestController {
 		return uploadedLinkDTO;
 	}
 	
+	@RequestMapping(value="/file",  method = RequestMethod.POST)
+	public ThumbnailDTO addFile(MultipartFile file, HttpServletRequest request) throws Exception {
+		
+		// 섬네일 DTO 생성
+		ThumbnailDTO 	thumbnailDTO 	= new ThumbnailDTO();
+		FilesVO			filesVO			= new FilesVO();
+		
+		// 기본적인 값들 셋팅
+		classManager = new ClassManager(request);
+		thumbnailDTO.setClass_idx(classManager.getClassIdx());
+		thumbnailDTO.setFile_name(file.getOriginalFilename());
+		thumbnailDTO.setFile_role(boardSeparator);
+		
+		// 업로드매니저 생성
+		FileUploadManager fileUploadManager = new FileUploadManager();
+
+		// 경로 셋팅
+		fileUploadManager.setPath("referenceboard", request);
+		
+		// 파일 업로드(저장)
+		fileUploadManager.upload(file);
+		
+		// 업로드된 경로 셋팅
+		thumbnailDTO.setFile_link(fileUploadManager.getUploadedLink());
+		
+		// 파일 디비에 저장
+		filesVO.setClass_idx(classManager.getClassIdx());
+		filesVO.setFile_link(fileUploadManager.getUploadedLink());
+		filesVO.setFile_name(file.getOriginalFilename());
+		filesVO.setFile_role(boardSeparator);
+		
+		referenceBoardService.addPostFile(filesVO);
+
+		// 썸네일 생성 및 업로드(저장)
+		fileUploadManager.makeThumbnail(file);
+		
+		// 썸네일 디비에 저장
+		filesVO.setFile_link(fileUploadManager.getThumbnailLink());
+		filesVO.setFile_role(boardSeparator + "_thumbnail");
+		referenceBoardService.addPostThumbnail(filesVO);
+		
+		thumbnailDTO.setThumbnail_link(fileUploadManager.getThumbnailLink());
+		
+		return thumbnailDTO;
+		
+	}
+	
 	@RequestMapping(value="/image",  method = RequestMethod.DELETE)
 	public void removeImage(@RequestBody Map<String, String> json, HttpServletRequest request) throws Exception {
 		String fileLink = json.get("src");
 		
 		// DB에 삭제
-		openBoardService.removePostImage(fileLink);
+		referenceBoardService.removePostImage(fileLink);
 		
 		// 물리 파일 삭제
 		FileUploadManager fileUploadManager = new FileUploadManager();
 		fileUploadManager.setRealPath(request);
 		fileUploadManager.delete(fileLink);
 	}
-
+	
+	@RequestMapping(value="/file",  method = RequestMethod.DELETE)
+	public void removeFile(@RequestBody Map<String, String> json, HttpServletRequest request) throws Exception {
+		String thumbnailFileLink 	= json.get("thumbnailFileLink");
+		String fileLink 			= thumbnailFileLink.replace("thumbnail_", "");
+		
+		// DB에 삭제
+		referenceBoardService.removePostThumbnail(thumbnailFileLink);
+		referenceBoardService.removePostFile(fileLink);
+		
+		// 물리 파일 삭제
+		FileUploadManager fileUploadManager = new FileUploadManager();
+		fileUploadManager.setRealPath(request);
+		fileUploadManager.delete(thumbnailFileLink);
+		fileUploadManager.delete(fileLink);
+	}
+	
 	@RequestMapping(value="/recommandSeachKeyword",  method = RequestMethod.GET)
 	public ArrayList<String> readRecommandSeachKeyword(
 			@RequestParam String debouncedsearchkeyword, 
 			@RequestParam String searchtype,
 			HttpServletRequest request) throws Exception {
 		
-		return openBoardService.getKeyword(searchtype, debouncedsearchkeyword);
+		return referenceBoardService.getKeyword(searchtype, debouncedsearchkeyword, boardSeparator);
 	}
 	
 	@RequestMapping(value="/{bo_idx}/comments/{comment_idx}",  method = RequestMethod.PATCH)
@@ -143,7 +209,7 @@ public class OpenBoardRestController {
 			@RequestBody Map<String, String> json,
 			HttpServletRequest request) throws Exception {
 		
-		openBoardService.updateComment(comment_idx, json.get("comm_content"));
+		referenceBoardService.updateComment(comment_idx, json.get("comm_content"));
 	}
 	
 	@RequestMapping(value="/{bo_idx}/comments/{comm_parent_idx}/recomments/new",  method = RequestMethod.POST)
@@ -159,7 +225,7 @@ public class OpenBoardRestController {
 		int user_idx 		= classManager.getUserIdx();
 		
 		// 해당 board의 commets 갯수 1 증가 시킴
-		openBoardService.addOneAtComments(bo_idx);
+		referenceBoardService.addOneAtComments(bo_idx);
 		
 		// 값 셋팅
 		commentDTO.setBo_idx(bo_idx);
@@ -169,7 +235,7 @@ public class OpenBoardRestController {
 		commentDTO.setComm_parent_idx(comm_parent_idx);
 		
 		// 커멘트 생성
-		openBoardService.addReComment(commentDTO);
+		referenceBoardService.addReComment(commentDTO);
 	}
 	
 	

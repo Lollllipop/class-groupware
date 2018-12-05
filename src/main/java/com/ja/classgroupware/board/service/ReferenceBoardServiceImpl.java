@@ -18,9 +18,10 @@ import com.ja.classgroupware.base.vo.FilesVO;
 import com.ja.classgroupware.board.domain.BoardDTO;
 import com.ja.classgroupware.board.domain.CommentDTO;
 import com.ja.classgroupware.board.domain.PostMainDTO;
+import com.ja.classgroupware.board.domain.ThumbnailDTO;
 
 @Service
-public class OpenBoardServiceImpl implements OpenBoardService {
+public class ReferenceBoardServiceImpl implements ReferenceBoardService {
 
 	@Autowired
 	BoardDAO boardDAO;
@@ -112,11 +113,12 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 	}
 
 	@Override
-	public ArrayList<String> getKeyword(String searchType, String debouncedSearchKeyword) throws Exception {
+	public ArrayList<String> getKeyword(String searchType, String debouncedSearchKeyword, String boardSeparator) throws Exception {
 		paramMap = new HashMap<String, Object>();
 		
 		paramMap.put("searchType", searchType);
 		paramMap.put("debouncedSearchKeyword", debouncedSearchKeyword);
+		paramMap.put("boardSeparator", boardSeparator);
 		
 		return boardDAO.selectKeyword(paramMap);
 	}
@@ -165,6 +167,26 @@ public class OpenBoardServiceImpl implements OpenBoardService {
 	public void removePostImage(String file_link) throws Exception {
 		filesDAO.deleteWithFileLink(file_link);
 		
+	}
+
+	@Override
+	public void addPostFile(FilesVO filesVO) throws Exception {
+		filesDAO.insert(filesVO);
+	}
+
+	@Override
+	public void addPostThumbnail(FilesVO filesVO) throws Exception {
+		filesDAO.insert(filesVO);
+	}
+
+	@Override
+	public void removePostThumbnail(String thumbnailFileLink) throws Exception {
+		filesDAO.deleteWithFileLink(thumbnailFileLink);
+	}
+
+	@Override
+	public void removePostFile(String fileLink) throws Exception {
+		filesDAO.deleteWithFileLink(fileLink);
 	}	
 
 }

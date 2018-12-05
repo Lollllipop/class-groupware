@@ -9,8 +9,9 @@ import com.ja.classgroupware.base.vo.FilesVO;
 import com.ja.classgroupware.board.domain.BoardDTO;
 import com.ja.classgroupware.board.domain.CommentDTO;
 import com.ja.classgroupware.board.domain.PostMainDTO;
+import com.ja.classgroupware.board.domain.ThumbnailDTO;
 
-public interface OpenBoardService {
+public interface ReferenceBoardService {
 
 	public ArrayList<BoardDTO> getAll(int class_idx, String bo_role) throws Exception;
 	
@@ -32,7 +33,7 @@ public interface OpenBoardService {
 	
 	public int getSelectedPostsCount(String searchType, String searchValue, String boardSeparator) throws Exception;
 
-	public ArrayList<String> getKeyword(String searchType, String debouncedSearchKeyword) throws Exception;
+	public ArrayList<String> getKeyword(String searchType, String debouncedSearchKeyword, String boardSeparator) throws Exception;
 	
 	public void addComment(CommentDTO commentDTO) throws Exception;
 
@@ -49,5 +50,13 @@ public interface OpenBoardService {
 	public void addReComment(CommentDTO commentDTO) throws Exception;
 
 	public void removePostImage(String file_link) throws Exception;
+
+	public void addPostFile(FilesVO filesVO) throws Exception;
+
+	public void addPostThumbnail(FilesVO filesVO) throws Exception;
+
+	public void removePostThumbnail(String thumbnailFileLink) throws Exception;
+
+	public void removePostFile(String fileLink) throws Exception;
 
 }

@@ -68,6 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM board b, users u
 		WHERE b.user_idx = u.user_idx 
 		AND bo_isnotice != 'true'
+		AND bo_role = #{boardSeparator}
 		<include refid="selectCount"></include>
 	</select>
 	
@@ -83,6 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<![CDATA[
 		    FROM board b, users u
 		    WHERE b.user_idx = u.user_idx
+		    AND bo_role = #{boardSeparator}
 		]]>
 		<choose>
 			<when test="searchType == 't'.toString()">
@@ -184,4 +186,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 		</if>
 	</sql>
+
 </mapper>
