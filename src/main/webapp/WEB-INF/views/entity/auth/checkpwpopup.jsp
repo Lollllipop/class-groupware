@@ -19,10 +19,10 @@
 
 <body>
 	<div class="container">	
-		<form method="POST">
+		<form action="/entity/auth/completepwpopup">
 		  <div class="form-group">
-		    <label for="exampleInputEmail1">아이디를 입력해주세요.</label>
-		    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter ID">
+		    <label for="exampleInputId">아이디를 입력해주세요.</label>
+		    <input type="text" class="form-control" id="exampleInputId" placeholder="Enter ID" name="user_id">
 		  </div>
 		  <div class="row justify-content-end" style="margin-right : 2px;">
 			<button type="submit" class="btn btn-primary">확인</button>

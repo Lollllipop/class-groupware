@@ -79,6 +79,8 @@
 								<input type="radio" id="user_role_teacher" name="user_role"
 									value="teacher">강사 <i class="fas fa-chalkboard-teacher"></i>
 							</div>
+							
+							
 						</form>
 						<button class="btn" onclick="f_checkValues()">회원가입</button>
 					</div>

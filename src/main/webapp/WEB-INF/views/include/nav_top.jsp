@@ -22,14 +22,14 @@
 			data-activates="dropdown2"><i class="fa fa-bell fa-fw"></i> <i
 				class="material-icons right">arrow_drop_down</i></a></li>
 		<li><a class="dropdown-button waves-effect waves-dark" href="#!"
-			data-activates="dropdown1"><i class="fa fa-user fa-fw"></i> <b>홍길동</b>
+			data-activates="dropdown1"><i class="fa fa-user fa-fw"></i> <b>${login.user_id}</b> <!-- 유저아이디 -->
 				<i class="material-icons right">arrow_drop_down</i></a></li>
 	</ul>
 </nav>
 <!-- Dropdown Structure -->
 <ul id="dropdown1" class="dropdown-content">
 	<li><a href="#"><i class="fa fa-user fa-fw"></i>내 정보</a></li>
-	<li><a href="#"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a></li>
+	<li><a href="/entity/auth/logout"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a></li>
 </ul>
 <ul id="dropdown2" class="dropdown-content dropdown-tasks w250 taskList">
 	<li><a href="#">

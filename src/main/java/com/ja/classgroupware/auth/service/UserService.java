@@ -23,7 +23,12 @@ public interface UserService {
 
   public UsersVO checkUserWithSessionKey(String value);
 
+  /*public UsersVO selectByEmail(UsersVO vo) throws Exception;*/
+
   public UsersVO selectByEmail(String user_email) throws Exception;
+
+  public UsersVO selectById(String user_id) throws Exception;
+
 
 
 

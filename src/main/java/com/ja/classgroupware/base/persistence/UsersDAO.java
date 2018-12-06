@@ -37,7 +37,7 @@ public interface UsersDAO {
 	public UsersVO checkUserWithSessionKey(String value);
 
 	public UsersVO selectByEmail(String user_email) throws Exception;
-	
-	
+
+	public UsersVO selectById(String user_id) throws Exception;
 	
 }

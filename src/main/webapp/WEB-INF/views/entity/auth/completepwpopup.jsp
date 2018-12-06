@@ -21,7 +21,7 @@
 	<div class="container">	
 		<form>
 		  <div class="form-group">
-		    <label for="exampleInputEmail1">귀하의 비밀번호는 <% %>입니다.</label>
+		    <label for="exampleInputEmail1">귀하의 비밀번호는${usersVO.user_password} 입니다.</label>
 		    
 		   <!--  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter ID"> -->
 		   <small id="emailHelp" class="form-text text-muted">확인하시고 로그인바랍니다.</small>

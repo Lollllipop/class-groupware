@@ -16,6 +16,7 @@
       var id = document.getElementById('user_id').value;
       var email = document.getElementById('user_email').value;
       
+      
       function email_check( email ) {   
         var regex=/([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
         return (email != '' && email != 'undefined' && regex.test(email));

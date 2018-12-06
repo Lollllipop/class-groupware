@@ -26,7 +26,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
 		HttpSession session = request.getSession();
 
-		if (session.getAttribute("login") == null) {
+		if (session.getAttribute("login") != null) {
 
 			logger.info("current user is not logined");
 
@@ -44,7 +44,6 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 					session.setAttribute("login", usersVO);
 					return true;
 				}
-
 			}
 
 			response.sendRedirect("/entity/auth/login");

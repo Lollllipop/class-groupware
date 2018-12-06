@@ -17,15 +17,14 @@
     
 </head>
 <script>
-
 </script>
 
 
 <body>
-	<div class="container">	
+	<div class="container">
 		<form method="POST">
 		  <div class="form-group">
-		    <label for="exampleInputEmail1">귀하의 아이디는 ${user_id}입니다.</label>
+		    <label for="exampleInputEmail1">귀하의 아이디는 ${usersVO.user_id}입니다.</label>
 		   
 		    <!-- <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"> -->
 		    <small id="emailHelp" class="form-text text-muted">확인하시고 로그인바랍니다.</small>

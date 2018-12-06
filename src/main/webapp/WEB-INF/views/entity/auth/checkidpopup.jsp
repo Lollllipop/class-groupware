@@ -19,11 +19,11 @@
 
 <body>
 	<div class="container">	
-		<form method="POST">
+		<form action="/entity/auth/completeidpopup">
 		  <div class="form-group">
 		    <label for="exampleInputEmail1">이메일 주소를 입력해주세요.</label>
 		    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="user_email">
-		    <small id="emailHelp" class="form-text text-muted">가입시 사용한 이메일 주소를 입력하시오.</small>
+		    <small id="emailHelp" class="form-text text-muted">가입시 사용한 이메일 주소를 입력하시오.</small> <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 		  </div>
 		  <div class="row justify-content-end" style="margin-right : 2px;">
 			<button type="submit" class="btn btn-primary">확인</button>

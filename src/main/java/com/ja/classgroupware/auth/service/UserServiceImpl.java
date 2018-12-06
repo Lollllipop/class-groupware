@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void insert(UsersVO vo) throws Exception {
 		
-		
+		dao.insert(vo);
 	}
 
 	@Override
@@ -64,9 +64,11 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
-	@Override
 	public UsersVO selectByEmail(String user_email) throws Exception {
 		return dao.selectByEmail(user_email);
-		
+	}
+	
+	public UsersVO selectById(String user_id) throws Exception {
+		return dao.selectById(user_id);
 	}
 }
