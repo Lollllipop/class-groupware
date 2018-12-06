@@ -1,11 +1,18 @@
 package com.ja.classgroupware.board.controller;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,11 +30,13 @@ import com.ja.classgroupware.base.domain.PagingNavInfo;
 import com.ja.classgroupware.base.domain.SearchInfo;
 import com.ja.classgroupware.base.util.ClassManager;
 import com.ja.classgroupware.base.util.DateConverter;
+import com.ja.classgroupware.base.util.MediaUtils;
 import com.ja.classgroupware.base.util.PageMaker;
 import com.ja.classgroupware.base.vo.BoardVO;
 import com.ja.classgroupware.board.domain.BoardDTO;
 import com.ja.classgroupware.board.domain.CommentDTO;
 import com.ja.classgroupware.board.domain.PostMainDTO;
+import com.ja.classgroupware.board.domain.ThumbnailDTO;
 import com.ja.classgroupware.board.service.ReferenceBoardService;
 
 // board : 게시판
@@ -153,12 +162,21 @@ public class ReferenceBoardController {
 		PostMainDTO postMainDTO = referenceBoardService.getDetail(bo_idx);
 		model.addAttribute("post", postMainDTO);
 		
+		// 파일 링크(파일링크, 썸네일링크) 리스트 보내기
+		ArrayList<ThumbnailDTO> thumbnails = referenceBoardService.getThumbnails(bo_idx);
+		for (ThumbnailDTO thumbnail : thumbnails) {
+			thumbnail.setThumbnail_link(thumbnail.getFile_link());
+			thumbnail.setFile_link(thumbnail.getThumbnail_link().replace("thumbnail_", ""));
+			thumbnail.setFile_link_name(thumbnail.getFile_link().substring(thumbnail.getFile_link().lastIndexOf("/") + 1, thumbnail.getFile_link().length()));
+		}
+		model.addAttribute("thumbnails", thumbnails);
+		
 		// 작성자 본인인지 아닌지 구분하기 위한 정보
 		boolean  isAuthor = postMainDTO.getUser_idx() == user_idx ? true : false;
 		model.addAttribute("isAuthor", isAuthor);
 		
 		// 댓글들
-		ArrayList<CommentDTO> comments = referenceBoardService.getComments(bo_idx);
+		ArrayList<CommentDTO> comments = referenceBoardService.getComments(bo_idx);		
 		
 		// for 문 돌면서 date 상세하게 나타나도록 바꿔야할듯
 		dateConverter 	= new DateConverter();
@@ -264,5 +282,48 @@ public class ReferenceBoardController {
 		
 		return "";
 	}
+	
+	@ResponseBody
+	@RequestMapping("/displayfile")
+	public ResponseEntity<byte[]> displayFile(String file_link, HttpServletRequest request) throws Exception{
+		String realFileLink = request.getSession().getServletContext().getRealPath("") + file_link.substring(1).replace("/", "\\");
+		
+	    InputStream in = null; 
+	    ResponseEntity<byte[]> entity = null;
+	    
+	    System.out.println(file_link);
+	    
+	    try{
+	    	
+	      String formatName = file_link.substring(file_link.lastIndexOf(".")+1);
+	      
+	      MediaType mType = MediaUtils.getMediaType(formatName);
+	      
+	      HttpHeaders headers = new HttpHeaders();
+	      
+	      in = new FileInputStream(realFileLink);
+	      
+	      if(mType != null){
+	        headers.setContentType(mType);
+	      }else{
+	    	  file_link = file_link.substring(file_link.indexOf("_")+1);     
+	    	  
+	    	  System.out.println(file_link);
+	    	  
+		      headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		      headers.add("Content-Disposition", "attachment; filename=\""+ new String(file_link.getBytes("UTF-8"), "ISO-8859-1")+"\"");
+	      }
+
+	        entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), headers,  HttpStatus.CREATED);
+	    }catch(Exception e){
+	    	e.printStackTrace();
+	    	entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
+	    }finally{
+	    	in.close();
+	    }
+	    
+	      return entity; 
+	      
+	  }
 	
 }

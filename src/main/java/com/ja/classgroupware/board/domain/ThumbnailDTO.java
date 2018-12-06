@@ -18,5 +18,6 @@ public class ThumbnailDTO {
 	private String file_name;
 	private String file_role;
 	private String thumbnail_link;
+	private String file_link_name;
 	
 }

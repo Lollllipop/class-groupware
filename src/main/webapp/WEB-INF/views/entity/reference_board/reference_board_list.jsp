@@ -95,7 +95,7 @@
 
 		<div id="page-wrapper">
 			<div class="header">
-				<h1 class="page-header">자유게시판</h1>
+				<h1 class="page-header">자료실</h1>
 			</div>
 
 			<div id="page-inner">
@@ -103,7 +103,7 @@
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-action">
-								<strong>자유게시판</strong>
+								<strong>자료실</strong>
 							</div>
 							<div class="clear"></div>
 							<div class="cntAllTextArea">총 ${totalCount} 개</div>

@@ -59,4 +59,6 @@ public interface ReferenceBoardService {
 
 	public void removePostFile(String fileLink) throws Exception;
 
+	public ArrayList<ThumbnailDTO> getThumbnails(Integer bo_idx) throws Exception;
+
 }

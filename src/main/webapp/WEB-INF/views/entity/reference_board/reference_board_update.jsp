@@ -41,7 +41,7 @@
 
 		<div id="page-wrapper">
 			<div class="header">
-				<h1 class="page-header">자유게시판</h1>
+				<h1 class="page-header">자료실</h1>
 			</div>
 
 			<div id="page-inner">

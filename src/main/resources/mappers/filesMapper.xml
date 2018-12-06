@@ -19,6 +19,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where file_idx =
 		#{file_idx}
 	</select>
+	
+	<select id="selectByBoIdx" resultType="com.ja.classgroupware.board.domain.ThumbnailDTO">
+		SELECT * 
+		FROM files
+		WHERE bo_idx = #{bo_idx}
+		AND FILE_ROLE = 'referenceboard'
+	</select>
 
 	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.FilesVO">
  <![CDATA[

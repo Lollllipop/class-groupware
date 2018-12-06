@@ -69,11 +69,16 @@
 }
 
 .upload-bottom .fa-window-close {
-    margin-left: 65px;
+    margin-left: 20px;
 }
 
 .upload-file-name {
 	display: inline-block;
+	width: 100px;
+	overflow: hidden; 
+	text-overflow: ellipsis;
+	white-space: nowrap; 
+	margin-bottom: -5px;
 }
 
 .fa-window-close {
@@ -92,7 +97,7 @@
 
 		<div id="page-wrapper">
 			<div class="header">
-				<h1 class="page-header">자유게시판</h1>
+				<h1 class="page-header">자료실</h1>
 			</div>
 
 			<div id="page-inner">
@@ -230,6 +235,10 @@
 			
 			// 카운트 1 줄임
 			uploadCount--;
+			
+			if (uploadCount == 0) {
+				$('#has-files').val('false');
+			}
 		}
 	
 		$(function() {
@@ -272,6 +281,9 @@
 					alert('파일은 세개이상 첨부할 수 없습니다.');
 					return;
 				}
+				
+				// 아이콘 셋팅
+				$('#has-files').val('true');
 				
 				uploadCount++;
 				

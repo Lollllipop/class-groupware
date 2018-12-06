@@ -141,6 +141,56 @@
 		padding: 0px;
 	}
 
+	#upload-box {
+		height: 130px; 
+		width: 100%;
+		border: 1px solid #fdb6b6;
+		border-radius: 2px;
+		background-color: #ffe3e1;
+		/* line-height: 100px;
+		color: white; */
+	}
+	
+	.upload-item {
+		display: inline-block;
+		margin-right: 5px;
+		height: 120px;
+		padding: 5px;
+		width: 160px;
+	}
+	
+	.upload-image {
+		height: 80px;
+	}
+	
+	.upload-top {
+		background-color: white;
+		padding: 5px;
+	}
+	
+	.upload-bottom {
+		background-color: #e0e0e0;
+		padding: 0 5px 0 5px;
+		text-align: left;
+	}
+	
+	.upload-bottom .fa-window-close {
+	    margin-left: 20px;
+	}
+	
+	.upload-file-name {
+		display: inline-block;
+		width: 100px;
+		overflow: hidden; 
+		text-overflow: ellipsis;
+		white-space: nowrap; 
+		margin-bottom: -5px;
+	}
+	
+	.fa-window-close {
+		cursor: pointer; 
+	}
+
 </style>
 
 </head>
@@ -151,7 +201,7 @@
 
 		<div id="page-wrapper">
 			<div class="header">
-				<h1 class="page-header">자유게시판</h1>
+				<h1 class="page-header">자료실</h1>
 			</div>
 			<div id="page-inner">
 				<div class="row">
@@ -196,6 +246,33 @@
 													</div>
 													<div class="share">
 														<i class="fas fa-share-alt"></i>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<div class="download-box">
+														<c:forEach items='${thumbnails}' var='thumbnail'>
+															<div class='upload-item'>
+																<div class='upload-top'>
+																	<span>
+																		<img src="${thumbnail.thumbnail_link}" alt="Attachment" class='upload-image'>
+																	</span>
+																</div>
+																<div class='upload-bottom'>
+																	<p class='upload-file-name'>${thumbnail.file_name}</p>
+																	
+																	<!-- 
+																	<form action="/referenceboard/displayfile" method="POST" id='download-form'>
+																		<input type="hidden" name='file_link' value='${thumbnail.file_link}'>
+																	</form>
+																	<a onclick='$("#download-form").submit()' download><i class="far fa-arrow-alt-circle-down"></i></a> 
+																	 -->
+																	
+																	<a href='${thumbnail.file_link}' download><i class="far fa-arrow-alt-circle-down"></i></a>
+																</div>
+															</div> 
+														</c:forEach>
 													</div>
 												</td>
 											</tr>
@@ -320,9 +397,23 @@
 	<!-- Handlebars -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script> 
 
+	<script id="thumbnail-template" type="text/x-handlebars-template">
+		<div class='upload-item'>
+			<div class='upload-top'>
+				<span>
+					<img src="{{thumbnail_link}}" alt="Attachment" class='upload-image'>
+				</span>
+			</div>
+			<div class='upload-bottom'>
+				<p class='upload-file-name'>{{file_name}}</p>
+				<i class="far fa-window-close" onclick='deleteUploadedFile()' id='{{thumbnail_link}}'></i>
+			</div>
+		</div>              
+	</script>  
+
 	<script type="text/javascript">
 		var isOpenReCommentWriteBox = false;
-	
+		
 		function deleteComment(idx, bo_idx, comment_idx) {
 			var isWantDelete = confirm('정말 삭제하시겠습니까?');
 			

@@ -187,6 +187,11 @@ public class ReferenceBoardServiceImpl implements ReferenceBoardService {
 	@Override
 	public void removePostFile(String fileLink) throws Exception {
 		filesDAO.deleteWithFileLink(fileLink);
+	}
+
+	@Override
+	public ArrayList<ThumbnailDTO> getThumbnails(Integer bo_idx) throws Exception {
+		return filesDAO.selectByBoIdx(bo_idx);
 	}	
 
 }

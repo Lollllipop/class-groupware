@@ -135,7 +135,6 @@ public class FileUploadManager {
 		}else{
 			this.thumbnailLink = makeFileIcon(file);
 		}
-		
 	}
 
 	public String getThumbnailLink() {
@@ -152,7 +151,7 @@ public class FileUploadManager {
 			File thumbnail		= new File(thumbnailPath);
 	    	
 	    	if (originalFile.exists()) {
-	    		Thumbnails.of(originalFile).size(100, 100).toFile(thumbnail);
+	    		Thumbnails.of(originalFile).size(70, 70).toFile(thumbnail);
 	    	}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -162,8 +161,11 @@ public class FileUploadManager {
 	}
 	
 	public String makeFileIcon(MultipartFile file) {
-		// 이미지 하나 생성해서 섬네일 만들기!
-		return null;
+		String thumbnailPath = this.getRealPath() + "resources\\image\\file_thumbnail.png";
+		
+		System.out.println(this.getRealPath() + "file_thumbnail.png");
+		
+		return makeURI(thumbnailPath);
 	}
 	
 	public String makeUniqueFileName(String originalFileName) {
