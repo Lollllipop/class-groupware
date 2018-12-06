@@ -7,7 +7,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<insert id="insert">
 		insert into comments
-		values(comments_seq.nextval, #{bo_idx}, #{class_idx}, #{user_idx}, #{comm_parent_idx}, #{comm_content}, SYSDATE, #{comm_role})
+		values(comments_seq.nextval, #{bo_idx}, #{user_idx}, #{comm_parent_idx}, #{comm_content}, SYSDATE, #{comm_role})
+	</insert>
+	
+	<insert id="insertReComment">
+		insert into comments
+		values(comments_seq.nextval, #{bo_idx}, #{user_idx}, #{comm_parent_idx}, #{comm_content}, SYSDATE, #{comm_role})
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.CommentsVO">
@@ -31,15 +36,21 @@ select comment_idx, bo_idx, class_idx,
 	</select>
 
 	<update id="update">
-		update comments set comm_content
-		=#{comm_content}, comm_writedate = SYSDATE
-		where
-		comment_idx = #{comment_idx}
+		update comments 
+		set comm_content = #{comm_content}
+		where comment_idx = #{comment_idx}
+	</update>
+	
+	<update id="updateCommentsWithMinusOne">
+		update board 
+		set bo_comments = bo_comments - 1
+		where bo_idx = #{bo_idx}
 	</update>
 
 	<delete id="delete">
-		delete from comments where comment_idx =
-		#{comment_idx}
+		delete 
+		from comments 
+		where comment_idx = #{comment_idx}
 	</delete>
 
 

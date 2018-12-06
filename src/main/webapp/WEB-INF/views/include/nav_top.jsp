@@ -8,7 +8,7 @@
 			<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
 			<span class="icon-bar"></span> <span class="icon-bar"></span>
 		</button>
-		<a class="navbar-brand waves-effect waves-dark" href="index.html"><i
+		<a class="navbar-brand waves-effect waves-dark" href="/"><i
 			class="large material-icons">track_changes</i> <strong>ChoongAng</strong></a>
 		<div id="sideNav" href="">
 			<i class="material-icons dp48">toc</i>

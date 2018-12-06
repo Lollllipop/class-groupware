@@ -13,13 +13,17 @@ import lombok.Setter;
 @AllArgsConstructor	// 모든 필드를 파라미터로 가지는 생성자 자동 생성
 public class BoardVO {
 
-	private int bo_idx;
-	private int class_idx;
-	private int user_idx;
-	private String bo_title;
-	private String bo_content;
-	private Date bo_writedate;
-	private String bo_isnotice;
-	private String bo_role;
+	private int 	bo_idx;
+	private int 	class_idx;
+	private int 	user_idx;
+	private String 	bo_title;
+	private String 	bo_content;
+	private Date 	bo_writedate;
+	private String 	bo_isnotice;
+	private String 	bo_role;
+	private int 	bo_views;
+	private Date 	bo_updatedate;
+	private int 	bo_comments;
+	private String  bo_hasfiles;
 	
 }

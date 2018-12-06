@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<insert id="insert">
 		insert into files
-		values(files_seq.nextval, #{bo_idx}, #{class_idx}, #{file_link}, #{file_name}, #{file_role})
+		values(files_seq.nextval, (select max(bo_idx) + 1 from board), #{class_idx}, #{file_link}, #{file_name}, #{file_role})
 	</insert>
 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.FilesVO">
@@ -18,6 +18,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		files
 		where file_idx =
 		#{file_idx}
+	</select>
+	
+	<select id="selectByBoIdx" resultType="com.ja.classgroupware.board.domain.ThumbnailDTO">
+		SELECT * 
+		FROM files
+		WHERE bo_idx = #{bo_idx}
+		AND FILE_ROLE = 'referenceboard'
 	</select>
 
 	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.FilesVO">
@@ -43,5 +50,11 @@ select file_idx, bo_idx, class_idx,
 		delete from files where file_idx =
 		#{file_idx}
 	</delete>
-
+	
+	<delete id="deleteWithFileLink">
+		delete 
+		from files 
+		where file_link = #{file_link}
+	</delete>
+	
 </mapper>

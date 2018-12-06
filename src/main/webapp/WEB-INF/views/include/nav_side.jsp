@@ -19,10 +19,10 @@
                 <a href="#" class="waves-effect waves-dark"><i class="fa fa-qrcode"></i>과제</a>
             </li>
             <li>
-                <a href="open_board_list.jsp" class="waves-effect waves-dark"><i class="fa fa-table"></i>자유게시판</a>
+                <a href="/openboard" class="waves-effect waves-dark"><i class="fa fa-table"></i>자유게시판</a>
             </li>
             <li>
-                <a href="#" class="waves-effect waves-dark"><i class="fa fa-edit"></i>자료실</a>
+                <a href="/referenceboard" class="waves-effect waves-dark"><i class="fa fa-edit"></i>자료실</a>
             </li>
             <li>
                 <a href="#" class="waves-effect waves-dark"><i class="fa fa-sitemap"></i>수강학생목록</a>

@@ -16,5 +16,4 @@ public interface AttendanceDAO {
 	
 	public void delete(int attendace_idx) throws Exception;
 	
-
 }
