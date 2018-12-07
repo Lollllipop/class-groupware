@@ -5,26 +5,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.ja.classgroupware.base.persistence.UsersDAO">
 	
-	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.UsersVO">
-		select user_idx, user_id, user_email, user_name, user_password, user_role
+	<select id="selectByIdx" resultType="com.ja.classgroupware.user.domain.UsersDateVO">
+		select user_idx, user_id, user_email, user_name, user_password, user_role, user_joindate
 		from users
 		where user_idx = #{user_idx}
 	</select>
 
-	<select id="selectPosts" resultType="com.ja.classgroupware.user.domain.myPostsVO">
+	<select id="selectPosts" resultType="com.ja.classgroupware.user.domain.MyPostsVO">
 		 <![CDATA[
-			select bo_idx, class_idx, bo_title, bo_role, class_name
-			from users, class
-			where user_idx = #{user_idx} and board.class_idx = class.class_idx
+			select board.bo_idx, board.class_idx, board.bo_title, board.bo_role, class.class_name
+			from board, class
+			where board.user_idx = #{user_idx} and board.class_idx = class.class_idx
 		 ]]>
 	</select>
 
 	<update id="update">
 		update users
 		set user_email = #{user_email},
-			user_name = #{user_name},
-			user_password = #{user_password},
-			user_role = #{user_role}
+			user_password = #{user_password}
 		where user_idx = #{user_idx}
 	</update>
 

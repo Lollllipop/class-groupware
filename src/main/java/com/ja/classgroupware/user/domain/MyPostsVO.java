@@ -1,6 +1,6 @@
 package com.ja.classgroupware.user.domain;
 
-public class myPostsVO {
+public class MyPostsVO {
 	
 	private Integer bo_idx;
 	private Integer class_idx;
@@ -43,5 +43,5 @@ public class myPostsVO {
 		return "BoardVO [bo_idx=" + bo_idx + ", class_idx=" + class_idx + ", bo_title=" + bo_title + ", bo_role="
 				+ bo_role + ", class_name=" + class_name + "]";
 	}
-	
+
 }
