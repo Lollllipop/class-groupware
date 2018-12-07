@@ -4,11 +4,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ja.classgroupware.base.persistence.SchedulerDAO">
-	<insert id="insert">
-		insert into scheduler
-		values(scheduler_seq.nextval ,#{scheduler_idx}, #{class_idx}, #{scheduler_content}, #{scheduler_startdate}, #{scheduler_enddate})
-	</insert>
-
+	
+<!-- 
 	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.SchedulerVO">
 		select * from scheduler
 		where scheduler_idx=#{scheduler_idx}
@@ -20,14 +17,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			 where scheduler_idx > 0 
 			 order by hw_idx desc
 		 ]]>
-	</select>
+	</select> -->
 
 	<update id="update">
-		update scheduler set scheduler_content
-		=#{scheduler_content},
-		scheduler_startdate
-		=#{scheduler_startdate}, scheduler_enddate
-		=#{scheduler_enddate}
+		update scheduler set 
+			scheduler_content=#{scheduler_content},
+			scheduler_startdate=#{scheduler_startdate}, 
+			scheduler_enddate=#{scheduler_enddate},
+			scheduler_color=#{scheduler_color}
 		where
 		scheduler_idx = #{scheduler_idx}
 	</update>
@@ -36,4 +33,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		delete from scheduler where scheduler_idx =
 		#{scheduler_idx}
 	</delete>
+	
+	<!-- custom -->
+	<insert id="insert">
+		insert into scheduler
+		values(scheduler_seq.nextval ,#{class_idx}, #{scheduler_content}, #{scheduler_startdate}, #{scheduler_enddate}, #{scheduler_color})
+	</insert>
+	
+	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.SchedulerVO">
+		select * from scheduler
+		where class_idx=#{class_idx}
+	</select>
+	
+	<select id="selectDetail" resultType="com.ja.classgroupware.base.vo.SchedulerVO">
+		select * from scheduler
+		where scheduler_idx=#{scheduler_idx}
+	</select>
 </mapper>

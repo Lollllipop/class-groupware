@@ -1,4 +1,4 @@
-package com.ja.classgroupware.schedular.domain;
+package com.ja.classgroupware.scheduler.domain;
 
 import java.util.Arrays;
 import java.util.Date;

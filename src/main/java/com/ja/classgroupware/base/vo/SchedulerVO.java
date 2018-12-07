@@ -18,5 +18,6 @@ public class SchedulerVO {
 	private String scheduler_content;
 	private Date scheduler_startdate;
 	private Date scheduler_enddate;
+	private String scheduler_color;
 	
 }
