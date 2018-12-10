@@ -5,17 +5,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.ja.classgroupware.base.persistence.UsersDAO">
 	
+	<!-- 회원가입, 로그인 -->
+	
 	<insert id="insert">
 		insert into users
 		values(users_seq.nextval, #{user_id}, #{user_email}, #{user_name}, #{user_password}, #{user_role})
 	</insert>
 
-	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.UsersVO">
-		select user_idx, user_id, user_email, user_name, user_password, user_role
-		from users
-		where user_idx = #{user_idx}
-	</select>
-	
 	<!-- 아이디 찾기 이메일로 select문 -->
 	<select id="selectByEmail" resultType="com.ja.classgroupware.base.vo.UsersVO">
 		select user_id
@@ -23,38 +19,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where user_email = #{user_email}
 	</select>
 	
-	
-	<select id="selectAll" resultType="com.ja.classgroupware.base.vo.UsersVO">
-		 <![CDATA[
-			select user_idx, user_id, user_email, user_name, user_password, user_role
-			from users
-			where user_idx > 0
-		 ]]>
-	</select>
-
-	<update id="update">
-		update class
-		set user_email = #{user_email},
-			user_name = #{user_name},
-			user_password = #{user_password},
-			user_role = #{user_role}
-		where user_idx = #{user_idx}
-	</update>
-
-	<delete id="delete">
-		delete 
-		from users 
-		where user_idx = #{user_idx}
-	</delete>
-	
 	<!-- 로그인 처리 -->
 	 <select id="login" resultType="com.ja.classgroupware.base.vo.UsersVO">
         select * from users where user_id = #{user_id} and user_password = #{user_password}
     </select>
 
-
-
-	
  	<update id="keepLogin">
 		update users set sessionKey = #{sessionId}, sessionLimit = #{next} where
 		user_id = #{user_id}
@@ -64,6 +33,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from users where sessionKey = #{value} and sessionlimit > now()
 	</select>
 	
+	<!-- 마이페이지 -->
 	
+	<select id="selectByIdx" resultType="com.ja.classgroupware.user.domain.UsersDateVO">
+		select user_idx, user_id, user_email, user_name, user_password, user_role, user_joindate
+		from users
+		where user_idx = #{user_idx}
+	</select>
 
+	<select id="selectPosts" resultType="com.ja.classgroupware.user.domain.MyPostsVO">
+		 <![CDATA[
+			select board.bo_idx, board.class_idx, board.bo_title, board.bo_role, class.class_name
+			from board, class
+			where board.user_idx = #{user_idx} and board.class_idx = class.class_idx
+		 ]]>
+	</select>
+
+	<update id="update">
+		update users
+		set user_email = #{user_email},
+			user_password = #{user_password}
+		where user_idx = #{user_idx}
+	</update>
+	
 </mapper>

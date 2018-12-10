@@ -7,28 +7,18 @@ import java.util.List;
 
 import com.ja.classgroupware.auth.domain.LoginDTO;
 import com.ja.classgroupware.base.vo.UsersVO;
-
+import com.ja.classgroupware.user.domain.MyPostsVO;
+import com.ja.classgroupware.user.domain.UsersDateVO;
 
 
 
 
 public interface UsersDAO {
 	
-	
-	/*@Autowired
-	private UserMapper UserMapper;*/
-	
-	public void insert(UsersVO vo) throws Exception;
-
-	public UsersVO selectByIdx(int class_idx) throws Exception;
-
-	public List<UsersVO> selectAll() throws Exception;
-
-	public void update(UsersVO vo) throws Exception;
-
-	public void delete(int class_idx) throws Exception;
+	// 회원가입, 로그인
 	
 	//public UsersVO login(UsersVO dto) throws Exception; //login 블로그 예제
+	public void insert(UsersVO vo) throws Exception;
 	
 	public UsersVO login(LoginDTO dto) throws Exception; //login 수업 예제
 	
@@ -38,6 +28,12 @@ public interface UsersDAO {
 
 	public UsersVO selectByEmail(String user_email) throws Exception;
 	
+	// 마이페이지
+	public UsersDateVO selectByIdx(int user_idx) throws Exception;
+
+	public List<MyPostsVO> selectPosts(int user_idx) throws Exception;
+
+	public void update(UsersDateVO vo) throws Exception; 
 	
 	
 }
