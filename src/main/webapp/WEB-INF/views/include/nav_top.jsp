@@ -28,7 +28,12 @@
 </nav>
 <!-- Dropdown Structure -->
 <ul id="dropdown1" class="dropdown-content">
-	<li><a href="/myPage"><i class="fa fa-user fa-fw"></i>내 정보</a></li>
+	<li>
+	<%-- <form action="/myPage" method="get"><input type="hidden" id="user_idx" name="user_idx"value="${login.user_idx}"> --%>
+	<a href="/myPage?user_idx=${login.user_idx}">
+	<i class="fa fa-user fa-fw"></i>내 정보</a>
+	<!-- </form> -->
+	</li>
 	<li><a href="/entity/auth/logout"><i class="fa fa-sign-out fa-fw"></i>로그아웃</a></li>
 </ul>
 <ul id="dropdown2" class="dropdown-content dropdown-tasks w250 taskList">

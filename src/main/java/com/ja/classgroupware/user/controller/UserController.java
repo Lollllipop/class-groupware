@@ -27,9 +27,8 @@ private static final Logger logger = LoggerFactory.getLogger(UserController.clas
 	private MypageService service;
 	
 	@RequestMapping(value = "/myPage", method = RequestMethod.GET)
-	  public String listAll(Model model) throws Exception {
+	  public String listAll(int user_idx, Model model) throws Exception {
 		String page = "/entity/user/my_page";
-		int user_idx=1;
 	    logger.info("show all list......................");
 	    model.addAttribute("list", service.listAll(user_idx));
 	    model.addAttribute("usersVO",service.read(user_idx));
