@@ -25,7 +25,10 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
     ModelMap modelMap = modelAndView.getModelMap();
     Object usersVO = modelMap.get("usersVO");
-
+    
+    System.out.println("로그인 인터셉터에 들어왔어요 유저VO가 있나요?");
+    System.out.println(usersVO);
+    	
     if (usersVO != null) {
 
       logger.info("new login success");
@@ -44,7 +47,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
       Object dest = session.getAttribute("dest");
 
       //response.sendRedirect(dest != null ? (String) dest : "/");
-      response.sendRedirect(dest != null ? (String) dest : "/classlist");
+      response.sendRedirect(dest != null ? (String) dest : "/entity/class/class_list");
     }
   }
 

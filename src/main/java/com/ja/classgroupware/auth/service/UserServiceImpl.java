@@ -17,7 +17,10 @@ public class UserServiceImpl implements UserService {
 
    @Override
    public UsersVO login(LoginDTO dto) throws Exception {
-
+	   
+	   System.out.println(dto + "23123123");
+	   
+	  
       return dao.login(dto);
    }
 

@@ -97,14 +97,18 @@ public class AuthController {
    */
    @RequestMapping(value = "/loginPost", method = RequestMethod.POST)
    public void loginPOST(LoginDTO dto, HttpSession session, Model model) throws Exception {
-
+	   
+	   System.out.println(dto);
+	   
       UsersVO vo = service.login(dto);
+      
+      System.out.println(2);
       
       if (vo == null) {
          return;
       }
-      System.out.println("id : " + vo.getUser_id());
-      System.out.println("pw : " + vo.getUser_password());
+      
+      System.out.println(3);
 
       model.addAttribute("usersVO", vo);
 
@@ -115,7 +119,6 @@ public class AuthController {
          Date sessionLimit = new Date(System.currentTimeMillis() + (1000 * amount));
 
          service.keepLogin(vo.getUser_id(), session.getId(), sessionLimit);
-         System.out.println("test");
       }
    }
    

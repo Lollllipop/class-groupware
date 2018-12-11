@@ -9,7 +9,7 @@
 </head>
 <body>
    <script type="text/javascript">
-   self.location = "/classlist"; //메인페이지
+   self.location = "/entity/class/class_list"; //메인페이지
    </script>
 </body>
 </html>
