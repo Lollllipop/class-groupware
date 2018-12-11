@@ -54,7 +54,7 @@ public class UserlistController {
 
 	    rttr.addFlashAttribute("msg", "SUCCESS");
 	    // 수강신청 후에는 마이페이지나 클래스리스트가 좋을 듯함
-	    return "redirect:/userList/listAll";
+	    return "redirect:/entity/class/class_list";
 	    //return "redirect:/user_list/user_list";
 	  }
 	
@@ -64,6 +64,8 @@ public class UserlistController {
 		int class_idx=1;
 	    logger.info("show all list......................");
 	    model.addAttribute("list", service.listAll(class_idx));
+	    
+	    System.out.println("aaaaaa");
 	    
 	    return page;
 	  }

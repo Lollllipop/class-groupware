@@ -3,7 +3,7 @@ package com.ja.classgroupware.classlist.domain;
 import java.util.Arrays;
 import java.util.Date;
 
-public class TetsVO {
+public class BoardVO {
 	
 	private Integer bno;
 	private String title;

@@ -83,7 +83,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
 	@Override
 	public ClassVO selectClass(int class_idx) throws Exception {
-		ClassVO classList = classDAO.selectByIdx(class_idx);
+		ClassVO classList = classDAO.read(class_idx);
 		
 		System.out.println( classList.getClass_name() + "/" + classList.getClass_startdate() + "/" + classList.getClass_enddate() + "/" + classList.getClass_idx() + "/" );
 		

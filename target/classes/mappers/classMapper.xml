@@ -10,7 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		values(class_seq.nextval, #{class_name}, #{class_about}, #{class_startdate}, #{class_enddate})
 	</insert>
 
-	<select id="selectByIdx" resultType="com.ja.classgroupware.base.vo.ClassVO">
+	<select id="read" resultType="com.ja.classgroupware.base.vo.ClassVO">
 		select class_idx, class_name,
 		class_about,
 		class_startdate, class_enddate from
