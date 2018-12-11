@@ -9,26 +9,26 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-	<meta charset="utf-8" />
+   <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     
     <%-- 여기에 css등 링크 작성!! --%>
    
 </head>
 
 <body>
-	<div class="container">	
-		<form>
-		  <div class="form-group">
-		    <label for="exampleInputEmail1">귀하의 비밀번호는 <% %>입니다.</label>
-		    
-		   <!--  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter ID"> -->
-		   <small id="emailHelp" class="form-text text-muted">확인하시고 로그인바랍니다.</small>
-		  </div>
-		  <div class="row justify-content-end" style="margin-right : 2px;">
-		  </div>
-		</form>
-	</div>
+   <div class="container">   
+      <form>
+        <div class="form-group">
+          <label for="exampleInputEmail1">귀하의 비밀번호는${usersVO.user_password} 입니다.</label>
+          
+         <!--  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter ID"> -->
+         <small id="emailHelp" class="form-text text-muted">확인하시고 로그인바랍니다.</small>
+        </div>
+        <div class="row justify-content-end" style="margin-right : 2px;">
+        </div>
+      </form>
+   </div>
 </body>
 </html>

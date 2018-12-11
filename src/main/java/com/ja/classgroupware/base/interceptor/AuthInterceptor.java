@@ -15,79 +15,78 @@ import com.ja.classgroupware.auth.service.UserService;
 
 public class AuthInterceptor extends HandlerInterceptorAdapter {
 
-	private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
+   private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
 
-	@Inject
-	private UserService service;
+   @Inject
+   private UserService service;
 
-	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-			throws Exception {
+   @Override
+   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+         throws Exception {
 
-		HttpSession session = request.getSession();
+      HttpSession session = request.getSession();
 
-		if (session.getAttribute("login") == null) {
+      if (session.getAttribute("login") != null) {
 
-			logger.info("current user is not logined");
+         logger.info("current user is not logined");
 
-			saveDest(request);
+         saveDest(request);
 
-			Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
+         Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
 
-			if (loginCookie != null) {
+         if (loginCookie != null) {
 
-				UsersVO usersVO = service.checkLoginBefore(loginCookie.getValue());
+            UsersVO usersVO = service.checkLoginBefore(loginCookie.getValue());
 
-				logger.info("USERSVO: " + usersVO);
+            logger.info("USERSVO: " + usersVO);
 
-				if (usersVO != null) {
-					session.setAttribute("login", usersVO);
-					return true;
-				}
+            if (usersVO != null) {
+               session.setAttribute("login", usersVO);
+               return true;
+            }
+         }
 
-			}
+         response.sendRedirect("/entity/auth/login");
+         return false;
+      }
+      return true;
+   }
 
-			response.sendRedirect("/entity/auth/login");
-			return false;
-		}
-		return true;
-	}
+   private void saveDest(HttpServletRequest req) {
 
-	private void saveDest(HttpServletRequest req) {
+      String uri = req.getRequestURI();
 
-		String uri = req.getRequestURI();
+      String query = req.getQueryString();
 
-		String query = req.getQueryString();
+      if (query == null || query.equals("null")) {
+         query = "";
+      } else {
+         query = "?" + query;
+      }
 
-		if (query == null || query.equals("null")) {
-			query = "";
-		} else {
-			query = "?" + query;
-		}
+      if (req.getMethod().equals("GET")) {
+         logger.info("dest: " + (uri + query));
+         req.getSession().setAttribute("dest", uri + query);
+      }
+   }
 
-		if (req.getMethod().equals("GET")) {
-			logger.info("dest: " + (uri + query));
-			req.getSession().setAttribute("dest", uri + query);
-		}
-	}
-
-	// @Override
-	// public boolean preHandle(HttpServletRequest request, HttpServletResponse
-	// response, Object handler) throws Exception {
-	//
-	// HttpSession session = request.getSession();
-	//
-	// if (session.getAttribute("login") == null) {
-	//
-	// logger.info("current user is not logined");
-	//
-	// saveDest(request);
-	//
-	// response.sendRedirect("/user/login");
-	// return false;
-	// }
-	// return true;
-	// }
+   // @Override
+   // public boolean preHandle(HttpServletRequest request, HttpServletResponse
+   // response, Object handler) throws Exception {
+   //
+   // HttpSession session = request.getSession();
+   //
+   // if (session.getAttribute("login") == null) {
+   //
+   // logger.info("current user is not logined");
+   //
+   // saveDest(request);
+   //
+   // response.sendRedirect("/user/login");
+   // return false;
+   // }
+   // return true;
+   // }
 }
 
 // if(session.getAttribute("login") == null){

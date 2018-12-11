@@ -14,26 +14,28 @@ import com.ja.classgroupware.user.domain.UsersDateVO;
 
 
 public interface UsersDAO {
-	
-	// 회원가입, 로그인
-	
-	//public UsersVO login(UsersVO dto) throws Exception; //login 블로그 예제
-	public void insert(UsersVO vo) throws Exception;
-	
-	public UsersVO login(LoginDTO dto) throws Exception; //login 수업 예제
-	
-	public void keepLogin(String user_id, String sessionId, Date next);
+   
+   // 회원가입, 로그인
+   
+   //public UsersVO login(UsersVO dto) throws Exception; //login 블로그 예제
+   public void insert(UsersVO vo) throws Exception;
+   
+   public UsersVO login(LoginDTO dto) throws Exception; //login 수업 예제
+   
+   public void keepLogin(String user_id, String sessionId, Date next);
 
-	public UsersVO checkUserWithSessionKey(String value);
+   public UsersVO checkUserWithSessionKey(String value);
 
-	public UsersVO selectByEmail(String user_email) throws Exception;
-	
-	// 마이페이지
-	public UsersDateVO selectByIdx(int user_idx) throws Exception;
+   public UsersVO selectByEmail(String user_email) throws Exception;
+   
+   public UsersVO selectById(String user_id) throws Exception;
+   
+   // 마이페이지
+   public UsersDateVO selectByIdx(int user_idx) throws Exception;
 
-	public List<MyPostsVO> selectPosts(int user_idx) throws Exception;
+   public List<MyPostsVO> selectPosts(int user_idx) throws Exception;
 
-	public void update(UsersDateVO vo) throws Exception; 
-	
-	
+   public void update(UsersDateVO vo) throws Exception; 
+   
+   
 }

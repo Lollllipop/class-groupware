@@ -41,20 +41,18 @@
 				"width=400, height=430, left=300, top=300");
 		/* setTimeout ( self.close(), 5000)  */
 	}
-	
-/* 	var formObj = $("form[role='form']");
 
-	$('#submit').click(
-			function() {
+	/* 	var formObj = $("form[role='form']");
 
-				formObj.attr("action",
-						"/userList/register");
-				formObj.attr("method", "post");
-				formObj.submit();
+	 $('#submit').click(
+	 function() {
 
-			}); */
+	 formObj.attr("action",
+	 "/userList/register");
+	 formObj.attr("method", "post");
+	 formObj.submit();
 
-	
+	 }); */
 </script>
 
 <!-- 제이쿼리 -->
@@ -70,10 +68,13 @@
 				<h1 class="page-header">
 					수업 목록
 					<!-- 마스터에게만 보임 -->
-					<button class="btn btn-danger" id='newBtn' onclick="class_create()">
-						<!-- id = 'newBtn' -->
-						<i class="material-icons left">settings</i>수업 개설
-					</button>
+					<c:if test="${login.user_role=='master'}">
+						<button class="btn btn-danger" id='newBtn'
+							onclick="class_create()">
+							<!-- id = 'newBtn' -->
+							<i class="material-icons left">settings</i>수업 개설
+						</button>
+					</c:if>
 				</h1>
 			</div>
 
@@ -89,7 +90,7 @@
 							<div class="card">
 
 								<div class="card-action">
-									<b>수강 중</b>
+									<b>수업</b>
 								</div>
 
 								<div class="card-image">
@@ -111,21 +112,24 @@
 														<i class="material-icons left">delete</i>수강포기
 													</button> --> <span style="float: right;">
 												<form action="/userList/register" method="post">
-													<input type=hidden name="user_idx" value="2"> 
-													<input type=hidden name="class_idx" value="${classVO.class_idx}">
+													<input type=hidden name="user_idx" value="2"> <input
+														type=hidden name="class_idx" value="${classVO.class_idx}">
 													<button type="submit" class="btn btn-success">
 														<i class="material-icons left">done</i>수강신청
 													</button>
-												</form> <a href="./class_update?class_idx=${classVO.class_idx}"
-												onclick="window.open(this.href, 'classUp', 'width=400, height=430, left=300, top=300'); return false">
-													<button class="btn btn-danger">
-														<i class="material-icons left">update</i>수업 수정
+
+												</form> <c:if test="${login.user_role=='master'}">
+													<a href="./class_update?class_idx=${classVO.class_idx}"
+														onclick="window.open(this.href, 'classUp', 'width=400, height=430, left=300, top=300'); return false">
+														<button class="btn btn-danger">
+															<i class="material-icons left">update</i>수업 수정
+														</button>
+													</a>
+													<button type="submit" class="btn btn-danger"
+														onclick="location.href='delete?class_idx=${classVO.class_idx}'">
+														<i class="material-icons left">settings</i>수업 삭제
 													</button>
-											</a>
-												<button type="submit" class="btn btn-danger"
-													onclick="location.href='delete?class_idx=${classVO.class_idx}'">
-													<i class="material-icons left">settings</i>수업 삭제
-												</button>
+												</c:if>
 										</span></li>
 
 									</ul>
@@ -265,12 +269,12 @@
 				</div>
 
 				<script>
-	var result = '${msg}';
+					var result = '${msg}';
 
-	if (result == 'SUCCESS') {
-		alert("처리가 완료되었습니다.");
-	}
-</script>
+					if (result == 'SUCCESS') {
+						alert("처리가 완료되었습니다.");
+					}
+				</script>
 
 				<%@ include file="/WEB-INF/views/include/footer.jsp"%>
 

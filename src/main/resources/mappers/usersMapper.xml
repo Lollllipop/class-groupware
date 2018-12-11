@@ -6,32 +6,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ja.classgroupware.base.persistence.UsersDAO">
 	
 	<!-- 회원가입, 로그인 -->
-	
-	<insert id="insert">
-		insert into users
-		values(users_seq.nextval, #{user_id}, #{user_email}, #{user_name}, #{user_password}, #{user_role})
-	</insert>
+   
+   <insert id="insert">
+      insert into users
+      values(users_seq.nextval, #{user_id}, #{user_email}, #{user_name}, #{user_password}, #{user_role},sysdate)
+   </insert>
 
-	<!-- 아이디 찾기 이메일로 select문 -->
-	<select id="selectByEmail" resultType="com.ja.classgroupware.base.vo.UsersVO">
-		select user_id
-		from users 
-		where user_email = #{user_email}
-	</select>
-	
-	<!-- 로그인 처리 -->
-	 <select id="login" resultType="com.ja.classgroupware.base.vo.UsersVO">
+   <!-- 아이디 찾기 이메일로 select문 -->
+   <select id="selectByEmail" resultType="com.ja.classgroupware.base.vo.UsersVO">
+      select user_id
+      from users 
+      where user_email = #{user_email}
+   </select>
+   
+      <!-- 비번 찾기 id로 select문 -->
+   <select id="selectById" resultType="com.ja.classgroupware.base.vo.UsersVO">
+      select user_password
+      from users 
+      where user_id = #{user_id}
+   </select>
+   
+   
+   <!-- 로그인 처리 -->
+    <select id="login" resultType="com.ja.classgroupware.base.vo.UsersVO">
         select * from users where user_id = #{user_id} and user_password = #{user_password}
     </select>
 
- 	<update id="keepLogin">
-		update users set sessionKey = #{sessionId}, sessionLimit = #{next} where
-		user_id = #{user_id}
-	</update>
+    <update id="keepLogin">
+      update users set sessionKey = #{sessionId}, sessionLimit = #{next} where
+      user_id = #{user_id}
+   </update>
 
-	<select id="checkUserWithSessionKey" resultType="com.ja.classgroupware.base.vo.UsersVO">
-		select * from users where sessionKey = #{value} and sessionlimit > now()
-	</select>
+   <select id="checkUserWithSessionKey" resultType="com.ja.classgroupware.base.vo.UsersVO">
+      select * from users where sessionKey = #{value} and sessionlimit > now()
+   </select>
 	
 	<!-- 마이페이지 -->
 	
@@ -46,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			select board.bo_idx, board.class_idx, board.bo_title, board.bo_role, class.class_name
 			from board, class
 			where board.user_idx = #{user_idx} and board.class_idx = class.class_idx
+			order by board.bo_idx desc
 		 ]]>
 	</select>
 

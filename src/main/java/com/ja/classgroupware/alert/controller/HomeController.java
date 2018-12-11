@@ -16,40 +16,56 @@ import com.ja.classgroupware.base.vo.AlertVO;
 @Controller
 public class HomeController {
 
-	@Autowired
-	private AlertDAO boardMapper;
+   @Autowired
+   private AlertDAO boardMapper;
 
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+   private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
-	/**
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) throws Exception {
-		// throw new Exception();
-		logger.info("Welcome home! The client locale is {}.", locale);
+   /**
+    * @throws Exception
+    */
+   @RequestMapping(value = "/main", method = RequestMethod.GET)
+   public String home(Locale locale, Model model) throws Exception {
+      // throw new Exception();
+      logger.info("Welcome home! The client locale is {}.", locale);
 
-		// 임시 코드...
-		AlertVO alertVO = new AlertVO(2, 2, 2, "2", 2, "2");
-		boardMapper.insert(alertVO);
+      // 임시 코드...
+      AlertVO alertVO = new AlertVO(2, 2, 2, "2", 2, "2");
+      boardMapper.insert(alertVO);
 
-		System.out.println("개선 성공!!!!!!!!!!!!");
-		//
+      System.out.println("개선 성공!!!!!!!!!!!!");
+      //
 
-		return "template";
-	}
+      return "MainPage";
+   }
+   
+   @RequestMapping(value = "/classlist", method = RequestMethod.GET)
+   public String main(Locale locale, Model model) throws Exception {
+      // throw new Exception();
+      logger.info("Welcome home! The client locale is {}.", locale);
 
-	@RequestMapping(value = "/doA", method = RequestMethod.GET)
-	public String doA(Locale locale, Model model) {
-		System.out.println("doA....................");
-		return "template";
-	}
+      // 임시 코드...
+      AlertVO alertVO = new AlertVO(2, 2, 2, "2", 2, "2");
+      boardMapper.insert(alertVO);
 
-	@RequestMapping(value = "/doB", method = RequestMethod.GET)
-	public String doB(Locale locale, Model model) {
-		System.out.println("doB....................");
-		model.addAttribute("result", "DOB RESULT");
-		return "template";
-	}
+      System.out.println("개선 성공!!!!!!!!!!!!");
+      //
+
+      return "/entity/class/class_list";
+   }
+   
+   
+   @RequestMapping(value = "/doA", method = RequestMethod.GET)
+   public String doA(Locale locale, Model model) {
+      System.out.println("doA....................");
+      return "template";
+   }
+
+   @RequestMapping(value = "/doB", method = RequestMethod.GET)
+   public String doB(Locale locale, Model model) {
+      System.out.println("doB....................");
+      model.addAttribute("result", "DOB RESULT");
+      return "template";
+   }
 
 }

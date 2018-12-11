@@ -124,7 +124,7 @@
 												</tr>
 												<tr>
 													<td style="text-align: center">작성자</td>
-													<td>${user_name}</td>
+													<td>${login.user_name}</td>
 												</tr>
 											</thead>
 											<tbody>

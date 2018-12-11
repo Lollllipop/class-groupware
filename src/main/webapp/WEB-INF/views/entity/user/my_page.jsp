@@ -101,14 +101,14 @@
 										</tr>
 									</thead>
 									<tbody>
-										<c:forEach items="${list}" var="myPostsVO">
+										<c:forEach items="${list}" var="myPostsVO" begin="0" end="6">
 
 											<tr>
-												<td><a href="#">${myPostsVO.bo_title}</a> <!-- 글 번호 넘겨줘서 링크 -->
+												<td><a href="/openboard/${myPostsVO.bo_idx}">${myPostsVO.bo_title}</a> <!-- 글 번호 넘겨줘서 링크 -->
 												</td>
 												<td><c:if test="${myPostsVO.bo_role=='openboard'}">
 													자유게시판
-													</c:if> <c:if test="${myPostsVO.bo_role=='data'}">
+													</c:if> <c:if test="${myPostsVO.bo_role=='referenceboard'}">
 													자료실
 													</c:if></td>
 												<td>${myPostsVO.class_name}</td>

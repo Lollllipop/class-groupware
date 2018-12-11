@@ -104,7 +104,7 @@
 														<td>${userListVO.user_email}</td>
 														<td>승인이 이루어져야 가입됩니다.</td>
 														<td>
-
+															<c:if test="${login.user_role=='teacher'}">
 															<form action="/userList/modify" method="post">
 																<input type="hidden" name="user_idx"
 																	value="${userListVO.user_idx}">
@@ -115,6 +115,7 @@
 																	value="${userListVO.user_idx}">
 																<button type="submit" class="btn btn-danger">거절</button>
 															</form>
+															</c:if>
 														</td>
 													</tr>
 												</c:if>
@@ -174,11 +175,13 @@
 														<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
 																value="${userListVO.class_joindate}" /></td>
 														<td>
+														<c:if test="${login.user_role=='teacher'}">
 															<form action="/userList/remove" method="post">
 																<input type="hidden" name="user_idx"
 																	value="${userListVO.user_idx}">
 																<button type="submit" class="btn btn-danger">제외</button>
 															</form>
+															</c:if>
 														</td>
 													</tr>
 												</c:if>

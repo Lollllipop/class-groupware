@@ -323,14 +323,16 @@
 										
 					    				<div class="timeline-footer">
 					    				
-					    					<!-- if문 사용해서 현재 세션의 user_idx와 현재 댓글의 user_idx를 비교해서 동일하면 보이도록 처리해야함 -->
-					     					<div style="float : left;">
-					     						<a class="btn btn-primary btn-xs" onclick="updateComment(${status.index}, ${post.bo_idx}, ${comment.comment_idx}, '${comment.comm_content}')">수정</a>
-					     					</div>
-					    					<div style="float : left;">
-					    						<a class="btn btn-danger btn-xs" onclick="deleteComment(${status.index}, ${post.bo_idx}, ${comment.comment_idx})">삭제</a>
-					    					</div>
-					    					<!--  -->
+					    					<c:if test="${isAuthor}">
+						    					<!-- if문 사용해서 현재 세션의 user_idx와 현재 댓글의 user_idx를 비교해서 동일하면 보이도록 처리해야함 -->
+						     					<div style="float : left;">
+						     						<a class="btn btn-primary btn-xs" onclick="updateComment(${status.index}, ${post.bo_idx}, ${comment.comment_idx}, '${comment.comm_content}')">수정</a>
+						     					</div>
+						    					<div style="float : left;">
+						    						<a class="btn btn-danger btn-xs" onclick="deleteComment(${status.index}, ${post.bo_idx}, ${comment.comment_idx})">삭제</a>
+						    					</div>
+						    					<!--  -->
+					    					</c:if>
 					    					
 					    					<div style="float : left;">
 					    						<a class="btn btn-primary btn-xs" onclick="createReComment(${status.index}, ${post.bo_idx}, ${comment.comment_idx}, '${comment.user_name}')">대댓글 작성</a>
@@ -360,12 +362,14 @@
 												</div>
 												
 												<div class="recomment-buttons">
-													<div style="float: left;">
-														<a class="btn btn-primary btn-xs" onclick="updateReComment('${status.index}' + '${status2.index}', ${post.bo_idx}, ${reComment.comment_idx}, '${reComment.comm_content}')">수정</a>
-													</div>
-													<div style="float: left;">
-														<a class="btn btn-danger btn-xs" onclick="deleteComment('${status.index}' + '${status2.index}', ${post.bo_idx}, ${reComment.comment_idx})">삭제</a>
-													</div>
+													<c:if test="${isAuthor}">
+														<div style="float: left;">
+															<a class="btn btn-primary btn-xs" onclick="updateReComment('${status.index}' + '${status2.index}', ${post.bo_idx}, ${reComment.comment_idx}, '${reComment.comm_content}')">수정</a>
+														</div>
+														<div style="float: left;">
+															<a class="btn btn-danger btn-xs" onclick="deleteComment('${status.index}' + '${status2.index}', ${post.bo_idx}, ${reComment.comment_idx})">삭제</a>
+														</div>
+													</c:if>
 													<div style="clear: both;"></div>
 												</div>
 											</div>
